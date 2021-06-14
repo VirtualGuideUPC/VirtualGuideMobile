@@ -2,22 +2,22 @@
 class User {
   final int id;
   final String name;
-  final String last_name;
+  final String lastName;
   final String email;
   final String password;
-  final String token_notification;
-  final int country_id;
+  final String tokenNotification;
+  final int countryId;
   final String birthday;
-  final bool is_foreign;
+  final bool isForeign;
 
   User({
       this.id,
       this.email,
       this.name,
-      this.last_name,
+      this.lastName,
       this.password,
-      this.token_notification,
-      this.country_id,
+      this.tokenNotification,
+      this.countryId,
       this.birthday,
-      this.is_foreign});
+      this.isForeign});
 }

@@ -1,26 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide/ui/explore/HomePage.dart';
+import 'package:tour_guide/data/datasource/userPreferences.dart';
+import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/pages/explore/ExplorerPage.dart';
+import 'package:tour_guide/ui/pages/login/LoginPage.dart';
+import 'package:tour_guide/ui/pages/signin/SigninPage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  final prefs=new UserPreferences();
+  prefs.initPrefs();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'VirtualGuide',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData
-          (
-          scaffoldBackgroundColor: Colors.white,
-          dialogBackgroundColor: Colors.black,
-          primarySwatch: Colors.grey,
-          cardColor: Colors.white70,
-          accentColor: Colors.white,
-        ),
-        home: HomePage()
+    return Provider(
+          child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'VirtualGuide',
+          initialRoute: 'explorer',
+          routes:{
+            'login':(BuildContext context)=>LoginPage(),
+            'signin':(BuildContext context)=>SigninPage(),
+            'explorer':(BuildContext context)=>ExplorePage()
+          },
+          theme: ThemeData
+            (
+            scaffoldBackgroundColor: Color.fromRGBO(143, 142, 192, 1),
+            dialogBackgroundColor: Colors.black,
+            primaryColor: Color.fromRGBO(143, 142, 192, 1),
+            primarySwatch: Colors.grey,
+            iconTheme: IconThemeData(
+              color:Color.fromRGBO(0, 0, 0, 0.6)
+            ),
+            cardColor: Colors.white70,
+            accentColor: Colors.white,
+            canvasColor: Colors.transparent,
+          ),
+      ),
     );
   }
 }
