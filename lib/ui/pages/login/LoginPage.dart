@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tour_guide/data/providers/userProvider.dart';
-import 'package:tour_guide/ui/bloc/login_bloc.dart';
+import 'package:tour_guide/ui/bloc/loginBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
 import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
@@ -12,7 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final userProvider=UserProvider();
+
   bool flagRequestSubmitted=false;
   @override
   Widget build(context) {
@@ -120,8 +119,7 @@ class _LoginPageState extends State<LoginPage> {
       return AlertDialog(backgroundColor: Colors.white,content:Center(child: CircularProgressIndicator(),));
     });
 
-    userProvider.loginUser(bloc.email, bloc.password).then((Map result){
-      print("sadfasdf");
+    bloc.login(bloc.email, bloc.password).then((Map result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
       if(!result['ok']){
         bloc.changeRequestResult(result["message"]);

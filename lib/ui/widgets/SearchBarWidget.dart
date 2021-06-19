@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onchangeValue;
   final VoidCallback onEditingComplete;
-  const SearchBarWidget({this.onchangeValue, this.onEditingComplete, Key key})
+  final Function onCleanField;
+  const SearchBarWidget({this.onchangeValue, this.onEditingComplete,this.onCleanField, Key key})
       : super(key: key);
 
   @override
@@ -26,6 +27,7 @@ class SearchBarWidgetState extends State<SearchBarWidget> {
   Widget buildTextField() {
     //theme sets a partial theme
     return TextField(
+      key: widget.key,
       controller: _controller,
       textInputAction: TextInputAction.search,
       keyboardType: TextInputType.text,
@@ -56,6 +58,7 @@ class SearchBarWidgetState extends State<SearchBarWidget> {
           child: _hasDeleteIcon
               ? new InkWell(
                   onTap: (() {
+                    widget.onCleanField();
                     setState(() {
                       /// Make sure to trigger the cancellation of the empty content in the first frame of the component build
                       WidgetsBinding.instance

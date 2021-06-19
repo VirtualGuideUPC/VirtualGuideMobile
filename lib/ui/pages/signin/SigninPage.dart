@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
-import 'package:tour_guide/ui/bloc/signin_bloc.dart';
+import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
 import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
+import 'package:intl/intl.dart';/*birth date formal*/
 
 class SigninPage extends StatefulWidget {
   @override
@@ -11,11 +11,12 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  final userProvider=UserProvider();
 
   final double minHeight=700;
 
   final List<String> _countries=['Perú'];
+
+  TextEditingController _inputFieldDateController = new TextEditingController();
 
   bool flagRequestSubmitted=false;
 
@@ -42,7 +43,7 @@ return Scaffold(
                             SizedBox(height: 10.0),
                             _buildPasswordField(bloc),
                             SizedBox(height: 10.0),
-                            _buildBirthDatePicker(bloc),
+                            _buildBirthDatePicker(context,bloc),
                             SizedBox(height: 10.0),
                             _buildCountryDropDown(bloc),
                             SizedBox(height: 10.0),
@@ -116,18 +117,34 @@ return Scaffold(
     );
   }
 
-  Widget _buildBirthDatePicker(SigninBloc bloc){
-        return StreamBuilder(
-      stream: bloc.birthDateStream ,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+  Widget _buildBirthDatePicker(context, SigninBloc bloc){
         return AuthTextField(
+          controller: _inputFieldDateController,
           label: "Fecha de nacimiento:",
           placeholder: "20/20/2020",
-          errorText: snapshot.error,
-          onChanged:bloc.changeBirthDate,
+          onTap:(){
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    _selectDate( context,bloc );
+          }
           );
-      },
+  }
+  _selectDate(context,SigninBloc bloc)async{
+    DateTime picked = await showDatePicker(
+      
+      context: context,
+      initialDate: new DateTime.now(),
+      firstDate: new DateTime(1950),
+      lastDate: new DateTime(2025),
+      locale: Locale('es', 'ES')
     );
+
+    if ( picked != null ) {
+          final _fecha = DateFormat('yyyy-MM-dd').format(picked).toString();
+          print(_fecha);
+          _inputFieldDateController.text = _fecha;
+          bloc.changeBirthDate(_fecha);
+          setState(() {});
+    }
   }
 
   Widget _buildCountryDropDown(SigninBloc bloc){
@@ -201,13 +218,13 @@ return Scaffold(
       return AlertDialog(backgroundColor: Colors.white,content:Center(child: CircularProgressIndicator(),));
     });
 
-    userProvider.signinUser(bloc.name,bloc.lastName,bloc.email, bloc.password,bloc.birthDate,bloc.country).then((Map result){
+    bloc.signin(bloc.name,bloc.lastName,bloc.email, bloc.password,bloc.birthDate,bloc.country).then((Map result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
       if(!result['ok']){
         bloc.changeRequestResult(result["message"]);
         flagRequestSubmitted=false;
       }else{
-        Navigator.pushReplacementNamed(context, "explorer");
+        Navigator.pushReplacementNamed(context, "login");
       }
     });
     
@@ -220,7 +237,7 @@ return Scaffold(
     for(int i=0;i<_countries.length;i++){
       lista.add( DropdownMenuItem(
         child: Text(_countries[i]),
-        value: i.toString(),
+        value: (i+1).toString(),
       ));
     }
     return lista;

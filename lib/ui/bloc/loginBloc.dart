@@ -1,7 +1,9 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/validators.dart';
 
 class LoginBloc with Validators {
+  final userProvider=UserProvider();
 
   BehaviorSubject<String> _emailController    ;
   BehaviorSubject<String> _passwordController ;
@@ -46,5 +48,9 @@ class LoginBloc with Validators {
     _emailController= BehaviorSubject<String>();
     _passwordController= BehaviorSubject<String>();
     _requestResult=BehaviorSubject<String>();
+  }
+
+  Future<Map<String, dynamic>> login(String email, String password)async{
+    return await userProvider.loginUser(email, password);
   }
 }

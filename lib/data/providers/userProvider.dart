@@ -8,7 +8,7 @@ class UserProvider {
   final _prefs = new UserPreferences();
   Future<Map<String, dynamic>> signinUser(String name, String lastName,
       String email, String password, String birthDate, String country) async {
-    final url = Uri.http(_url, "api/users/register");
+    final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/register/');
     final authData = {
       'email': email,
       'password': password,
@@ -18,14 +18,15 @@ class UserProvider {
       'country': country
     };
     final http.Response resp =
-        await http.post(url, body: json.encode(authData));
+        await http.post(url,headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',}, body: json.encode(authData));
     Map decodedJson = json.decode(resp.body);
     if (resp.statusCode==200) {
       //_prefs.token = decodedJson['jwt'];
       return {'ok': true, 'message':'operacion realizada con exito'};
     } else {
       String errorMsg;
-      List responseValues=decodedJson.values;
+      print(decodedJson);
+      List<dynamic> responseValues=decodedJson.values.toList();
       if (responseValues.length>0 && responseValues[0] is List && responseValues[0].length>0) {
         errorMsg = responseValues[0][0];
       } else {
@@ -45,7 +46,6 @@ class UserProvider {
           headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',},
           body: json.encode(authData)
         );
-    print("respuesta ->" + resp.statusCode.toString());
 
     Map decodedJson = json.decode(resp.body);
     if (resp.statusCode==200 && decodedJson.containsKey('jwt')){

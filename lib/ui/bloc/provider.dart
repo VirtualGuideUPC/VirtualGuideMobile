@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide/ui/bloc/login_bloc.dart';
-import 'package:tour_guide/ui/bloc/signin_bloc.dart';
+import 'package:tour_guide/ui/bloc/loginBloc.dart';
+import 'package:tour_guide/ui/bloc/permissionBloc.dart';
+import 'package:tour_guide/ui/bloc/placesBloc.dart';
+import 'package:tour_guide/ui/bloc/signinBloc.dart';
+import 'package:tour_guide/ui/bloc/userBloc.dart';
 
 class Provider extends InheritedWidget {
 
@@ -19,6 +22,9 @@ class Provider extends InheritedWidget {
   //blocs
   final loginBloc = LoginBloc();
   final signinBloc=SigninBloc();
+  final placesBloc=PlacesBloc();
+  final userBloc=UserBloc();
+  final permissionBloc=PermissionBloc();
  
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
@@ -29,6 +35,13 @@ class Provider extends InheritedWidget {
   static SigninBloc signinBlocOf ( BuildContext context ) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().signinBloc;
   }
-
-  
+  static PlacesBloc placesBlocOf(BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType<Provider>().placesBloc;
+  }
+  static UserBloc userBlocOf(BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType<Provider>().userBloc;
+  }
+    static PermissionBloc permissionBlocOf(BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType<Provider>().permissionBloc;
+  }
 }

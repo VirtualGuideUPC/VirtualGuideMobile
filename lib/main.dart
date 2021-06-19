@@ -4,7 +4,7 @@ import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorerPage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
 import 'package:tour_guide/ui/pages/signin/SigninPage.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs=new UserPreferences();
@@ -18,8 +18,16 @@ class MyApp extends StatelessWidget {
     return Provider(
           child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', 'US'), // English
+            const Locale('es', 'ES'),
+          ],
           title: 'VirtualGuide',
-          initialRoute: 'explorer',
+          initialRoute: 'login',
           routes:{
             'login':(BuildContext context)=>LoginPage(),
             'signin':(BuildContext context)=>SigninPage(),

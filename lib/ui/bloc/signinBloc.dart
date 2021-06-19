@@ -1,7 +1,10 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/validators.dart';
 
 class SigninBloc extends Validators{
+  final userProvider=UserProvider();
+
   BehaviorSubject<String> _emailController    ;
   BehaviorSubject<String> _passwordController ;
   BehaviorSubject<String> _nameController     ;
@@ -20,7 +23,7 @@ class SigninBloc extends Validators{
   Stream<String> get nameStream => _nameController.stream.transform( validateName );
   Stream<String> get lastNameStream => _lastNameController.stream.transform( validateLastName );
   Stream<String> get countryStream => _countryController.stream;
-  Stream<String> get birthDateStream => _birthDateController.stream.transform(validateBirthDate);
+  Stream<String> get birthDateStream => _birthDateController.stream;
   Stream<String> get requestResultStream => _requestResult.stream;
 
   Stream<bool> get formValidStream => 
@@ -69,4 +72,8 @@ class SigninBloc extends Validators{
     _birthDateController= BehaviorSubject<String>();
     _requestResult=BehaviorSubject<String>();
     }
+
+     Future<Map<String, dynamic>>  signin(String name, String lastName, String email, String password, String birthDate, String country) async{
+    return await userProvider.signinUser(name, lastName, email, password, birthDate, country);
+  }
   }

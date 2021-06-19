@@ -5,8 +5,10 @@ class AuthTextField extends StatelessWidget {
   final String placeholder;
   final bool obscureText;
   final Function onChanged;
+  final Function onTap;
   final String errorText;
-  AuthTextField({@required this.label,@required this.placeholder,this.onChanged,this.obscureText=false,this.errorText});
+  final TextEditingController controller;
+  AuthTextField({@required this.label,@required this.placeholder,this.onChanged,this.onTap,this.obscureText=false,this.errorText,this.controller});
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -16,6 +18,7 @@ class AuthTextField extends StatelessWidget {
       ),
       SizedBox(height: 5.0),
       TextField(
+          controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 0,horizontal:10.0),
@@ -25,6 +28,7 @@ class AuthTextField extends StatelessWidget {
             errorText: this.errorText
           ),
           onChanged: onChanged,
+          onTap: onTap,
       ),
     ]);
   }
