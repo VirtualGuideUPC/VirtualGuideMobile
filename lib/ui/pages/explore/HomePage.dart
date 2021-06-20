@@ -165,15 +165,7 @@ class _HomePageState extends State<HomePage>
       future: permissionbloc.requestLocationPermission(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data) {
-            print("service active");
-            return _buildMap(true,userBloc);
-  
-          } else {
-            print("service not active");
-            return _buildMap(false,userBloc);
-
-          }
+          return _buildMap(userBloc);
         } else {
           return Center(child:Text("ESPERANDO PERMISO Y SERVICIO"));
         }
@@ -181,8 +173,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildMap(bool locationGranted, UserBloc userBloc) {
-    if(locationGranted){
+  Widget _buildMap( UserBloc userBloc) {
+
         return FutureBuilder(
           future: userBloc.getCurrentLocation(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -191,22 +183,44 @@ class _HomePageState extends State<HomePage>
                   lat: snapshot.data.latitude,
                   long: snapshot.data.longitude,
                   );
-            } else {
+            } else if(snapshot.hasError) {
+              Future.delayed(Duration.zero, () => _showErrorAlert(snapshot.error));
+              return MapScreen(
+                  lat: -12.02434966783591,
+                  long: -77.10855891728943,
+                  );
+
+            }else{
               return Center(
                 child: Text("ESPERANDO UBICACION DEL USUARIO, SI NO CARGA, ES CULPA DE LA LIBRERIA"),
               );
             }
           },
         );
-    }else{
-        return MapScreen(
-          lat: -12.02434966783591,
-          long:-77.10855891728943,
-        );
-    }
+    
 
   }
-
+_showErrorAlert(String message){
+                    showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(20.0) ),
+                        title: Text('Ocurrio un problema'),
+                        content: Column(mainAxisSize: MainAxisSize.min, children:[ Center(child: Text(message))]),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Ok'),
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    });
+}
   Widget _buildSearchResults(PlacesBloc placesBloc) {
     return StreamBuilder(
         stream: placesBloc.searchResultStream,

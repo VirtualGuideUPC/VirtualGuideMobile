@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
     final bloc = Provider.loginBlocOf(context);
     bloc.init();
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
         body: SingleChildScrollView(
             child: Column(children: [
       SafeArea(
@@ -25,10 +26,11 @@ class _LoginPageState extends State<LoginPage> {
         height: 30.0,
       )),
       Container(
+        color: Theme.of(context).primaryColorLight,
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
-            Text("Inicia ssdsdión", style: Theme.of(context).textTheme.headline3),
+            Text("Inicia sesión", style: Theme.of(context).textTheme.headline3),
             SizedBox(height: 20.0),
             _buildEmailField(bloc),
             SizedBox(height: 20.0),
@@ -116,7 +118,12 @@ class _LoginPageState extends State<LoginPage> {
     BuildContext alertContext;
     showDialog(context: context, builder: (context){
       alertContext=context;
-      return AlertDialog(backgroundColor: Colors.white,content:Center(child: CircularProgressIndicator(),));
+      return AlertDialog(backgroundColor: Colors.white,content:Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(child: CircularProgressIndicator(),),
+        ],
+      ));
     });
 
     bloc.login(bloc.email, bloc.password).then((Map result){

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData
             (
             scaffoldBackgroundColor: Color.fromRGBO(143, 142, 192, 1),
-            dialogBackgroundColor: Colors.black,
+            dialogBackgroundColor: Colors.white,
             primaryColor: Color.fromRGBO(143, 142, 192, 1),
             primarySwatch: Colors.grey,
             iconTheme: IconThemeData(

@@ -26,6 +26,7 @@ class _SigninPageState extends State<SigninPage> {
     final bloc=Provider.signinBlocOf(context);
     bloc.init();
 return Scaffold(
+        backgroundColor: Theme.of(context).primaryColorLight,
         body: SingleChildScrollView(
             child: Column(children: [
                       SafeArea(child: Container(height: 10.0,)),
@@ -108,8 +109,9 @@ return Scaffold(
       stream: bloc.passwordStream,
       builder: (BuildContext context, AsyncSnapshot snapshot){
         return AuthTextField(
+          obscureText: true,
           label: "Contraseña:",
-          placeholder: "ooooooo",
+          placeholder: "••••••••••••",
           errorText: snapshot.error,
           onChanged:bloc.changePassword,
           );
@@ -157,6 +159,7 @@ return Scaffold(
                     Text('País',style: TextStyle(fontSize: 18.0, color: Color.fromRGBO(0, 0, 0, 0.6)),),
                     SizedBox(height: 5.0),
                     DropdownButtonFormField(
+                          dropdownColor: Theme.of(context).primaryColorLight,
                           decoration:  InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(vertical: 10.0,horizontal:10.0),
                             floatingLabelBehavior: FloatingLabelBehavior.never,

@@ -12,7 +12,12 @@ class UserBloc{
 
   Future<Position>getCurrentLocation() async{
     if(currentLocation==null){
-      currentLocation=await geolocationProvider.getCurrentLocation();
+      try {
+          currentLocation=await geolocationProvider.getCurrentLocation();
+      } catch (e) {
+        return Future.error(e);
+      }
+
     }
     return currentLocation;
   }
