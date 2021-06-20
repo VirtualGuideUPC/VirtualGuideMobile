@@ -11,11 +11,11 @@ class PermissionProvider{
     }
     return false;
   }
-  requestLocationService() async{
+  Future <bool> requestLocationService() async{
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-
+      return true;
     }else{
-
+      return false;
     }
   }
 }

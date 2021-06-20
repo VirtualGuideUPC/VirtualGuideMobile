@@ -17,7 +17,13 @@ class PermissionBloc{
     bool get locationService => _locationServiceController.value;
 
     Future<bool> requestLocationPermission()async{
-      return await _permissionProvider.requestLocationPermission();
+      bool locationPermissionGranted= await _permissionProvider.requestLocationPermission();
+      bool locationServiceGranted=await _permissionProvider.requestLocationService();
+      if(locationPermissionGranted && locationServiceGranted){
+        return true;
+      }else{
+        return false;
+      }
     }
 
     dispose(){

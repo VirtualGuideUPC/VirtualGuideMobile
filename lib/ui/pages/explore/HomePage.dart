@@ -166,33 +166,45 @@ class _HomePageState extends State<HomePage>
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data) {
-            return _buildMap(userBloc);
+            print("service active");
+            return _buildMap(true,userBloc);
+  
           } else {
-            return Center(child: Text("not available"));
+            print("service not active");
+            return _buildMap(false,userBloc);
+
           }
         } else {
-          return Center(child: CircularProgressIndicator());
+          return Center(child:Text("ESPERANDO PERMISO Y SERVICIO"));
         }
       },
     );
   }
 
-  Widget _buildMap(UserBloc userBloc) {
-    return FutureBuilder(
-      future: userBloc.getCurrentLocation(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return MapScreen(
-              lat: snapshot.data.latitude,
-              long: snapshot.data.longitude,
+  Widget _buildMap(bool locationGranted, UserBloc userBloc) {
+    if(locationGranted){
+        return FutureBuilder(
+          future: userBloc.getCurrentLocation(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return MapScreen(
+                  lat: snapshot.data.latitude,
+                  long: snapshot.data.longitude,
+                  );
+            } else {
+              return Center(
+                child: Text("ESPERANDO UBICACION DEL USUARIO, SI NO CARGA, ES CULPA DE LA LIBRERIA"),
               );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+            }
+          },
+        );
+    }else{
+        return MapScreen(
+          lat: -12.02434966783591,
+          long:-77.10855891728943,
+        );
+    }
+
   }
 
   Widget _buildSearchResults(PlacesBloc placesBloc) {
