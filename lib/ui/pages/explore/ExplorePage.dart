@@ -2,33 +2,42 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tour_guide/data/entities/experience.dart';
 import 'package:tour_guide/ui/bloc/permissionBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
+import 'package:tour_guide/ui/pages/explore/DropDownSheetWidget.dart';
 import 'package:tour_guide/ui/widgets/ExperiencesCarouselWidget.dart';
 import 'package:tour_guide/ui/widgets/MapScreenWidget.dart';
 import 'package:tour_guide/ui/widgets/SearchBarWidget.dart';
 
-class HomePage extends StatefulWidget {
-  Stream<int> streamExplorerTabIndex;
-  HomePage(this.streamExplorerTabIndex);
+class ExplorePage extends StatefulWidget {
+  final Stream<int> streamExplorerTabIndex;
+  ExplorePage(this.streamExplorerTabIndex);
   @override
-  _HomePageState createState() => _HomePageState();
+  _ExplorePageState createState() => _ExplorePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin<HomePage> {
+class _ExplorePageState extends State<ExplorePage>
+    with AutomaticKeepAliveClientMixin<ExplorePage> {
   String _searchString = '';
   bool _isBottomSheetOpen = false;
 
+  Future<Position> futureUserPosition;
   @override
   void initState() {
     super.initState();
+
+    futureUserPosition=UserBloc().getCurrentLocation();
+    futureUserPosition.catchError((error){
+      Future.delayed(Duration.zero, () => _showErrorAlert(error.toString()));
+    });
+
     widget.streamExplorerTabIndex.listen((number) {
-      Future.delayed(Duration.zero, () {
+      Future.delayed(Duration.zero, () { // Para obtener del context en este metodo
         _closeBottomSheet(context);
       });
     });
@@ -42,7 +51,7 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     final userBloc = Provider.userBlocOf(context);
     final placesBloc = Provider.placesBlocOf(context);
-    final permissionBloc = Provider.permissionBlocOf(context);
+    // final permissionBloc = Provider.permissionBlocOf(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Column(
@@ -68,7 +77,7 @@ class _HomePageState extends State<HomePage>
               child: Stack(
                 fit: StackFit.loose,
                 children: [
-                  Container(child: _handleMapCreation(permissionBloc, userBloc)),
+                  Container(child: _buildMap(userBloc)),
                   _buildSearchResults(placesBloc),
                   _buildCarousel(placesBloc),
                   _buildFooter(placesBloc)
@@ -97,9 +106,9 @@ class _HomePageState extends State<HomePage>
     );
   }
   Widget _buildFooter(PlacesBloc placesBloc){
-    return StreamBuilder(
+    return StreamBuilder<List<Experience>>(
       stream: placesBloc.experiencesStream ,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot<List<Experience>> snapshot){
         if(snapshot.hasData){
             final numberExperiences=snapshot.data.length;
             String message="";
@@ -143,12 +152,12 @@ class _HomePageState extends State<HomePage>
                                 child: Center(
                               child: Text(
                                 message,
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                             ))
                           ])),
                       onTap: () {
-                        _showBottomSheet(context);
+                        _showBottomSheet(snapshot.data,message,context);
                       },
                     ),
                   );
@@ -160,23 +169,23 @@ class _HomePageState extends State<HomePage>
   }
 
 
-  Widget _handleMapCreation(PermissionBloc permissionbloc, UserBloc userBloc) {
-    return FutureBuilder(
-      future: permissionbloc.requestLocationPermission(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData) {
-          return _buildMap(userBloc);
-        } else {
-          return Center(child:Text("ESPERANDO PERMISO Y SERVICIO"));
-        }
-      },
-    );
-  }
+  // Widget _handleMapCreation(PermissionBloc permissionbloc, UserBloc userBloc) {
+  //   return FutureBuilder(
+  //     future: permissionbloc.requestLocationPermission(),
+  //     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+  //       if (snapshot.hasData) {
+  //         return _buildMap(userBloc);
+  //       } else {
+  //         return Center(child:Text("ESPERANDO PERMISO Y SERVICIO"));
+  //       }
+  //     },
+  //   );dd
+  // }
 
   Widget _buildMap( UserBloc userBloc) {
 
         return FutureBuilder(
-          future: userBloc.getCurrentLocation(),
+          future: futureUserPosition,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               return MapScreen(
@@ -184,7 +193,6 @@ class _HomePageState extends State<HomePage>
                   long: snapshot.data.longitude,
                   );
             } else if(snapshot.hasError) {
-              Future.delayed(Duration.zero, () => _showErrorAlert(snapshot.error));
               return MapScreen(
                   lat: -12.02434966783591,
                   long: -77.10855891728943,
@@ -250,33 +258,11 @@ _showErrorAlert(String message){
           }
         });
   }
-  void _showBottomSheet(context) {
+  void _showBottomSheet(List<Experience>experiences,String title,BuildContext context) {
     Scaffold.of(context)
         .showBottomSheet((context) {
           _isBottomSheetOpen = true;
-          return Container(
-              //  decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.only(
-              //     topLeft: Radius.circular(16.0),
-              //     topRight: Radius.circular(16.0),
-              //   ),
-              color: Color.fromRGBO(79, 77, 140, 1),
-              height: MediaQuery.of(context).size.height - 100.0,
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 20,
-                    child: Center(
-                      child: Container(
-                        width: 100,
-                        height: 3,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ));
+          return DropdownSheet(experiences: experiences,title: title,);
         })
         .closed
         .whenComplete(() {

@@ -73,7 +73,11 @@ class SigninBloc extends Validators{
     _requestResult=BehaviorSubject<String>();
     }
 
-     Future<Map<String, dynamic>>  signin(String name, String lastName, String email, String password, String birthDate, String country) async{
-    return await userProvider.signinUser(name, lastName, email, password, birthDate, country);
-  }
+     Future<String>  signin(String name, String lastName, String email, String password, String birthDate, String country) async{
+       try {
+          return await userProvider.signinUser(name, lastName, email, password, birthDate, country);
+       } catch (e) {
+         return Future.error(e);
+       }
+    }
   }

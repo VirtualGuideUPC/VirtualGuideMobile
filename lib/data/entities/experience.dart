@@ -1,52 +1,99 @@
 
-class Experience {
-  String uniqueId;
+// class Experience {
+//   String uniqueId;
 
+//   String name;
+//   String costInfo;
+//   double price;
+//   String scheduleInfo;
+//   String historicInfo;
+//   String longInfo;
+//   String shortInfo;
+//   String activitiesInfo;
+//   String latitude;
+//   String longitude;
+//   int tpRange;
+//   int province;
+//   int typePlace;
+
+//   Experience({
+//     this.name,
+//     this.costInfo,
+//     this.price,
+//     this.scheduleInfo,
+//     this.historicInfo,
+//     this.longInfo,
+//     this.shortInfo,
+//     this.activitiesInfo,
+//     this.latitude,
+//     this.longitude,
+//     this.tpRange,
+//     this.province,
+//     this.typePlace,
+//   });
+//   Experience.fromJson(Map json){
+//     this.costInfo=json["cost_info"];
+//     this.name=json["name"];
+//     this.price=json["price"];
+//     this.scheduleInfo=json["schedule_info"];
+//     this.historicInfo=json["historic_info"];
+//     this.longInfo=json["long_info"];
+//     this.shortInfo=json["short_info"];
+//     this.activitiesInfo=json["activities_info"];
+//     this.latitude=json["latitude"];
+//     this.longitude=json["longitude"];
+//     this.tpRange=json["tp_range"];
+//     this.province=json["province"];
+//     this.typePlace=json["type_place"];
+//   }
+//   getPosterPath(){
+//     return "https://res.cloudinary.com/dfr41axmh/image/upload/v1624038048/duhxfihcm47a3ditxkrx.jpg";
+//   }
+// }
+class Experience {
+  int id;
   String name;
-  String costInfo;
-  double price;
-  String scheduleInfo;
-  String historicInfo;
-  String longInfo;
   String shortInfo;
-  String activitiesInfo;
   String latitude;
   String longitude;
-  int range;
-  int province;
+  String picture;
+  int tpRange;
+  String province;
   int typePlace;
+  bool isFavorite;
+  double avgRanking;
+  int nComments;
 
   Experience({
+    this.id,
     this.name,
-    this.costInfo,
-    this.price,
-    this.scheduleInfo,
-    this.historicInfo,
-    this.longInfo,
     this.shortInfo,
-    this.activitiesInfo,
     this.latitude,
     this.longitude,
-    this.range,
+    this.picture,
+    this.tpRange,
     this.province,
     this.typePlace,
+    this.isFavorite,
+    this.avgRanking,
+    this.nComments,
   });
   Experience.fromJson(Map json){
-    this.costInfo=json["cost_info"];
+    this.id=json["id"];
     this.name=json["name"];
-    this.price=json["price"];
-    this.scheduleInfo=json["schedule_info"];
-    this.historicInfo=json["historic_info"];
-    this.longInfo=json["long_info"];
     this.shortInfo=json["short_info"];
-    this.activitiesInfo=json["activities_info"];
     this.latitude=json["latitude"];
     this.longitude=json["longitude"];
-    this.range=json["range"];
+    this.picture=json["picture"];
+    this.tpRange=json["tp_range"];
     this.province=json["province"];
     this.typePlace=json["type_place"];
+    this.isFavorite=json["is_favorite"];
+    this.avgRanking=json["avg_ranking"];
+    this.nComments=json["n_comments"];
   }
-  getPosterPath(){
-    return "https://res.cloudinary.com/dfr41axmh/image/upload/v1624038048/duhxfihcm47a3ditxkrx.jpg";
+  String getPosterPath(){
+    return this.picture;
   }
 }
+

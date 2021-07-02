@@ -126,15 +126,15 @@ class _LoginPageState extends State<LoginPage> {
       ));
     });
 
-    bloc.login(bloc.email, bloc.password).then((Map result){
+    bloc.login(bloc.email, bloc.password).then((String result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
-      if(!result['ok']){
-        bloc.changeRequestResult(result["message"]);
-        flagRequestSubmitted=false;
-      }else{
-        Navigator.pushReplacementNamed(context, "explorer");
-      }
+      Navigator.pushReplacementNamed(context, "home");
+    }).catchError((error){
+      if(alertContext!=null)Navigator.of(alertContext).pop();
+      bloc.changeRequestResult(error.toString());
+      flagRequestSubmitted=false;
     });
+
     flagRequestSubmitted=true; 
   }
 

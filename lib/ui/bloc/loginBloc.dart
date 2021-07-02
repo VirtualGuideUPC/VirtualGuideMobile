@@ -50,7 +50,11 @@ class LoginBloc with Validators {
     _requestResult=BehaviorSubject<String>();
   }
 
-  Future<Map<String, dynamic>> login(String email, String password)async{
-    return await userProvider.loginUser(email, password);
+  Future<String> login(String email, String password)async{
+    try {
+      return await userProvider.loginUser(email, password);
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 }

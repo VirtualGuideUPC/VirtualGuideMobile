@@ -221,16 +221,15 @@ return Scaffold(
       return AlertDialog(backgroundColor: Colors.white,content:Center(child: CircularProgressIndicator(),));
     });
 
-    bloc.signin(bloc.name,bloc.lastName,bloc.email, bloc.password,bloc.birthDate,bloc.country).then((Map result){
+    bloc.signin(bloc.name,bloc.lastName,bloc.email, bloc.password,bloc.birthDate,bloc.country).then((String result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
-      if(!result['ok']){
-        bloc.changeRequestResult(result["message"]);
+      Navigator.pushReplacementNamed(context, "login");
+    }).catchError((error){
+      if(alertContext!=null)Navigator.of(alertContext).pop();
+        bloc.changeRequestResult(error.toString());
         flagRequestSubmitted=false;
-      }else{
-        Navigator.pushReplacementNamed(context, "login");
-      }
     });
-    
+
     flagRequestSubmitted=true; 
   }
 

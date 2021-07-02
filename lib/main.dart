@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
-import 'package:tour_guide/ui/pages/explore/ExplorerPage.dart';
+import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
+import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
+import 'package:tour_guide/ui/pages/home/HomePage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
 import 'package:tour_guide/ui/pages/signin/SigninPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -31,7 +33,9 @@ class MyApp extends StatelessWidget {
           routes:{
             'login':(BuildContext context)=>LoginPage(),
             'signin':(BuildContext context)=>SigninPage(),
-            'explorer':(BuildContext context)=>ExplorePage()
+            'home':(BuildContext context)=>HomePage(),
+            'experience-detail':(BuildContext context)=>ExperienceDetail(),
+            'favorite-departments':(BuildContext context)=>FavoriteDepartments()
           },
           theme: ThemeData
             (

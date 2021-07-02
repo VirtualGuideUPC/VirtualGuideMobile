@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tour_guide/ui/pages/explore/ChatbotPage.dart';
-import 'package:tour_guide/ui/pages/explore/HomePage.dart';
-import 'package:tour_guide/ui/pages/explore/UserSettingsPage.dart';
+import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
+import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
+import 'package:tour_guide/ui/pages/account_settings/UserSettingsPage.dart';
 
 
-class ExplorePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _ExplorePageState createState() => _ExplorePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClientMixin<ExplorePage>, SingleTickerProviderStateMixin{
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<HomePage>, SingleTickerProviderStateMixin{
   StreamController<int> _streamIndexCurrentTab= StreamController<int>();
   TabController tabController;
   @override
@@ -47,9 +47,9 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
         physics: NeverScrollableScrollPhysics(),
             controller: tabController,
             children: [
-              HomePage(_streamIndexCurrentTab.stream),
-              ChatbotPage(),
-              UserSettingsPage(),
+              ExplorePage(_streamIndexCurrentTab.stream),
+              ChatPage(),
+              AccountSettingsPage(),
             ],
           ),
     );

@@ -16,7 +16,6 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PlacesBloc placesBloc=Provider.placesBlocOf(context);
-    UserBloc userBloc=Provider.userBlocOf(context);
     return StreamBuilder<List<Experience>>(
       stream: placesBloc.experiencesStream,
       builder: (context,AsyncSnapshot snapshot) {
