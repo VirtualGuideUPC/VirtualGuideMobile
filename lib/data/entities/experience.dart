@@ -79,18 +79,18 @@ class Experience {
     this.nComments,
   });
   Experience.fromJson(Map json){
-    this.id=json["id"];
+    this.id=json["touristicplace_id"];
     this.name=json["name"];
     this.shortInfo=json["short_info"];
     this.latitude=json["latitude"];
     this.longitude=json["longitude"];
     this.picture=json["picture"];
     this.tpRange=json["tp_range"];
-    this.province=json["province"];
+    this.province=json["province_name"];
     this.typePlace=json["type_place"];
-    this.isFavorite=json["is_favorite"];
-    this.avgRanking=json["avg_ranking"];
-    this.nComments=json["n_comments"];
+    this.isFavorite=json["is_favorite"]??false;
+    this.avgRanking=json["avg_ranking"]/1;
+    this.nComments=json["number_comments"];
   }
   String getPosterPath(){
     return this.picture;

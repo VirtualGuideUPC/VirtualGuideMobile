@@ -14,10 +14,12 @@ class UserPreferences{
     this._prefs = await SharedPreferences.getInstance();
   }
   
-  get token {
-    return _prefs.getString('token') ?? '';
-  }
-  set token(String token){
-    _prefs.setString('token', token);
-  }
+  String getToken(){return _prefs.getString('token')??'';}
+  Future<bool> setToken(String token){return _prefs.setString('token', token);}
+  Future<bool> removeToken(){return _prefs.remove('token');}
+
+  int getUserId(){return _prefs.getInt('user_id')??-1;}
+  Future<bool> setUserId(int userId){return _prefs.setInt('user_id', userId);}
+  Future<bool> removeUserId(){return _prefs.remove('user_id');}
+
 }

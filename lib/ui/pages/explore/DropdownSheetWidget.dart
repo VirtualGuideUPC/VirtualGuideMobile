@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide/data/entities/experience.dart';
+import 'package:tour_guide/main.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/FlipCardWidget.dart';
 
 class DropdownSheet extends StatelessWidget {
@@ -58,7 +61,7 @@ class DropdownSheet extends StatelessWidget {
         experience:item,
         horizontalPadding: 10,
         onTap: (){
-          Navigator.pushNamed(context, 'experience-detail', arguments: item );
+          Utils.mainNavigator.currentState.pushNamed(routeExperienceDetails, arguments: item );
         },
       );
     }).toList();

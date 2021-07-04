@@ -10,13 +10,13 @@ import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
 import 'package:tour_guide/ui/pages/explore/DropDownSheetWidget.dart';
-import 'package:tour_guide/ui/widgets/ExperiencesCarouselWidget.dart';
+import 'package:tour_guide/ui/pages/explore/ExperiencesCarouselWidget.dart';
 import 'package:tour_guide/ui/widgets/MapScreenWidget.dart';
 import 'package:tour_guide/ui/widgets/SearchBarWidget.dart';
 
 class ExplorePage extends StatefulWidget {
-  final Stream<int> streamExplorerTabIndex;
-  ExplorePage(this.streamExplorerTabIndex);
+  //final Stream<int> streamExplorerTabIndex;
+  //ExplorePage(/*this.streamExplorerTabIndex*/);
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }
@@ -27,6 +27,12 @@ class _ExplorePageState extends State<ExplorePage>
   bool _isBottomSheetOpen = false;
 
   Future<Position> futureUserPosition;
+  final Map defaultCameraPosition={'lat':-12.02434966783591,'lng':-77.10855891728943};
+  Map<String,double> oldCameraPosition={'lat':null,'lng':null};
+  Map<String,double> newCameraPosition={'lat':null,'lng':null};
+  List<Marker> mapMarkersList=<Marker>[];
+
+  StreamSubscription subscriptionExperiences;
   @override
   void initState() {
     super.initState();
@@ -36,9 +42,24 @@ class _ExplorePageState extends State<ExplorePage>
       Future.delayed(Duration.zero, () => _showErrorAlert(error.toString()));
     });
 
-    widget.streamExplorerTabIndex.listen((number) {
-      Future.delayed(Duration.zero, () { // Para obtener del context en este metodo
-        _closeBottomSheet(context);
+    // widget.streamExplorerTabIndex.listen((number) {
+    //   Future.delayed(Duration.zero, () { // Para obtener del context en este metodo
+    //     _closeBottomSheet(context);
+    //   });
+    // });
+    Future.delayed(Duration.zero, () {
+      final placesBloc = Provider.placesBlocOf(context);
+      subscriptionExperiences=placesBloc.experiencesStream.listen((event) {
+        if(event!=null){
+          if(event.length>0){
+            newCameraPosition['lat']=double.parse(event[0].latitude);
+            newCameraPosition['lng']=double.parse(event[0].longitude);
+          }
+          
+          mapMarkersList=_createMapMarkersFromExperiences(event);
+        }
+
+        setState(() {});
       });
     });
 
@@ -93,7 +114,6 @@ class _ExplorePageState extends State<ExplorePage>
       builder: (BuildContext context, AsyncSnapshot snapshot){
         if(snapshot.hasData){
           return Positioned(
-            
             height: 120,
             bottom: 75,
             left:0,
@@ -120,7 +140,8 @@ class _ExplorePageState extends State<ExplorePage>
               message=numberExperiences.toString() + " Experiencias encontradas";
             }
 
-              return  Positioned(
+
+            return  Positioned(
                     height: 60,
                     bottom: 0,
                     left: 0,
@@ -183,30 +204,55 @@ class _ExplorePageState extends State<ExplorePage>
   // }
 
   Widget _buildMap( UserBloc userBloc) {
-
+    if(oldCameraPosition['lat']==null || oldCameraPosition['lng']==null){
         return FutureBuilder(
           future: futureUserPosition,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
+              oldCameraPosition['lat']=snapshot.data.latitude;
+              oldCameraPosition['lng']=snapshot.data.longitude;
               return MapScreen(
-                  lat: snapshot.data.latitude,
-                  long: snapshot.data.longitude,
+                  startLat: oldCameraPosition['lat'],
+                  startLng: oldCameraPosition['lng'],
+                  endLat:  oldCameraPosition['lat'],
+                  endLng:  oldCameraPosition['lng'],
+                  markersList: mapMarkersList,
                   );
             } else if(snapshot.hasError) {
+              oldCameraPosition['lat']=defaultCameraPosition['lat'];
+              oldCameraPosition['lng']=defaultCameraPosition['lng'];
               return MapScreen(
-                  lat: -12.02434966783591,
-                  long: -77.10855891728943,
+                  startLat: oldCameraPosition['lat'],
+                  startLng: oldCameraPosition['lng'],
+                  endLat:  oldCameraPosition['lat'],
+                  endLng:  oldCameraPosition['lng'],
+                  markersList: mapMarkersList
                   );
-
             }else{
               return Center(
-                child: Text("ESPERANDO UBICACION DEL USUARIO, SI NO CARGA, ES CULPA DE LA LIBRERIA"),
+                child: Text("ESPERANDO UBICACION DEL USUARIO"),
               );
             }
           },
         );
-    
-
+    }else{
+      if(newCameraPosition['lat']==null || newCameraPosition['lng']==null){
+        newCameraPosition['lat']=oldCameraPosition['lat'];
+        newCameraPosition['lng']=oldCameraPosition['lng'];
+      }
+      print(newCameraPosition['lat']);
+      print(newCameraPosition['lng']);
+      Widget map= MapScreen(
+        startLat: oldCameraPosition['lat'],
+        startLng: oldCameraPosition['lng'],
+        endLat:  newCameraPosition['lat'],
+        endLng:  newCameraPosition['lng'],
+        markersList: mapMarkersList
+      );
+      oldCameraPosition['lat']=newCameraPosition['lat'];
+      oldCameraPosition['lng']=newCameraPosition['lng'];
+      return map;
+    }
   }
 _showErrorAlert(String message){
                     showDialog(
@@ -234,18 +280,29 @@ _showErrorAlert(String message){
         stream: placesBloc.searchResultStream,
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData && snapshot.data.length > 0) {
+            //filtering places
+            final rx=RegExp(r'Peru',caseSensitive:false);
+            List<dynamic>places=snapshot.data.where((element){
+              if(element['description'].contains(rx)){return true;}
+              else{return false;}
+            }).toList();
+
             return Stack(children: [
               Container(color: Color.fromRGBO(255, 255, 255, 0.87)),
               Container(
                 child: ListView(
-                  children: snapshot.data
+                  children: places
                       .map((result) => ListTile(
                             title: Text(result['description']),
-                            onTap: () {
-                              placesBloc.getExperiences(
-                                  result["place_id"], "1");
-                                  FocusScope.of(context).requestFocus(new FocusNode());
-                                  placesBloc.changeSearchResult([]);
+                            onTap: ()  async{
+                              final Map locationDetail= await placesBloc.getLocationDetail(result['place_id']);
+                              final double lat=locationDetail["result"]["geometry"]["location"]["lat"];
+                              final double long=locationDetail["result"]["geometry"]["location"]["lng"];
+                              newCameraPosition['lat']=lat;
+                              newCameraPosition['lng']=long;
+                              placesBloc.getExperiences("1",lat,long);
+                              FocusScope.of(context).requestFocus(new FocusNode());
+                              placesBloc.changeSearchResult([]);
 
                             },
                           ))
@@ -277,5 +334,21 @@ _showErrorAlert(String message){
   @override
   void dispose() {
     super.dispose();
+    subscriptionExperiences.cancel();
+  }
+
+  
+  List<Marker> _createMapMarkersFromExperiences( List<Experience> experiences){
+    return experiences.map((experience){
+      return Marker(
+        markerId: MarkerId(experience.name),
+        draggable: false,
+        visible: true,
+        infoWindow: InfoWindow(
+            title: experience.name, snippet: experience.shortInfo),
+        position: LatLng(double.parse(experience.latitude),
+            double.parse(experience.longitude))
+      );
+    }).toList();
   }
 }

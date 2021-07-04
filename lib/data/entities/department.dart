@@ -4,8 +4,8 @@ class Department{
   List<String> pictures;
 
   Department.fromJson(Map json){
-    this.id=json["id"];
+    this.id=json["department_id"];
     this.name=json["name"];
-    this.pictures=json["pictures"].cast<String>();
+    this.pictures=<String>[json["photo"]];
   }
 }

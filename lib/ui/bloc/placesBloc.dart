@@ -26,18 +26,21 @@ class PlacesBloc{
   }
 
 
-  void getExperiences(String placeId, String userId) async{
-    final Map locationDetail = await _getLocationDetail(placeId);
-    final double lat=locationDetail["result"]["geometry"]["location"]["lat"];
-    final double long=locationDetail["result"]["geometry"]["location"]["lng"];
+  void getExperiences(String userId, double lat,double long) async{
+
     final List<Experience> experiences = await _getExperiences(userId,lat,long);
     changeExperiences(experiences);
     print("Experiencas encontradas -> " + experiences.length.toString());
   }
-  Future<Map> _getLocationDetail(String placeId) async{
+  Future<Map> getLocationDetail(String placeId) async{
     final Map locationDetail=await placesProvider.getLocationDetail(placeId);
     return locationDetail;
   }
+
+  void postAddFavoriteExperience(String experienceId) async{
+    await experienceProvider.postAddFavoriteExperience(experienceId);
+  }
+
   Future<List<Experience>> _getExperiences(String userId, double lat, double lng)async{
     final List<Experience> experiences=await experienceProvider.getExperiences(userId, lat, lng);
     return experiences;

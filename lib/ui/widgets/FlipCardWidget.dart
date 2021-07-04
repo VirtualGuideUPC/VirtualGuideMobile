@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:tour_guide/data/entities/experience.dart';
+import 'package:tour_guide/data/providers/experienceProvider.dart';
+import 'package:tour_guide/ui/bloc/placesBloc.dart';
+import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
 
 class FlipCard extends StatefulWidget {
   final Function onTap;
@@ -17,6 +21,8 @@ class FlipCard extends StatefulWidget {
 class _FlipCardState extends State<FlipCard> {
     bool isBack = true;
     double angle = 0;
+
+    final ExperienceProvider experienceProvider=ExperienceProvider();
     void _flip() {
     setState(() {
       angle = (angle + pi) % (2 * pi);
@@ -24,6 +30,7 @@ class _FlipCardState extends State<FlipCard> {
   }
   @override
   Widget build(BuildContext context) {
+    final placesBloc=Provider.placesBlocOf(context);
     return GestureDetector(
                 onTap:(){print("TAP ON THE MAIN DETECTOR");if(widget.onTap!=null){widget.onTap();}},
                 onLongPress: (){if(widget.onLongPress!=null){widget.onLongPress();} _flip();},
@@ -44,7 +51,7 @@ class _FlipCardState extends State<FlipCard> {
                           ..setEntry(3, 2, 0.001)
                           ..rotateY(val),
                         child: Container(
-                            child: isBack?_buildFrontFace()
+                            child: isBack?_buildFrontFace(placesBloc)
                                 : Transform(
                                     alignment: Alignment.center,
                                     transform: Matrix4.identity()
@@ -57,7 +64,7 @@ class _FlipCardState extends State<FlipCard> {
                     }),
               );
   }
-  Widget _buildFrontFace(){
+  Widget _buildFrontFace(PlacesBloc placesBloc){
     final experience=widget.experience;
     return Container(
       padding:EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
@@ -68,7 +75,7 @@ class _FlipCardState extends State<FlipCard> {
               Positioned.fill(
                 child: FadeInImage(
                       placeholder: AssetImage("assets/img/loading.gif"),
-                      image: _getPosterImage(widget.experience.getPosterPath()),
+                      image: Utils.getPosterImage(widget.experience.getPosterPath()),
                       fit:BoxFit.fitHeight
                 ),
               ),
@@ -78,8 +85,11 @@ class _FlipCardState extends State<FlipCard> {
                 child:GestureDetector(
                   onTap: (){
                     //TODO: send request to set this experience as favorite
-                    experience.isFavorite=!experience.isFavorite; 
-                    setState(() {});
+                    if(!experience.isFavorite){
+                      placesBloc.postAddFavoriteExperience(experience.id.toString());
+                      experience.isFavorite=true;
+                      setState(() {});
+                    }
                   },
                   child: experience.isFavorite?Icon(Icons.favorite,color: Colors.deepOrange.shade900,):Icon(Icons.favorite_border)
                 ),
@@ -103,7 +113,7 @@ class _FlipCardState extends State<FlipCard> {
           Positioned.fill(
             child: FadeInImage(
                   placeholder: AssetImage("assets/img/loading.gif"),
-                  image: _getPosterImage(experience.getPosterPath()),
+                  image: Utils.getPosterImage(experience.getPosterPath()),
                   fit:BoxFit.fitHeight
             ),
           ),
@@ -143,12 +153,4 @@ class _FlipCardState extends State<FlipCard> {
     )
     ) ;
   }
-  _getPosterImage(String posterPath){
-      if(posterPath==null){
-          return AssetImage("assets/images/no-image.png");
-      }else{
-          return NetworkImage(posterPath);
-      }
-    }
-
 }

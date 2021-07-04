@@ -1,0 +1,10 @@
+const routeLogin='/login';
+const routeSignin='/signin';
+const routeExperienceDetails='/experience_details';
+const routePrefixHome='/home/';
+const routeHomeStart='/home/$routeHomeExplorerPage';
+const routeHomeExplorerPage='explorer';
+const routeHomeChatPage='chat';
+const routeHomeAccountPage='account';
+const routeHomeFavoriteDepartmentsPage='favorite_departments';
+const routeHomeFavoriteExperiencesPage='favorite_experiences';

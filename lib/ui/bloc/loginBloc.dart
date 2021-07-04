@@ -45,9 +45,11 @@ class LoginBloc with Validators {
       if(flagControllersAreClosed){throw new Exception('Race condition at LoginBloc');}
       return;
     }
+    flagControllersAreClosed=false;
     _emailController= BehaviorSubject<String>();
     _passwordController= BehaviorSubject<String>();
     _requestResult=BehaviorSubject<String>();
+
   }
 
   Future<String> login(String email, String password)async{

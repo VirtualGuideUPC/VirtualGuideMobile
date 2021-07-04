@@ -6,16 +6,18 @@ import 'package:tour_guide/data/entities/experienceDetailed.dart';
 import 'package:tour_guide/data/providers/experienceProvider.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/FlipCardWidget.dart';
 
-class ExperienceDetail extends StatefulWidget {
-  const ExperienceDetail({Key key}) : super(key: key);
+class ExperienceDetails extends StatefulWidget {
+  const ExperienceDetails({Key key}) : super(key: key);
 
   @override
   _ExperienceDetailState createState() => _ExperienceDetailState();
 }
 
-class _ExperienceDetailState extends State<ExperienceDetail> {
+class _ExperienceDetailState extends State<ExperienceDetails> {
 
   Future<ExperienceDetailed> futureExperienceDetail;
   @override
@@ -85,9 +87,9 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
           );
         }else if(snapshot.hasError){
           if(snapshot.error=='401'){
-            Future.delayed(Duration.zero, () => Navigator.pushReplacementNamed(context, "login"));
+            Future.delayed(Duration.zero, () => Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin));
           }else{
-            Future.delayed(Duration.zero, () => Navigator.of(context).pop());
+            Future.delayed(Duration.zero, () => Utils.mainNavigator.currentState.pop());
           }
           return Container();
         }else{
@@ -101,11 +103,15 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
     return SizedBox(
       width: double.infinity,
       height:400,
-      child:Carousel(
-        images:experienceDetails.pictures.map(
-          (item) => NetworkImage(item)
-        ).toList()
-      )
+      child:
+        experienceDetails.pictures.length>0
+        ?
+        Carousel(
+          images:experienceDetails.pictures.map(
+            (item) => NetworkImage(item)
+          ).toList())
+        :
+        Image(image:AssetImage("assets/img/no-image.jpg"))
     );
   }
 
@@ -121,9 +127,9 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
       }
     );
 
-    final more=_section("Descubre más de",
+    final more=_section("Descubre más de ...",
       (){
-        return _slider(experienceDetails.types.length,0.6,110,
+        return _slider(experienceDetails.categories.length,0.6,110,
           (context, i){
             return Container(
                 padding:EdgeInsets.all(20),
@@ -131,9 +137,9 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Flexible(fit: FlexFit.tight, child: Text(experienceDetails.types[i].name,style:TextStyle(fontSize: 24))),
-                    Flexible(fit: FlexFit.tight, child: SizedBox()),
-                    Flexible(fit: FlexFit.tight, child: Text(experienceDetails.types[i].nExperiences.toString() + " experiencias",style:TextStyle(fontSize:17,color:Colors.black87)))
+                    Flexible(fit: FlexFit.tight, child: Text(experienceDetails.categories[i].name,style:TextStyle(fontSize: 24))),
+                    //Flexible(fit: FlexFit.tight, child: SizedBox()),
+                    //Flexible(fit: FlexFit.tight, child: Text(experienceDetails.categories[i].nExperiences.toString() + " experiencias",style:TextStyle(fontSize:17,color:Colors.black87)))
                   ],
               ),
             );
@@ -164,7 +170,7 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
         );
       }
     );
-    final reviews=_section("${experienceDetails.ranking} (${experienceDetails.numberComments} comentarios)",
+    final reviews=_section("${experienceDetails.avgRanking} (${experienceDetails.numberComments} comentarios)",
       (){
         return _slider(experienceDetails.reviews.length,0.7,250,
           (context, i){
@@ -198,26 +204,54 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
       }
     );
 
-    final similarExperiences=_section("Experiencias similaress",
-      (){
-        return _slider(experienceDetails.similarExperience.length, 0.45, 250,(context,i){
-            final Experience experience=Experience(
-              id:experienceDetails.similarExperience[i].id,
-              name:experienceDetails.similarExperience[i].name,
-              shortInfo: experienceDetails.similarExperience[i].shortInfo,
-              picture:experienceDetails.similarExperience[i].pic,
-              isFavorite:experienceDetails.similarExperience[i].isFavorite
-            );  
-            return FlipCard(
-                experience:experience,
-                onTap: (){
-                  
-                },
-              );
-            
-        });
-      }
-    );
+    Widget similarExperiences;
+    if(experienceDetails.similarExperience!=null){
+      similarExperiences=_section("Experiencias similaress",
+        (){
+          return _slider(experienceDetails.similarExperience.length, 0.45, 250,(context,i){
+              final Experience experience=Experience(
+                id:experienceDetails.similarExperience[i].id,
+                name:experienceDetails.similarExperience[i].name,
+                shortInfo: experienceDetails.similarExperience[i].shortInfo,
+                picture:experienceDetails.similarExperience[i].pic,
+                avgRanking: experienceDetails.similarExperience[i].avgRanking,
+                nComments: experienceDetails.similarExperience[i].numberComments,
+                province: experienceDetails.similarExperience[i].province,
+                isFavorite:false
+              );  
+              return FlipCard(
+                  experience:experience,
+                  onTap: (){
+                    
+                  },
+                );
+              
+          });
+        }
+      );
+    }else{
+      similarExperiences=_section("Experiencias similaress",
+        (){
+          return _slider(2, 0.45, 250,(context,i){
+              final Experience experience=Experience(
+                id:1,
+                name:"Machupicchu",
+                shortInfo:"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took ",
+                picture:"https://res.cloudinary.com/djtqhafqe/image/upload/v1624908103/taller-desempe%C3%B1o-profesional/pyjoctif663ddfqn8og6.jpg",
+                isFavorite:false
+              );  
+              return FlipCard(
+                  experience:experience,
+                  onTap: (){
+                    
+                  },
+                );
+              
+          });
+        }
+      );
+    }
+
 
     return Container(
       color: Color.fromRGBO(79, 77, 140, 1),
@@ -267,13 +301,5 @@ class _ExperienceDetailState extends State<ExperienceDetail> {
             },
           ),
         );
-  }
-
-   ImageProvider _getPosterImage(String posterPath){
-      if(posterPath==null){
-          return AssetImage("assets/images/no-image.png");
-      }else{
-          return NetworkImage(posterPath);
-      }
   }
 }

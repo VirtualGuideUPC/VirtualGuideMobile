@@ -45,7 +45,8 @@ class UserProvider {
 
     Map decodedJson = json.decode(resp.body);
     if (resp.statusCode==200 && decodedJson.containsKey('jwt')){
-      _prefs.token = decodedJson['jwt'];
+      _prefs.setToken(decodedJson['jwt']);
+      _prefs.setUserId(decodedJson['id']);
       return decodedJson['jwt'];
     } else {
       if (decodedJson.containsKey('detail')) {

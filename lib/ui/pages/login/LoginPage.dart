@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:tour_guide/data/datasource/userPreferences.dart';
+import 'package:tour_guide/main.dart';
 import 'package:tour_guide/ui/bloc/loginBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
 import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
 
@@ -11,21 +16,39 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   bool flagRequestSubmitted=false;
+
+  bool flagWaitingIfLoggedUser=true;
+  @override
+  void initState() { 
+    super.initState();
+    final _prefs=UserPreferences();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if(_prefs.getToken()!=''){
+        Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
+      }
+      flagWaitingIfLoggedUser=false;
+      setState(() {});
+    }); 
+  }
   @override
   Widget build(context) {
     final bloc = Provider.loginBlocOf(context);
     bloc.init();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
-        body: SingleChildScrollView(
+      body: !flagWaitingIfLoggedUser?_buildContent(bloc):Center(child: CircularProgressIndicator(),)
+    );
+  }
+  Widget _buildContent(LoginBloc bloc){
+    return SingleChildScrollView(
             child: Column(children: [
       SafeArea(
           child: Container(
         height: 30.0,
       )),
-      Container(
+       Container(
         color: Theme.of(context).primaryColorLight,
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
@@ -42,15 +65,14 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 10.0),
             GestureDetector(child: Text("Registrate aqui",style:TextStyle(fontSize: 15.0)),onTap: (){
               bloc.dispose();
-              Navigator.pushReplacementNamed(context, "signin");
+              Utils.mainNavigator.currentState.pushReplacementNamed(routeSignin);
               },),
             SizedBox(height: 10.0),
           ],
         ),
       )
-    ])));
+    ]));
   }
-
   _buildEmailField(LoginBloc bloc){
     return StreamBuilder(
       stream: bloc.emailStream ,
@@ -128,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
 
     bloc.login(bloc.email, bloc.password).then((String result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
-      Navigator.pushReplacementNamed(context, "home");
+      Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
     }).catchError((error){
       if(alertContext!=null)Navigator.of(alertContext).pop();
       bloc.changeRequestResult(error.toString());

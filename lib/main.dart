@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
 import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
+import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
 import 'package:tour_guide/ui/pages/home/HomePage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/pages/signin/SigninPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-void main() {
+
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs=new UserPreferences();
-  prefs.initPrefs();
+  await prefs.initPrefs();
   runApp(MyApp());
 }
 
@@ -29,13 +34,31 @@ class MyApp extends StatelessWidget {
             const Locale('es', 'ES'),
           ],
           title: 'VirtualGuide',
-          initialRoute: 'login',
-          routes:{
-            'login':(BuildContext context)=>LoginPage(),
-            'signin':(BuildContext context)=>SigninPage(),
-            'home':(BuildContext context)=>HomePage(),
-            'experience-detail':(BuildContext context)=>ExperienceDetail(),
-            'favorite-departments':(BuildContext context)=>FavoriteDepartments()
+          navigatorKey: Utils.mainNavigator,
+          home: LoginPage(),
+          onGenerateRoute: (settings){
+            Widget page;
+            if(settings.name==routeLogin){
+              page=LoginPage();
+            }else if(settings.name==routeSignin){
+              page=SigninPage();
+            }else if(settings.name==routeExperienceDetails){
+              page=ExperienceDetails();
+            }else if(settings.name.startsWith(routePrefixHome)){
+              final subRoute=settings.name.substring(routePrefixHome.length);
+              page=HomePage(
+                homePageRoute:subRoute
+              );
+            }else{
+              throw Exception('Unknown route: ${settings.name}');
+            }
+
+            return MaterialPageRoute<dynamic>(
+              builder: (context) {
+                return page;
+              },
+              settings: settings,
+            );
           },
           theme: ThemeData
             (

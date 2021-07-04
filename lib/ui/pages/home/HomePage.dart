@@ -1,12 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tour_guide/main.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
-import 'package:tour_guide/ui/pages/account_settings/UserSettingsPage.dart';
+import 'package:tour_guide/ui/pages/account_settings/AcountSettingsPage.dart';
+import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
+import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
+import 'package:tour_guide/ui/pages/login/LoginPage.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 
 
 class HomePage extends StatefulWidget {
+  final String homePageRoute;
+  HomePage({@required this.homePageRoute});
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -26,10 +34,18 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
             resizeToAvoidBottomInset:false,
+            
       appBar: TabBar(
         onTap: (index){
+          switch(index){
+            case 0: Utils.homeNavigator.currentState.pushReplacementNamed(routeHomeExplorerPage);break;
+            case 1: Utils.homeNavigator.currentState.pushReplacementNamed(routeHomeChatPage);break;
+            case 2: Utils.homeNavigator.currentState.pushReplacementNamed(routeHomeAccountPage);break;
+          }
+          print(index);
           _streamIndexCurrentTab.add(index);
 
         },
@@ -43,18 +59,44 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
         ],
         
       ),
-      body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-            controller: tabController,
-            children: [
-              ExplorePage(_streamIndexCurrentTab.stream),
-              ChatPage(),
-              AccountSettingsPage(),
-            ],
-          ),
+      body: SafeArea(
+              child: Navigator(
+          key:Utils.homeNavigator,
+          initialRoute: widget.homePageRoute,
+          onGenerateRoute: _onGenerateRoute,
+        ),
+      )
     );
   }
+  Route _onGenerateRoute(RouteSettings settings) {
+    Widget page;
+    switch (settings.name) {
+      case routeHomeExplorerPage:
+        page = ExplorePage();
+        break;
+      case routeHomeChatPage:
+        page = ChatPage();
+        break;
+      case routeHomeAccountPage:
+        page = AccountSettingsPage();
+        break;
+      case routeHomeFavoriteDepartmentsPage:
+        page = FavoriteDepartments();
+        break;
+      case routeHomeFavoriteExperiencesPage:
+        page = FavoriteExperiences();
+        break;
+      default:
+        print("NOMBRE SUBRUTA: " + settings.name);
+    }
 
+    return MaterialPageRoute<dynamic>(
+      builder: (context) {
+        return page;
+      },
+      settings: settings,
+    );
+  }
 }
 
 class UserResult extends StatelessWidget {

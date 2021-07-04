@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide/data/entities/experience.dart';
+import 'package:tour_guide/data/providers/experienceProvider.dart';
+import 'package:tour_guide/ui/bloc/placesBloc.dart';
+import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
+
+import '../../../main.dart';
 
 
 class ExperiencesCarousel extends StatefulWidget {
@@ -18,10 +25,10 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
     initialPage: 0,
     viewportFraction: 0.9
   );
-
+  final ExperienceProvider experienceProvider=ExperienceProvider();
   @override
   Widget build(BuildContext context) {
-    
+    final placesBloc=Provider.placesBlocOf(context);
     final numberCards=widget.experiences.length;
     return Container(
       child: PageView.builder(
@@ -30,7 +37,7 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
         // children: _tarjetas(context),
         itemCount:numberCards>5?5:numberCards,
         itemBuilder: ( context, i ){
-          return _tarjeta(context, widget.experiences[i] );
+          return _tarjeta(context, widget.experiences[i] ,placesBloc);
         },
       ),
     );
@@ -38,7 +45,7 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
 
   }
 
-  Widget _tarjeta(BuildContext context, Experience experience) {
+  Widget _tarjeta(BuildContext context, Experience experience, PlacesBloc placesBloc) {
 
     final tarjeta = Container(
       decoration: BoxDecoration(
@@ -57,7 +64,7 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
                       child: FadeInImage(
-                        image: _getPosterImage(experience.getPosterPath()),
+                        image: Utils.getPosterImage(experience.getPosterPath()),
                         placeholder: AssetImage('assets/img/loading.gif'),
                         fit: BoxFit.cover,
                         height: 100.0,
@@ -96,8 +103,12 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
               top:4,
               child: GestureDetector(
                 onTap: (){
-                  //TODO:send request to set this experience as favorite
-                  experience.isFavorite=!experience.isFavorite; setState(() {});
+                  // experience.isFavorite=!experience.isFavorite; 
+                    if(!experience.isFavorite){
+                      placesBloc.postAddFavoriteExperience(experience.id.toString());
+                      experience.isFavorite=true;
+                      setState(() {});
+                    }
                 },
                 child: experience.isFavorite?Icon(Icons.favorite):Icon(Icons.favorite_border),
               ),
@@ -110,17 +121,10 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
       child: tarjeta,
       onTap: (){
         print("tap!");
-        // Navigator.pushNamed(context, 'detalle', arguments: pelicula );
+        Utils.mainNavigator.currentState.pushNamed(routeExperienceDetails, arguments: experience );
       },
     );
 
   }
 
-   ImageProvider _getPosterImage(String posterPath){
-      if(posterPath==null){
-          return AssetImage("assets/images/no-image.png");
-      }else{
-          return NetworkImage(posterPath);
-      }
-    }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
 import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
 import 'package:intl/intl.dart';/*birth date formal*/
@@ -54,7 +56,7 @@ return Scaffold(
                             SizedBox(height: 10.0),
                             GestureDetector(child: Text("Inicia sesión aqui",style:TextStyle(fontSize: 15.0)),onTap: (){
                               bloc.dispose();
-                              Navigator.pushReplacementNamed(context, "login");},),
+                              Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);},),
                             SizedBox(height: 10.0),
                           ],
                         ),
@@ -223,7 +225,7 @@ return Scaffold(
 
     bloc.signin(bloc.name,bloc.lastName,bloc.email, bloc.password,bloc.birthDate,bloc.country).then((String result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
-      Navigator.pushReplacementNamed(context, "login");
+      Utils.mainNavigator.currentState.pushReplacementNamed("login");
     }).catchError((error){
       if(alertContext!=null)Navigator.of(alertContext).pop();
         bloc.changeRequestResult(error.toString());
