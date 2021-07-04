@@ -98,7 +98,6 @@ class ExperienceProvider{
         'Cookie':'jwt=$userToken'
       },
     );
-    print("asasdfasdfads");
     print(resp.statusCode.toString());
     if(resp.statusCode==200){
       dynamic decodedJson = json.decode(resp.body);

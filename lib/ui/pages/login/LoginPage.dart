@@ -138,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
   _login(LoginBloc bloc, BuildContext context){
     if(flagRequestSubmitted){return;}
     BuildContext alertContext;
-    showDialog(context: context, builder: (context){
+    showDialog(context: context,barrierDismissible: false, builder: (context){
       alertContext=context;
       return AlertDialog(backgroundColor: Colors.white,content:Column(
         mainAxisSize: MainAxisSize.min,

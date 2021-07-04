@@ -66,7 +66,9 @@ class _FavoriteExperiencesState extends State<FavoriteExperiences> {
   }
   List<Widget> _buildCards(BuildContext context, List<Experience> experiences){
     return experiences.map((item){
-      return Container(
+      return GestureDetector(
+        onTap: (){Utils.homeNavigator.currentState.pushNamed(routeHomeExperienceDetailsPage,arguments: item);},
+        child: Container(
         margin:EdgeInsets.only(bottom:40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +85,7 @@ class _FavoriteExperiencesState extends State<FavoriteExperiences> {
             Text(item.name,style:TextStyle(fontSize:20))
           ],
         ),
-      );
+      ));
     }
     ).toList();
   }

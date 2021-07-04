@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tour_guide/main.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
+import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
 import 'package:tour_guide/ui/pages/account_settings/AcountSettingsPage.dart';
 import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
@@ -85,6 +86,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
         break;
       case routeHomeFavoriteExperiencesPage:
         page = FavoriteExperiences();
+        break;
+      case routeHomeExperienceDetailsPage:
+        page= ExperienceDetails();
         break;
       default:
         print("NOMBRE SUBRUTA: " + settings.name);

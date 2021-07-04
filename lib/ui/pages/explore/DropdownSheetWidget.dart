@@ -61,7 +61,7 @@ class DropdownSheet extends StatelessWidget {
         experience:item,
         horizontalPadding: 10,
         onTap: (){
-          Utils.mainNavigator.currentState.pushNamed(routeExperienceDetails, arguments: item );
+          Utils.homeNavigator.currentState.pushNamed(routeHomeExperienceDetailsPage, arguments: item );
         },
       );
     }).toList();

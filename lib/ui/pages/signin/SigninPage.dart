@@ -218,14 +218,14 @@ return Scaffold(
   _signin(SigninBloc bloc, BuildContext context){
     if(flagRequestSubmitted){return;}
     BuildContext alertContext;
-    showDialog(context: context, builder: (context){
+    showDialog(context: context,barrierDismissible: false, builder: (context){
       alertContext=context;
       return AlertDialog(backgroundColor: Colors.white,content:Center(child: CircularProgressIndicator(),));
     });
 
     bloc.signin(bloc.name,bloc.lastName,bloc.email, bloc.password,bloc.birthDate,bloc.country).then((String result){
       if(alertContext!=null)Navigator.of(alertContext).pop();
-      Utils.mainNavigator.currentState.pushReplacementNamed("login");
+      Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);
     }).catchError((error){
       if(alertContext!=null)Navigator.of(alertContext).pop();
         bloc.changeRequestResult(error.toString());

@@ -42,8 +42,6 @@ class MyApp extends StatelessWidget {
               page=LoginPage();
             }else if(settings.name==routeSignin){
               page=SigninPage();
-            }else if(settings.name==routeExperienceDetails){
-              page=ExperienceDetails();
             }else if(settings.name.startsWith(routePrefixHome)){
               final subRoute=settings.name.substring(routePrefixHome.length);
               page=HomePage(

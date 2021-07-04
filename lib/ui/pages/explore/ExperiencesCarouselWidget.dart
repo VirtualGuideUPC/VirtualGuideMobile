@@ -120,8 +120,7 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
     return GestureDetector(
       child: tarjeta,
       onTap: (){
-        print("tap!");
-        Utils.mainNavigator.currentState.pushNamed(routeExperienceDetails, arguments: experience );
+        Utils.homeNavigator.currentState.pushNamed(routeHomeExperienceDetailsPage, arguments: experience );
       },
     );
 

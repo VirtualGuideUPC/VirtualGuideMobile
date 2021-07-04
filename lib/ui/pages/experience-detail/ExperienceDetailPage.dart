@@ -87,9 +87,9 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
           );
         }else if(snapshot.hasError){
           if(snapshot.error=='401'){
-            Future.delayed(Duration.zero, () => Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin));
+            Future.delayed(Duration.zero, () => Utils.homeNavigator.currentState.pop());
           }else{
-            Future.delayed(Duration.zero, () => Utils.mainNavigator.currentState.pop());
+            Future.delayed(Duration.zero, () => Utils.homeNavigator.currentState.pop());
           }
           return Container();
         }else{
