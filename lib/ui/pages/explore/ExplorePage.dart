@@ -89,7 +89,8 @@ class _ExplorePageState extends State<ExplorePage>
                 onchangeValue: (val) {
                   _searchString = val;
                   print(val);
-                  placesBloc.getLocations(_searchString);
+                  //todo::this is commented for the api deprecated
+                  //placesBloc.getLocations(_searchString);
                 },
                 onEditingComplete: () {},
               ),

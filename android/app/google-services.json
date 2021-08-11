@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "566828197883",
+    "project_id": "virtualguide-38021",
+    "storage_bucket": "virtualguide-38021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566828197883:android:fa6f2437b1fa289ab18d5e",
+        "android_client_info": {
+          "package_name": "com.tourguide.tour_guide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566828197883-h53fcijje5usp9uftibkkavv82d2etgj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tourguide.tour_guide",
+            "certificate_hash": "483fa9e8a36cf31048c722ea13b6df9ddfd0d8ee"
+          }
+        },
+        {
+          "client_id": "566828197883-o1undf5qo6b80cpk02sfdgdecmq70cec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfEY9OFhl9N4eKDQo9vPXcza4xlYMTeW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566828197883-o1undf5qo6b80cpk02sfdgdecmq70cec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

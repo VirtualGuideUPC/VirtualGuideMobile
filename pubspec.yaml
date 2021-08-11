@@ -37,6 +37,8 @@ dependencies:
   geolocator: ^7.1.0
   permission_handler: ^8.1.1
   carousel_pro: ^1.0.0
+  cached_network_image:
+  google_sign_in: ^4.0.1+1
 
 dev_dependencies:
   flutter_test:
