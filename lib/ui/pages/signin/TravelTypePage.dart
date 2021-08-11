@@ -1,49 +1,149 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; /*birth date formal*/
+import 'package:tour_guide/data/entities/category.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
 import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
-import 'package:intl/intl.dart'; /*birth date formal*/
 
-class SigninPage extends StatefulWidget {
+class TravelTypePage extends StatefulWidget {
   @override
-  _SigninPageState createState() => _SigninPageState();
+  _TravelTypePageState createState() => _TravelTypePageState();
 }
 
-class _SigninPageState extends State<SigninPage> {
+class _TravelTypePageState extends State<TravelTypePage> {
   final double minHeight = 700;
 
-  final List<String> _countries = ['Perú'];
+  final List<String> _countries = [
+    'Perú',
+    'Chile',
+    'Brazil',
+    'México',
+    'Argentina',
+    'Bolivia',
+    'Colombia',
+    'USA',
+    'Francia',
+    'Portugal',
+    'China',
+    'Corea'
+  ];
+
+  final List<String> _languages = [
+    'Español',
+    'Inglés',
+    'Francés',
+    'Portugues',
+    'Chino',
+    'Coreano'
+  ];
 
   TextEditingController _inputFieldDateController = new TextEditingController();
 
   bool flagRequestSubmitted = false;
+  bool isMale = false;
+
+  Widget getImageWidget(url, name) {
+    return GestureDetector(
+      onTap: () => {
+        Utils.mainNavigator.currentState.pushReplacementNamed(routeTravelStyles)
+      },
+      child: Container(
+        decoration: new BoxDecoration(color: Colors.white),
+        width: double.infinity,
+        height: 275,
+        child: Stack(
+          children: <Widget>[
+            Image.network(url, fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              alignment: Alignment.center,),
+            /*style.isSelected ? Positioned(
+                top: 0, right: 0, bottom: 0, left: 0, //give the values according to your requirement
+                child: Icon(Icons.favorite, color: Colors.white, size: 35,)
+              //IconButton(icon: Icon(Icons.delete_forever, color: Colors.redAccent,), onPressed: () {  },),
+            ) : Text(""),*/
+            Positioned(
+                bottom: 15,
+                left: 15,
+                //give the values according to your requirement
+                child: textWithStroke(text: name, fontSize: 20)
+                //IconButton(icon: Icon(Icons.delete_forever, color: Colors.redAccent,), onPressed: () {  },),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget textWithStroke(
+      {String text,
+      String fontFamily,
+      double fontSize: 12,
+      double strokeWidth: 1,
+      Color textColor: Colors.white,
+      Color strokeColor: Colors.black}) {
+    return Stack(
+      children: <Widget>[
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = strokeWidth
+              ..color = strokeColor,
+          ),
+        ),
+        Text(text,
+            style: TextStyle(
+                fontFamily: fontFamily, fontSize: fontSize, color: textColor)),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
-    final bloc = Provider.signinBlocOf(context);
+    final bloc = Provider.loginBlocOf(context);
     bloc.init();
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColorLight,
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            "Escoge tu estilo",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              bloc.dispose();
+              Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);
+            },
+          ),
+        ),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
-            child: Column(children: [
-          SafeArea(
-              child: Container(
-            height: 10.0,
-          )),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            height: _screenSize.height - 100 < minHeight
-                ? minHeight
-                : _screenSize.height - 100,
-            child: Column(
-              children: [
-                Text("Registrate",
-                    style: Theme.of(context).textTheme.headline3),
-                _buildNameField(bloc),
+            child: Stack(children: <Widget>[
+          Column(
+            children: [
+              getImageWidget(
+                  "http://hayo.co/wp-content/uploads/2018/08/lonely-planet-622111-unsplash.jpg",
+                  "Viaje personal"),
+              getImageWidget(
+                  "https://www.arscurrendi.com/wp-content/uploads/2018/07/backlit-clouds-dusk-853168.jpg",
+                  "Viaje con amigos"),
+              getImageWidget(
+                  "https://i2.wp.com/wandereroftheworld.co.uk/wp-content/uploads/2019/07/55-Romantic-Couple-Travel-Quotes-Fun-Travel-Puns.png?w=650&ssl=1",
+                  "Viaje romántico"),
+              getImageWidget(
+                  "https://www.vuelio.com/uk/wp-content/uploads/2018/08/family-travel-feature.jpg",
+                  "Viaje en familia")
+              /*_buildNameField(bloc),
                 SizedBox(height: 10.0),
                 _buildLastNameField(bloc),
                 SizedBox(height: 10.0),
@@ -68,10 +168,50 @@ class _SigninPageState extends State<SigninPage> {
                         .pushReplacementNamed(routeLogin);
                   },
                 ),
+                SizedBox(height: 10.0),*/
+            ],
+          ),
+          /*Container(
+            padding: EdgeInsets.symmetric(horizontal: 40.0),
+            height: _screenSize.height - 100 < minHeight
+                ? minHeight
+                : _screenSize.height - 100,
+            child: Column(
+              children: [
+                getImageWidget("http://hayo.co/wp-content/uploads/2018/08/lonely-planet-622111-unsplash.jpg", "Viaje personal"),
+                getImageWidget("https://www.arscurrendi.com/wp-content/uploads/2018/07/backlit-clouds-dusk-853168.jpg", "Viaje con amigos"),
+                getImageWidget("https://www.arscurrendi.com/wp-content/uploads/2018/07/backlit-clouds-dusk-853168.jpg", "Viaje con amigos"),
+                getImageWidget("https://www.arscurrendi.com/wp-content/uploads/2018/07/backlit-clouds-dusk-853168.jpg", "Viaje con amigos"),
+                getImageWidget("https://www.arscurrendi.com/wp-content/uploads/2018/07/backlit-clouds-dusk-853168.jpg", "Viaje con amigos")
+                /*_buildNameField(bloc),
                 SizedBox(height: 10.0),
+                _buildLastNameField(bloc),
+                SizedBox(height: 10.0),
+                _buildEmailField(bloc),
+                SizedBox(height: 10.0),
+                _buildPasswordField(bloc),
+                SizedBox(height: 10.0),
+                _buildBirthDatePicker(context, bloc),
+                SizedBox(height: 10.0),
+                _buildCountryDropDown(bloc),
+                SizedBox(height: 10.0),
+                _buildRequestResultBox(bloc),
+                Expanded(child: SizedBox()),
+                _buildSubmitButton(bloc),
+                SizedBox(height: 10.0),
+                GestureDetector(
+                  child: Text("Inicia sesión aqui",
+                      style: TextStyle(fontSize: 15.0)),
+                  onTap: () {
+                    bloc.dispose();
+                    Utils.mainNavigator.currentState
+                        .pushReplacementNamed(routeLogin);
+                  },
+                ),
+                SizedBox(height: 10.0),*/
               ],
             ),
-          )
+          )*/
         ])));
   }
 
@@ -135,8 +275,8 @@ class _SigninPageState extends State<SigninPage> {
   Widget _buildBirthDatePicker(context, SigninBloc bloc) {
     return AuthTextField(
         controller: _inputFieldDateController,
-        label: "Fecha de nacimiento:",
-        placeholder: "20/20/2020",
+        label: "Fecha de nacimiento",
+        placeholder: "Seleccionar",
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           _selectDate(context, bloc);
@@ -168,7 +308,7 @@ class _SigninPageState extends State<SigninPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'País',
+              '',
               style: TextStyle(
                   fontSize: 18.0, color: Color.fromRGBO(0, 0, 0, 0.6)),
             ),
@@ -187,6 +327,41 @@ class _SigninPageState extends State<SigninPage> {
               items: getOpcionesDropdown(),
               onChanged: (val) {
                 bloc.changeCountry(val);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageDropDown(SigninBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.nameStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '',
+              style: TextStyle(
+                  fontSize: 18.0, color: Color.fromRGBO(0, 0, 0, 0.6)),
+            ),
+            SizedBox(height: 5.0),
+            DropdownButtonFormField(
+              dropdownColor: Theme.of(context).primaryColorLight,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 10.0),
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                labelText: "Seleccione un idioma",
+              ),
+              value: snapshot.data,
+              items: getLanguagesDropdown(),
+              onChanged: (val) {
+                bloc.changeName(val);
               },
             ),
           ],
@@ -276,5 +451,16 @@ class _SigninPageState extends State<SigninPage> {
       ));
     }
     return lista;
+  }
+
+  List<DropdownMenuItem<String>> getLanguagesDropdown() {
+    List<DropdownMenuItem<String>> list = [];
+    for (int i = 0; i < _languages.length; i++) {
+      list.add(DropdownMenuItem(
+        child: Text(_languages[i]),
+        value: (i + 1).toString(),
+      ));
+    }
+    return list;
   }
 }
