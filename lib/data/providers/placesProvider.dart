@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PlacesProvider{
-  String _apiKey='AIzaSyDtAr_TPakwmocvoOp-poGun0sII4a7o-0';
+  String _apiKey='AIzaSyC1P3Uh-USWM03mLZnz-chGepsaIUCnAMI';
 
 
   Future<List<dynamic>> getLocations(String searchTerm) async{
@@ -20,7 +20,7 @@ class PlacesProvider{
       if(requestEndMoment.difference(requestStartMoment).inSeconds>1){
         return [];
       }else{
-        //print(decodedJson);
+        print(decodedJson);
         return decodedJson['predictions'];
       }
 
