@@ -1,0 +1,51 @@
+class Review {
+  int id;
+  String userName;
+  String profilePic;
+  String date;
+  String comment;
+  int commentRanking;
+  int touristicPlace;
+  int user;
+  int ranking;
+
+  Review(
+      {this.id,
+      this.userName,
+      this.profilePic,
+      this.date,
+      this.comment,
+      this.ranking,
+      this.commentRanking,
+      this.touristicPlace,
+      this.user});
+
+  Review.fromJson(Map json) {
+    this.id = json["review_id"];
+    this.userName = json["user_name"];
+    this.profilePic = json["profile_pic"];
+    this.date = json["date"];
+    this.comment = json["comment"];
+    this.ranking = json["ranking"];
+    this.commentRanking = json["comment_ranking"];
+    this.touristicPlace = json["touristic_place"];
+    this.user = json["user"];
+  }
+}
+
+class CreateReviewDto {
+  String comment;
+  int commentRanking;
+  String date;
+  int ranking;
+  int touristicPlace;
+  int user;
+
+  CreateReviewDto(
+      {this.comment,
+      this.commentRanking,
+      this.date,
+      this.ranking,
+      this.touristicPlace,
+      this.user});
+}

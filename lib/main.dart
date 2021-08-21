@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
@@ -11,10 +12,9 @@ import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/pages/signin/SigninPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs=new UserPreferences();
+  final prefs = new UserPreferences();
   await prefs.initPrefs();
   runApp(MyApp());
 }
@@ -23,54 +23,49 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-          child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('en', 'US'), // English
-            const Locale('es', 'ES'),
-          ],
-          title: 'VirtualGuide',
-          navigatorKey: Utils.mainNavigator,
-          home: LoginPage(),
-          onGenerateRoute: (settings){
-            Widget page;
-            if(settings.name==routeLogin){
-              page=LoginPage();
-            }else if(settings.name==routeSignin){
-              page=SigninPage();
-            }else if(settings.name.startsWith(routePrefixHome)){
-              final subRoute=settings.name.substring(routePrefixHome.length);
-              page=HomePage(
-                homePageRoute:subRoute
-              );
-            }else{
-              throw Exception('Unknown route: ${settings.name}');
-            }
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', 'US'), // English
+          const Locale('es', 'ES'),
+        ],
+        title: 'VirtualGuide',
+        navigatorKey: Utils.mainNavigator,
+        home: LoginPage(),
+        onGenerateRoute: (settings) {
+          Widget page;
+          if (settings.name == routeLogin) {
+            page = LoginPage();
+          } else if (settings.name == routeSignin) {
+            page = SigninPage();
+          } else if (settings.name.startsWith(routePrefixHome)) {
+            final subRoute = settings.name.substring(routePrefixHome.length);
+            page = HomePage(homePageRoute: subRoute);
+          } else {
+            throw Exception('Unknown route: ${settings.name}');
+          }
 
-            return MaterialPageRoute<dynamic>(
-              builder: (context) {
-                return page;
-              },
-              settings: settings,
-            );
-          },
-          theme: ThemeData
-            (
-            scaffoldBackgroundColor: Color.fromRGBO(143, 142, 192, 1),
-            dialogBackgroundColor: Colors.white,
-            primaryColor: Color.fromRGBO(143, 142, 192, 1),
-            primarySwatch: Colors.grey,
-            iconTheme: IconThemeData(
-              color:Color.fromRGBO(0, 0, 0, 0.6)
-            ),
-            cardColor: Colors.white70,
-            accentColor: Colors.white,
-            canvasColor: Colors.transparent,
-          ),
+          return MaterialPageRoute<dynamic>(
+            builder: (context) {
+              return page;
+            },
+            settings: settings,
+          );
+        },
+        theme: ThemeData(
+          scaffoldBackgroundColor: Color.fromRGBO(143, 142, 192, 1),
+          dialogBackgroundColor: Colors.white,
+          primaryColor: Color.fromRGBO(143, 142, 192, 1),
+          primarySwatch: Colors.grey,
+          iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 0.6)),
+          cardColor: Colors.white70,
+          accentColor: Colors.white,
+          canvasColor: Colors.transparent,
+        ),
       ),
     );
   }
