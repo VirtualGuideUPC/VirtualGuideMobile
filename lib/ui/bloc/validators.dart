@@ -10,7 +10,7 @@ class Validators {
     if(regExp.hasMatch(name)){
       sink.add(name);
     }else{
-      sink.addError('El nombre no es valido');
+      sink.addError('El nombre no es válido');
     }
   });
   final validateLastName= StreamTransformer<String,String>.fromHandlers(handleData: (lastName,sink){
@@ -19,7 +19,7 @@ class Validators {
     if(regExp.hasMatch(lastName)){
       sink.add(lastName);
     }else{
-      sink.addError('El apellido no es valido');
+      sink.addError('El apellido no es válido');
     }
   });
 

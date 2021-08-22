@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
-import 'package:tour_guide/main.dart';
+import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/ui/bloc/loginBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
-import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
-import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
+import 'package:tour_guide/ui/widgets/CustomElevatedButton.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -19,37 +19,56 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   bool flagRequestSubmitted = false;
-
   bool flagWaitingIfLoggedUser = true;
-
   bool isSignedIn = false;
 
-  /*void initState(){
-    super.initState();
-
-
-  }*/
-
   controlSignIn(GoogleSignInAccount signInAccount) async {
-    if(signInAccount != null){
+    if (signInAccount != null) {
       setState(() {
         isSignedIn = true;
-        Utils.mainNavigator.currentState.pushReplacementNamed(routePersonalInformation, arguments: signInAccount);
+        var user = User();
+        user.email = signInAccount.email;
+        user.name = signInAccount.displayName;
+        user.picture = signInAccount.photoUrl;
+        Utils.mainNavigator.currentState.pushReplacementNamed(
+            routePersonalInformation,
+            arguments: user);
       });
-    }else{
+    } else {
       setState(() {
         isSignedIn = false;
       });
     }
   }
 
-  loginUser(){
+  loginWithGoogle() {
     googleSignIn.signIn();
   }
 
-  logoutUser(){
+  logoutWithGoogle() {
     googleSignIn.signOut();
+  }
+
+  loginWithFb(){
+    FacebookAuth.instance.login(permissions: [
+      "public_profile",
+      "email"
+    ]).then((value) {
+      FacebookAuth.instance.getUserData().then((value) {
+        setState(() {
+          isSignedIn = true;
+          var user = User();
+          user.email = value["email"];
+          user.name = value["name"];
+          user.picture = value["picture"]["data"]["url"];
+          Utils.mainNavigator.currentState.pushReplacementNamed(
+              routePersonalInformation,
+              arguments: user);
+        });
+      });
+    });
   }
 
   @override
@@ -71,9 +90,9 @@ class _LoginPageState extends State<LoginPage> {
       print("Error message " + gError);
     });
 
-    googleSignIn.signInSilently(suppressErrors: false).then((gSignInAccount){
+    googleSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
       controlSignIn(gSignInAccount);
-    }).catchError((gError){
+    }).catchError((gError) {
       print("Error message " + gError);
     });
   }
@@ -102,91 +121,15 @@ class _LoginPageState extends State<LoginPage> {
               Text("Te damos la bienvenida",
                   style: Theme.of(context).textTheme.headline5),
               Image.asset('assets/img/img_home.png'),
-              //todo::create widget
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            side: BorderSide(color: Colors.grey)))),
-                onPressed: () {
-                  //bloc.dispose();
-                  //Utils.mainNavigator.currentState
-                  //    .pushReplacementNamed(routePersonalInformation);
-                  loginUser();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/img/ic_google.png'),
-                    SizedBox(
-                      width: 10.0,
-                      height: 52.0,
-                    ),
-                    Text('Continuar con Google'),
-                  ],
-                ),
-              ),
+              customElevatedButton("Continuar con Google", 'assets/img/ic_google.png', loginWithGoogle),
               Divider(
                 color: Colors.white,
               ),
-              Row(
-                children: [
-                  Flexible(
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      side: BorderSide(color: Colors.grey)))),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/img/ic_apple.png'),
-                          SizedBox(
-                            height: 52.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                    flex: 1,
-                  ),
-                  VerticalDivider(),
-                  Flexible(
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      side: BorderSide(color: Colors.grey)))),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/img/ic_fb.png'),
-                          SizedBox(
-                            height: 52.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                    flex: 1,
-                  )
-                ],
+              customElevatedButton("Continuar con Facebook", 'assets/img/ic_fb.png', loginWithFb),
+              Divider(
+                height: 22,
+                color: Colors.white,
               ),
-              Divider(color: Colors.white),
               Text(
                 "Al continuar aceptas los Términos de servicios y la Política de privacidad de datos",
                 textAlign: TextAlign.center,
@@ -195,26 +138,6 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white,
                 height: 40.0,
               ),
-              /* Text("Inicia sesión uwu",
-                  style: Theme.of(context).textTheme.headline3),
-              SizedBox(height: 20.0),
-              _buildEmailField(bloc),
-              SizedBox(height: 20.0),
-              _buildPasswordField(bloc),
-              SizedBox(height: 20.0),
-              _buildRequestResultBox(bloc),
-              SizedBox(height: 25.0),
-              _buildSubmitButton(bloc),
-              SizedBox(height: 10.0),
-              GestureDetector(
-                child: Text("Registrate aqui", style: TextStyle(fontSize: 15.0)),
-                onTap: () {
-                  bloc.dispose();
-                  Utils.mainNavigator.currentState
-                      .pushReplacementNamed(routeSignin);
-                },
-              ),
-              SizedBox(height: 10.0),*/
             ],
           ),
         )
@@ -222,124 +145,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _buildEmailField(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.emailStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return AuthTextField(
-          label: "Correo:",
-          placeholder: "ejemplo@gmail.com",
-          errorText: snapshot.error,
-          onChanged: bloc.changeEmail,
-        );
-      },
-    );
-  }
-
-  _buildPasswordField(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return AuthTextField(
-          label: "Contraseña:",
-          placeholder: "••••••••••••",
-          obscureText: true,
-          errorText: snapshot.error,
-          onChanged: bloc.changePassword,
-        );
-      },
-    );
-  }
-
-  _buildRequestResultBox(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.requestResultStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.redAccent),
-                color: Color.fromRGBO(255, 0, 0, 0.2),
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Text(
-              snapshot.data,
-              style: TextStyle(color: Colors.redAccent),
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
-    );
-  }
-
-  _buildSubmitButton(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return BigButton(
-          label: "Ingresar",
-          onPressed: snapshot.hasData
-              ? () {
-                  return _login(bloc, context);
-                }
-              : null,
-        );
-      },
-    );
-  }
-
-  _login(LoginBloc bloc, BuildContext context) {
-    if (flagRequestSubmitted) {
-      return;
-    }
-    BuildContext alertContext;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          alertContext = context;
-          return AlertDialog(
-              backgroundColor: Colors.white,
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ],
-              ));
-        });
-
-    bloc.login(bloc.email, bloc.password).then((String result) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
-      Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
-    }).catchError((error) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
-      bloc.changeRequestResult(error.toString());
-      flagRequestSubmitted = false;
-    });
-
-    flagRequestSubmitted = true;
-  }
-
-// void _showAlert(BuildContext context,String title, String message) {
-//   showDialog(
-//     context: context,
-//     builder: ( context ) {
-//       return AlertDialog(
-//         title: Text('$title'),
-//         content: Text(message),
-//         actions: <Widget>[
-//           TextButton(
-//             child: Text('Ok'),
-//             onPressed: ()=> Navigator.of(context).pop(),
-//           )
-//         ],
-//       );
-//     }
-//   );
-// }
 }

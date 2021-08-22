@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart'; /*birth date formal*/
+import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
@@ -18,21 +18,16 @@ class PersonalInformationPage extends StatefulWidget {
 class _PersonalInformationPageState extends State<PersonalInformationPage> {
   final double minHeight = 700;
 
-  final List<String> _countries = ['Perú'];
-
   TextEditingController _inputFieldDateController = new TextEditingController();
-  GoogleSignInAccount googleSignInAccount;
+  User user;
   bool flagRequestSubmitted = false;
   bool isMale = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    user = ModalRoute.of(context).settings.arguments;
 
-    googleSignInAccount = ModalRoute.of(context).settings.arguments;// error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
-    print("heyheyhey");
-    print("email: "+googleSignInAccount.email);
-    print("photo: "+googleSignInAccount.photoUrl);
   }
 
   @override
@@ -44,7 +39,6 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
-          //title: Text("Perfil"),
           leading: BackButton(
             color: Colors.black,
             onPressed: () {
@@ -67,21 +61,34 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                 : _screenSize.height - 100,
             child: Column(
               children: [
-                Text(
-                    "Actualiza tu información personal para mejores recomendaciones",
+                Text("Actualiza tu información personal",
                     style: Theme.of(context).textTheme.subtitle1,
                     textAlign: TextAlign.center),
                 Divider(
-                  height: 40.0,
+                  height: 20.0,
                   color: Colors.white,
                 ),
                 CircleAvatar(
                     radius: 45,
                     backgroundColor: Colors.grey,
-                    backgroundImage: CachedNetworkImageProvider(
-                        googleSignInAccount.photoUrl)),
+                    backgroundImage: CachedNetworkImageProvider(user.picture)),
                 Divider(
-                  height: 40.0,
+                  height: 20.0,
+                  color: Colors.white,
+                ),
+                _buildNameField(bloc),
+                Divider(
+                  height: 10.0,
+                  color: Colors.white,
+                ),
+                _buildLastNameField(bloc),
+                Divider(
+                  height: 10.0,
+                  color: Colors.white,
+                ),
+                _buildEmailField(bloc),
+                Divider(
+                  height: 10.0,
                   color: Colors.white,
                 ),
                 _buildBirthDatePicker(context, bloc),
@@ -115,8 +122,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                             Text(
                               "Mujer",
                               style: TextStyle(
-                                  color:
-                                      isMale ? Colors.black : Colors.white),
+                                  color: isMale ? Colors.black : Colors.white),
                             ),
                             SizedBox(
                               height: 42.0,
@@ -131,8 +137,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: isMale
-                                ? MaterialStateProperty.all<Color>(
-                                    Colors.black)
+                                ? MaterialStateProperty.all<Color>(Colors.black)
                                 : MaterialStateProperty.all<Color>(
                                     Colors.white),
                             shape: MaterialStateProperty.all<
@@ -152,8 +157,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                             Text(
                               "Hombre",
                               style: TextStyle(
-                                  color:
-                                      isMale ? Colors.white : Colors.black),
+                                  color: isMale ? Colors.white : Colors.black),
                             ),
                             SizedBox(
                               height: 42.0,
@@ -174,7 +178,8 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.black),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0),
                                     side: BorderSide(color: Colors.grey)))),
@@ -237,8 +242,10 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       stream: bloc.nameStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AuthTextField(
+          //todo::fix this
+          controller: TextEditingController()..text = user.name,//_inputFieldNameController,
           label: "Nombre:",
-          placeholder: "Steve",
+          placeholder: "Ingrese su nombre",
           errorText: snapshot.error,
           onChanged: bloc.changeName,
         );
@@ -252,7 +259,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AuthTextField(
           label: "Apellido:",
-          placeholder: "Marvel",
+          placeholder: "Ingrese su apellido",
           errorText: snapshot.error,
           onChanged: bloc.changeLastName,
         );
@@ -265,25 +272,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       stream: bloc.emailStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AuthTextField(
+          controller: TextEditingController()..text = user.email,
           label: "Correo:",
-          placeholder: "alguien@gmail.com",
+          placeholder: "Ingrese su correo electrónico",
           errorText: snapshot.error,
           onChanged: bloc.changeEmail,
-        );
-      },
-    );
-  }
-
-  Widget _buildPasswordField(SigninBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return AuthTextField(
-          obscureText: true,
-          label: "Contraseña:",
-          placeholder: "••••••••••••",
-          errorText: snapshot.error,
-          onChanged: bloc.changePassword,
         );
       },
     );
@@ -293,7 +286,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     return AuthTextField(
         controller: _inputFieldDateController,
         label: "Fecha de nacimiento",
-        placeholder: "Seleccionar",
+        placeholder: "Seleccionar fecha de nacimiento",
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           _selectDate(context, bloc);
@@ -315,41 +308,6 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       bloc.changeBirthDate(_fecha);
       setState(() {});
     }
-  }
-
-  Widget _buildCountryDropDown(SigninBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.countryStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'País',
-              style: TextStyle(
-                  fontSize: 18.0, color: Color.fromRGBO(0, 0, 0, 0.6)),
-            ),
-            SizedBox(height: 5.0),
-            DropdownButtonFormField(
-              dropdownColor: Theme.of(context).primaryColorLight,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 10.0),
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                labelText: "Seleccione un pais",
-              ),
-              value: snapshot.data,
-              items: getOpcionesDropdown(),
-              onChanged: (val) {
-                bloc.changeCountry(val);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Widget _buildRequestResultBox(SigninBloc bloc) {
@@ -422,16 +380,5 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     });
 
     flagRequestSubmitted = true;
-  }
-
-  List<DropdownMenuItem<String>> getOpcionesDropdown() {
-    List<DropdownMenuItem<String>> lista = [];
-    for (int i = 0; i < _countries.length; i++) {
-      lista.add(DropdownMenuItem(
-        child: Text(_countries[i]),
-        value: (i + 1).toString(),
-      ));
-    }
-    return lista;
   }
 }

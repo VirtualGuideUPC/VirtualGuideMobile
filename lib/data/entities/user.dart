@@ -1,14 +1,15 @@
 
 class User {
-  final int id;
-  final String name;
-  final String lastName;
-  final String email;
-  final String password;
-  final String tokenNotification;
-  final int countryId;
-  final String birthday;
-  final bool isForeign;
+  int id;
+  String name;
+  String lastName;
+  String email;
+  String password;
+  String tokenNotification;
+  int countryId;
+  String birthday;
+  String picture;
+  bool isForeign;
 
   User({
       this.id,
@@ -19,5 +20,6 @@ class User {
       this.tokenNotification,
       this.countryId,
       this.birthday,
+      this.picture,
       this.isForeign});
 }
