@@ -29,6 +29,9 @@ class SigninBloc extends Validators{
   Stream<bool> get formValidStream => 
       Rx.combineLatest6(emailStream, passwordStream,nameStream,lastNameStream,countryStream,birthDateStream, (a,b,c,d,e,f) => true );
 
+  Stream<bool> get formValidStreamPersonalInformation =>
+      Rx.combineLatest4(emailStream,nameStream,lastNameStream,birthDateStream, (a,b,c,d) => true );
+
   // Insertar valores al Stream
   Function(String) get changeEmail    => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;

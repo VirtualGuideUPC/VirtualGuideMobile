@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; /*birth date formal*/
+import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
@@ -41,9 +42,15 @@ class _CountryInformationPageState extends State<CountryInformationPage> {
   ];
 
   TextEditingController _inputFieldDateController = new TextEditingController();
-
+  User user;
   bool flagRequestSubmitted = false;
   bool isMale = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    user = ModalRoute.of(context).settings.arguments;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +109,7 @@ class _CountryInformationPageState extends State<CountryInformationPage> {
                         onPressed: () {
                           bloc.dispose();
                           Utils.mainNavigator.currentState
-                              .pushReplacementNamed(routeTravelType);
+                              .pushReplacementNamed(routeTravelType, arguments: user);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

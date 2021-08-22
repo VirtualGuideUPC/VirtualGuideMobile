@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; /*birth date formal*/
 import 'package:tour_guide/data/entities/category.dart';
+import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
@@ -44,11 +45,18 @@ class _TravelTypePageState extends State<TravelTypePage> {
 
   bool flagRequestSubmitted = false;
   bool isMale = false;
+  User user;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    user = ModalRoute.of(context).settings.arguments;
+  }
 
   Widget getImageWidget(url, name) {
     return GestureDetector(
       onTap: () => {
-        Utils.mainNavigator.currentState.pushReplacementNamed(routeTravelStyles)
+        Utils.mainNavigator.currentState.pushReplacementNamed(routeTravelStyles, arguments: user)
       },
       child: Container(
         decoration: new BoxDecoration(color: Colors.white),

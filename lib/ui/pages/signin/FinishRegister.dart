@@ -95,7 +95,7 @@ class _FinishRegisterPageState extends State<FinishRegisterPage> {
                       onPressed: () {
                         bloc.dispose();
                         Utils.mainNavigator.currentState
-                            .pushReplacementNamed(routeTravelType);
+                            .pushReplacementNamed(routeHomeStart);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

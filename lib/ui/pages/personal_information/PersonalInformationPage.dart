@@ -19,6 +19,9 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   final double minHeight = 700;
 
   TextEditingController _inputFieldDateController = new TextEditingController();
+  TextEditingController _inputFieldNameController = new TextEditingController();
+  TextEditingController _inputFieldLastnameController = new TextEditingController();
+  TextEditingController _inputFieldEmailController = new TextEditingController();
   User user;
   bool flagRequestSubmitted = false;
   bool isMale = false;
@@ -27,6 +30,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     user = ModalRoute.of(context).settings.arguments;
+    _inputFieldEmailController.text = user.email;
 
   }
 
@@ -184,9 +188,16 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                                     borderRadius: BorderRadius.circular(20.0),
                                     side: BorderSide(color: Colors.grey)))),
                         onPressed: () {
+
+                          user.name = _inputFieldNameController.text;
+                          user.lastName = _inputFieldLastnameController.text;
+                          user.email = _inputFieldEmailController.text;
+                          user.birthday = _inputFieldDateController.text;
                           bloc.dispose();
-                          Utils.mainNavigator.currentState
-                              .pushReplacementNamed(routeCountryInformation);
+                          //user.gender
+                          Utils.mainNavigator.currentState.pushReplacementNamed(
+                              routeCountryInformation,
+                              arguments: user);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -205,32 +216,6 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                     ),
                   ),
                 ),
-                /*_buildNameField(bloc),
-                SizedBox(height: 10.0),
-                _buildLastNameField(bloc),
-                SizedBox(height: 10.0),
-                _buildEmailField(bloc),
-                SizedBox(height: 10.0),
-                _buildPasswordField(bloc),
-                SizedBox(height: 10.0),
-                _buildBirthDatePicker(context, bloc),
-                SizedBox(height: 10.0),
-                _buildCountryDropDown(bloc),
-                SizedBox(height: 10.0),
-                _buildRequestResultBox(bloc),
-                Expanded(child: SizedBox()),
-                _buildSubmitButton(bloc),
-                SizedBox(height: 10.0),
-                GestureDetector(
-                  child: Text("Inicia sesión aqui",
-                      style: TextStyle(fontSize: 15.0)),
-                  onTap: () {
-                    bloc.dispose();
-                    Utils.mainNavigator.currentState
-                        .pushReplacementNamed(routeLogin);
-                  },
-                ),
-                SizedBox(height: 10.0),*/
               ],
             ),
           )
@@ -242,8 +227,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       stream: bloc.nameStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AuthTextField(
-          //todo::fix this
-          controller: TextEditingController()..text = user.name,//_inputFieldNameController,
+          controller: _inputFieldNameController,
           label: "Nombre:",
           placeholder: "Ingrese su nombre",
           errorText: snapshot.error,
@@ -258,6 +242,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       stream: bloc.lastNameStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AuthTextField(
+          controller: _inputFieldLastnameController,
           label: "Apellido:",
           placeholder: "Ingrese su apellido",
           errorText: snapshot.error,
@@ -272,7 +257,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       stream: bloc.emailStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return AuthTextField(
-          controller: TextEditingController()..text = user.email,
+          controller: _inputFieldEmailController,
           label: "Correo:",
           placeholder: "Ingrese su correo electrónico",
           errorText: snapshot.error,
@@ -310,47 +295,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     }
   }
 
-  Widget _buildRequestResultBox(SigninBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.requestResultStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.redAccent),
-                color: Color.fromRGBO(255, 0, 0, 0.2),
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Text(
-              snapshot.data,
-              style: TextStyle(color: Colors.redAccent),
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
-    );
-  }
-
-  Widget _buildSubmitButton(SigninBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return BigButton(
-          label: "Ir al siguiente paso",
-          onPressed: snapshot.hasData
-              ? () {
-                  _signin(bloc, context);
-                }
-              : null,
-        );
-      },
-    );
-  }
-
-  _signin(SigninBloc bloc, BuildContext context) {
+  /*_signin(SigninBloc bloc, BuildContext context) {
     if (flagRequestSubmitted) {
       return;
     }
@@ -380,5 +325,5 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     });
 
     flagRequestSubmitted = true;
-  }
+  }*/
 }
