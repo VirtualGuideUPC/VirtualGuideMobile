@@ -102,8 +102,11 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                     ),
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (ctx) => ReviewDialog(snapshot.data));
+                              context: context,
+                              builder: (ctx) => ReviewDialog(snapshot.data))
+                          .whenComplete(() {
+                        setState(() {});
+                      });
                     },
                     child: Icon(Icons.add)))
           ]);

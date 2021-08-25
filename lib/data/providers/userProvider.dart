@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
+import 'package:tour_guide/data/entities/user.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 
 class UserProvider {
   final String _url = "https://virtualguide2.herokuapp.com";
@@ -61,5 +64,43 @@ class UserProvider {
         return Future.error('Ocurrió un error, inténtelo mas tarde');
       }
     }
+  }
+
+  Future<User> getUserProfile() async {
+    final url =
+        Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/');
+
+    final String userToken = UserPreferences().getToken();
+
+    final http.Response resp = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+
+    if (resp.statusCode == 200) {
+      var decodedJson = json.decode(resp.body);
+      print(decodedJson);
+      var userProfile = User.fromJson(decodedJson);
+      return userProfile;
+    } else {
+      if (resp.statusCode == 403) {
+        return Future.error('401');
+      } else {
+        return Future.error('500');
+      }
+    }
+  }
+
+  void logOut() {
+    final futures = <Future>[];
+
+    final _prefs = UserPreferences();
+    futures.add(_prefs.removeToken());
+    futures.add(_prefs.removeUserId());
+
+    Future.wait(futures).then((value) {
+      Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);
+    });
   }
 }
