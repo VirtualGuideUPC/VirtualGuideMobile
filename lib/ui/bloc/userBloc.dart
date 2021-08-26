@@ -31,9 +31,7 @@ class UserBloc {
 
   Future<User> getUserProfile() async {
     var user = await UserProvider().getUserProfile();
-    if (user == '401') {
-      UserProvider().logOut();
-    }
+
     changeUserProfile(user != null ? user : new User());
   }
 }

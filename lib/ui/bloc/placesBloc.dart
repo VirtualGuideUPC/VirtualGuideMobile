@@ -74,8 +74,8 @@ class PlacesBloc {
   }
 
   Future<Review> postReview(
-      CreateReviewDto createReviewDto, File picture) async {
-    await reviewProvider.createReview(createReviewDto, picture);
+      CreateReviewDto createReviewDto, List<File> pictures) async {
+    await reviewProvider.createReview(createReviewDto, pictures);
   }
 
   void dispose() {

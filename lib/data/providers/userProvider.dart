@@ -84,7 +84,7 @@ class UserProvider {
       return userProfile;
     } else {
       if (resp.statusCode == 403) {
-        return Future.error('401');
+        logOut();
       } else {
         return Future.error('500');
       }

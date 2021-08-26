@@ -35,7 +35,7 @@ class ReviewProvider {
   }
 
   Future<Review> createReview(
-      CreateReviewDto createReviewDto, File picture) async {
+      CreateReviewDto createReviewDto, List<File> pictures) async {
     final url =
         Uri.parse('https://virtualguide2.herokuapp.com/api/reviews/create/');
 
@@ -48,8 +48,15 @@ class ReviewProvider {
       "ranking": createReviewDto.ranking,
       "touristic_place": createReviewDto.touristicPlace,
       "user": createReviewDto.user,
-      "image": await MultipartFile.fromFile(picture.path),
     });
+    if (pictures.length > 0) {
+      for (var file in pictures) {
+        formData.files.addAll([
+          MapEntry("image", await MultipartFile.fromFile(file.path)),
+        ]);
+      }
+    }
+
     var resp = await Dio().post(url.toString(),
         data: formData,
         options: Options(headers: <String, String>{
