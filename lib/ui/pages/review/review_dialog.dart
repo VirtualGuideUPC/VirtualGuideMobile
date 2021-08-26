@@ -1,6 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
-import 'package:tour_guide/data/entities/experience.dart';
 import 'package:tour_guide/data/entities/experienceDetailed.dart';
 import 'package:tour_guide/data/entities/review.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,7 @@ class _ReviewDialog extends State<ReviewDialog> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  File _pickedImage = File('');
 
   var pref = UserPreferences();
   CreateReviewDto _toSend = CreateReviewDto(
@@ -36,17 +38,70 @@ class _ReviewDialog extends State<ReviewDialog> {
   void _saveForm(userId, PlacesBloc placesBloc) {
     final isValid = _formKey.currentState.validate();
     if (isValid) {
-      this._formKey.currentState.save();
-      _toSend.user = int.parse(userId);
-      _toSend.touristicPlace = widget.experience.id;
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-      String formattedDate = formatter.format(now);
-      this._toSend.date = formattedDate;
+      if (_pickedImage.path.isNotEmpty) {
+        this._formKey.currentState.save();
+        _toSend.user = int.parse(userId);
+        _toSend.touristicPlace = widget.experience.id;
+        var now = new DateTime.now();
+        var formatter = new DateFormat('yyyy-MM-dd');
+        String formattedDate = formatter.format(now);
+        this._toSend.date = formattedDate;
+      }
+      placesBloc.postReview(_toSend, _pickedImage).then((value) {
+        Navigator.pop(context);
+      });
+    } else
+      return;
+  }
+
+  _imgFromCamera() async {
+    ImagePicker picker = ImagePicker();
+    final img = await picker.pickImage(source: ImageSource.camera);
+    if (img != null) {
+      setState(() {
+        _pickedImage = File(img.path);
+      });
     }
-    placesBloc.postReview(_toSend).then((value) {
-      Navigator.pop(context);
-    });
+  }
+
+  _imgFromGallery() async {
+    ImagePicker picker = ImagePicker();
+    final img = await picker.pickImage(source: ImageSource.gallery);
+
+    if (img != null) {
+      setState(() {
+        _pickedImage = File(img.path);
+      });
+    }
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+              color: Colors.white,
+              height: 120,
+              child: Column(
+                children: [
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ));
+        });
   }
 
   @override
@@ -62,7 +117,7 @@ class _ReviewDialog extends State<ReviewDialog> {
           children: [
             Text(
               "Crear reseña",
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 25),
             ),
             Form(
                 key: _formKey,
@@ -122,6 +177,47 @@ class _ReviewDialog extends State<ReviewDialog> {
                     ),
                     SizedBox(
                       height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          child: _pickedImage.path.isEmpty
+                              ? Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey[800],
+                                )
+                              : null,
+                          radius: 40,
+                          backgroundColor: Colors.grey,
+                          backgroundImage: _pickedImage.path.isEmpty
+                              ? null
+                              : FileImage(_pickedImage),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              _showPicker(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.deepPurple.shade400,
+                                shape: new RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25)))),
+                            icon: Icon(
+                              Icons.photo_camera,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              "Subir imagen",
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 25,
                     ),
                     ElevatedButton(
                         onPressed: () {

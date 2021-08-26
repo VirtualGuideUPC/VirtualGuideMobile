@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/entities/review.dart';
@@ -33,34 +34,42 @@ class ReviewProvider {
     }
   }
 
-  Future<Review> createReview(CreateReviewDto createReviewDto) async {
+  Future<Review> createReview(
+      CreateReviewDto createReviewDto, File picture) async {
     final url =
         Uri.parse('https://virtualguide2.herokuapp.com/api/reviews/create/');
 
     final String userToken = UserPreferences().getToken();
 
-    var body = jsonEncode({
+    var formData = FormData.fromMap({
       "comment": createReviewDto.comment,
       "comment_ranking": createReviewDto.commentRanking,
       "date": createReviewDto.date,
       "ranking": createReviewDto.ranking,
       "touristic_place": createReviewDto.touristicPlace,
-      "user": createReviewDto.user
+      "user": createReviewDto.user,
+      "image": await MultipartFile.fromFile(picture.path),
     });
-
-    final http.Response resp = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+    var resp = await Dio().post(url.toString(),
+        data: formData,
+        options: Options(headers: <String, String>{
           'Authorization': userToken,
           'Cookie': 'jwt=$userToken'
-        },
-        body: body);
+        }));
+
     print("resopnde code: " + resp.statusCode.toString());
 
     if (resp.statusCode == 200) {
-      var decodedJson = json.decode(resp.body);
-      print(decodedJson);
-      var review = Review.fromJson(decodedJson);
+      var data = resp.data as Map<String, dynamic>;
+
+      var review = Review(
+          comment: data['comment'],
+          commentRanking: data['comment_ranking'],
+          date: data['date'],
+          ranking: data['ranking'],
+          touristicPlace: data['touristic_place'],
+          user: data['user'],
+          id: data['review_id']);
       return review;
     } else {
       if (resp.statusCode == 403) {

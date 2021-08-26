@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:rxdart/rxdart.dart';
 import 'package:tour_guide/data/entities/experience.dart';
 import 'package:tour_guide/data/entities/experienceDetailed.dart';
@@ -72,8 +73,9 @@ class PlacesBloc {
     return await reviewProvider.getReviewsFromTouristicPlace(touristicPlaceId);
   }
 
-  Future<Review> postReview(CreateReviewDto createReviewDto) async {
-    await reviewProvider.createReview(createReviewDto);
+  Future<Review> postReview(
+      CreateReviewDto createReviewDto, File picture) async {
+    await reviewProvider.createReview(createReviewDto, picture);
   }
 
   void dispose() {

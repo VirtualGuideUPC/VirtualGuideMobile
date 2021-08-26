@@ -7,7 +7,6 @@ import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
 class UserProvider {
-  final String _url = "https://virtualguide2.herokuapp.com";
   final _prefs = new UserPreferences();
   Future<String> signinUser(String name, String lastName, String email,
       String password, String birthDate, String country) async {
