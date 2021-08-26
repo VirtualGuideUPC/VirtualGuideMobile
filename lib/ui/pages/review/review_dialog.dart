@@ -182,11 +182,27 @@ class _ReviewDialog extends State<ReviewDialog> {
                     SizedBox(
                       height: 15,
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          _saveForm(pref.getUserId().toString(), placesBloc);
-                        },
-                        child: Text("Publicar reseña"))
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.indigo.shade900),
+                              onPressed: () {
+                                _saveForm(
+                                    pref.getUserId().toString(), placesBloc);
+                              },
+                              icon: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                "Publicar reseña",
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        )
+                      ],
+                    )
                   ],
                 ))
           ],
