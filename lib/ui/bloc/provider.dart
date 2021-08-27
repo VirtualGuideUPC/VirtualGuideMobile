@@ -6,42 +6,45 @@ import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
 
 class Provider extends InheritedWidget {
-
   //singleton pattern
   static Provider _instancia;
-  factory Provider({ Key key, Widget child }) {
-    if ( _instancia == null ) {
-      _instancia = new Provider._internal(key: key, child: child );
+  factory Provider({Key key, Widget child}) {
+    if (_instancia == null) {
+      _instancia = new Provider._internal(key: key, child: child);
     }
     return _instancia;
   }
-  Provider._internal({ Key key, Widget child })
-    : super(key: key, child: child );
-
+  Provider._internal({Key key, Widget child}) : super(key: key, child: child);
 
   //blocs
   final loginBloc = LoginBloc();
-  final signinBloc=SigninBloc();
-  final placesBloc=PlacesBloc();
-  final userBloc=UserBloc();
-  final permissionBloc=PermissionBloc();
- 
+  final signinBloc = SigninBloc();
+  final placesBloc = PlacesBloc();
+  final userBloc = UserBloc();
+  final permissionBloc = PermissionBloc();
+
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static LoginBloc loginBlocOf ( BuildContext context ) {
+  static LoginBloc loginBlocOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().loginBloc;
   }
-  static SigninBloc signinBlocOf ( BuildContext context ) {
+
+  static SigninBloc signinBlocOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().signinBloc;
   }
-  static PlacesBloc placesBlocOf(BuildContext context){
+
+  static PlacesBloc placesBlocOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().placesBloc;
   }
-  static UserBloc userBlocOf(BuildContext context){
+
+  static UserBloc userBlocOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().userBloc;
   }
-    static PermissionBloc permissionBlocOf(BuildContext context){
-    return context.dependOnInheritedWidgetOfExactType<Provider>().permissionBloc;
+
+  static PermissionBloc permissionBlocOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<Provider>()
+        .permissionBloc;
   }
 }

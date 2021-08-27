@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart' as pvd;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
-import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/bloc/provider.dart' as tgpvd;
+import 'package:tour_guide/ui/helpers/themeNotifier.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
-import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
-import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
-import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
 import 'package:tour_guide/ui/pages/home/HomePage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
@@ -16,56 +14,54 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = new UserPreferences();
   await prefs.initPrefs();
-  runApp(MyApp());
+  runApp(pvd.ChangeNotifierProvider<ThemeNotifier>(
+    create: (_) => new ThemeNotifier(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en', 'US'), // English
-          const Locale('es', 'ES'),
-        ],
-        title: 'VirtualGuide',
-        navigatorKey: Utils.mainNavigator,
-        home: LoginPage(),
-        onGenerateRoute: (settings) {
-          Widget page;
-          if (settings.name == routeLogin) {
-            page = LoginPage();
-          } else if (settings.name == routeSignin) {
-            page = SigninPage();
-          } else if (settings.name.startsWith(routePrefixHome)) {
-            final subRoute = settings.name.substring(routePrefixHome.length);
-            page = HomePage(homePageRoute: subRoute);
-          } else {
-            throw Exception('Unknown route: ${settings.name}');
-          }
+    return tgpvd.Provider(
+      child: pvd.Consumer<ThemeNotifier>(
+        builder: (ctx, theme, _) {
+          return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: [
+                const Locale('en', 'US'), // English
+                const Locale('es', 'ES'),
+              ],
+              title: 'VirtualGuide',
+              navigatorKey: Utils.mainNavigator,
+              home: LoginPage(),
+              onGenerateRoute: (settings) {
+                Widget page;
+                if (settings.name == routeLogin) {
+                  page = LoginPage();
+                } else if (settings.name == routeSignin) {
+                  page = SigninPage();
+                } else if (settings.name.startsWith(routePrefixHome)) {
+                  final subRoute =
+                      settings.name.substring(routePrefixHome.length);
+                  page = HomePage(homePageRoute: subRoute);
+                } else {
+                  throw Exception('Unknown route: ${settings.name}');
+                }
 
-          return MaterialPageRoute<dynamic>(
-            builder: (context) {
-              return page;
-            },
-            settings: settings,
-          );
+                return MaterialPageRoute<dynamic>(
+                  builder: (context) {
+                    return page;
+                  },
+                  settings: settings,
+                );
+              },
+              theme: theme.getTheme());
         },
-        theme: ThemeData(
-          scaffoldBackgroundColor: Color.fromRGBO(143, 142, 192, 1),
-          dialogBackgroundColor: Colors.white,
-          primaryColor: Color.fromRGBO(143, 142, 192, 1),
-          primarySwatch: Colors.grey,
-          iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 0.6)),
-          cardColor: Colors.white70,
-          accentColor: Colors.white,
-          canvasColor: Colors.transparent,
-        ),
       ),
     );
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide/data/datasource/userPreferences.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/data/providers/userProvider.dart';
-import 'package:tour_guide/main.dart';
+import 'package:tour_guide/ui/helpers/themeNotifier.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
@@ -26,8 +26,9 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
-
     final _screenHeight = _screenSize.height - kToolbarHeight;
+
+    var themeProvider = Provider.of<ThemeNotifier>(context);
 
     Widget _avatar(String nombre) {
       return Container(
@@ -47,7 +48,10 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
               child: Text(
                 "Hola $nombre!",
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyText1.color),
               ),
             )
           ],
@@ -65,7 +69,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
             title,
             style: TextStyle(
                 fontSize: 15,
-                color: Colors.grey.shade700,
+                color: Theme.of(context).textTheme.bodyText2.color,
                 fontWeight: FontWeight.w400),
           ),
           SizedBox(
@@ -81,7 +85,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           child: Material(
             shape: Border(bottom: BorderSide(width: 2, color: Colors.grey)),
             child: TextButton(
-              style: TextButton.styleFrom(primary: Colors.black),
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).textTheme.bodyText1.color),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -97,6 +102,75 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
       ]);
     }
 
+    Widget _logOutButton = Align(
+      alignment: Alignment.bottomCenter,
+      child: ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(primary: Colors.red),
+          onPressed: () {
+            UserProvider().logOut();
+          },
+          icon: Icon(
+            Icons.logout,
+            color: Colors.white,
+          ),
+          label: Text(
+            "Cerrar Sesión",
+            style: TextStyle(color: Colors.white),
+          )),
+    );
+
+    Widget _loader = Container(
+        color: Colors.white,
+        child: Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.white,
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+          ),
+        ));
+
+    Widget _switcher(String title) {
+      return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Expanded(
+          child: Material(
+            shape: Border(bottom: BorderSide(width: 2, color: Colors.grey)),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  primary: Theme.of(context).textTheme.bodyText1.color),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                    ),
+                    Switch(
+                        activeColor: Colors.teal,
+                        value: themeProvider.getThemeMode(),
+                        onChanged: (value) {
+                          setState(() {
+                            if (value == true) {
+                              themeProvider.setDarkMode();
+                            } else {
+                              themeProvider.setLightMode();
+                            }
+                          });
+                        })
+                  ],
+                ),
+              ),
+              onPressed: () {
+                themeProvider.setLightMode();
+              },
+            ),
+          ),
+        ),
+      ]);
+    }
+
     return Scaffold(
       body: StreamBuilder(
         stream: userBloc.userProfileStream,
@@ -106,7 +180,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
             return Container(
                 width: _screenSize.width,
                 height: _screenHeight,
-                color: Colors.white,
+                color: Theme.of(context).dialogBackgroundColor,
                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                 child: Stack(children: [
                   Column(
@@ -116,6 +190,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       _title("CONFIGURACIÓN DE LA CUENTA"),
                       _section("Información personal", () {}),
                       _section("Mis preferencias", () {}),
+                      _switcher("Modo oscuro"),
                       _section("Mis lugares favoritos", () {
                         Utils.homeNavigator.currentState
                             .pushNamed(routeHomeFavoriteDepartmentsPage);
@@ -123,32 +198,10 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       _section("Recopilación de experiencias", () {}),
                     ],
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(primary: Colors.red),
-                        onPressed: () {
-                          UserProvider().logOut();
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          color: Colors.white,
-                        ),
-                        label: Text(
-                          "Cerrar Sesión",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  )
+                  _logOutButton
                 ]));
           } else {
-            return Container(
-                color: Colors.white,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-                  ),
-                ));
+            return _loader;
           }
         },
       ),
