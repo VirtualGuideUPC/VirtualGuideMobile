@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as pvd;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
-import 'package:tour_guide/ui/bloc/provider.dart' as tgpvd;
+import 'package:tour_guide/ui/bloc/provider.dart' as ownpvd;
 import 'package:tour_guide/ui/helpers/themeNotifier.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/home/HomePage.dart';
@@ -23,7 +23,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return tgpvd.Provider(
+    return ownpvd.Provider(
       child: pvd.Consumer<ThemeNotifier>(
         builder: (ctx, theme, _) {
           return MaterialApp(

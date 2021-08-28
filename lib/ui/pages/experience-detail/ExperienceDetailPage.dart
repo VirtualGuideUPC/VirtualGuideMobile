@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -195,10 +197,58 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
         ),
       );
     });
+
+    Widget imagesFromReviews(review, deviceHeight, deviceWidth) {
+      return review.images.length == 0
+          ? Text("")
+          : ElevatedButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (ctx) {
+                      return Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: Container(
+                          width: deviceWidth,
+                          height: deviceHeight * 0.5,
+                          child: PageView.builder(
+                              physics: BouncingScrollPhysics(),
+                              controller:
+                                  PageController(viewportFraction: 0.89),
+                              itemCount: review.images.length,
+                              itemBuilder: (ctx, indx) {
+                                return Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              review.images[indx].url))),
+                                );
+                              }),
+                        ),
+                      );
+                    });
+              },
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Icon(Icons.photo),
+              ),
+              style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).buttonColor,
+                  shape: CircleBorder()),
+            );
+    }
+
     final reviews = _section(
         "${experienceDetails.avgRanking} (${experienceDetails.numberComments} comentarios)",
         () {
       return _slider(experienceDetails.reviews.length, 0.7, 250, (context, i) {
+        var review = experienceDetails.reviews[i];
+        var deviceHeight = MediaQuery.of(context).size.height - kToolbarHeight;
+        var deviceWidth = MediaQuery.of(context).size.width;
+
         return Container(
           padding: EdgeInsets.all(15),
           child: Column(
@@ -219,13 +269,13 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            experienceDetails.reviews[i].userName,
+                            review.userName,
                             style: TextStyle(fontSize: 20),
                           ),
                           SizedBox(height: 5),
-                          Text(experienceDetails.reviews[i].date,
+                          Text(review.date,
                               style: TextStyle(
-                                  fontSize: 17, color: Colors.black54))
+                                  fontSize: 17, color: Colors.black54)),
                         ],
                       ))
                 ],
@@ -233,9 +283,9 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
               SizedBox(
                 height: 15,
               ),
-              Flexible(
-                  fit: FlexFit.loose,
-                  child: Text(experienceDetails.reviews[i].comment))
+              Flexible(fit: FlexFit.loose, child: Text(review.comment)),
+              Expanded(child: SizedBox()),
+              imagesFromReviews(review, deviceHeight, deviceWidth)
             ],
           ),
         );

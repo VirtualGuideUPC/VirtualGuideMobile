@@ -8,6 +8,7 @@ class Review {
   int touristicPlace;
   int user;
   int ranking;
+  List<ReviewImage> images;
 
   Review(
       {this.id,
@@ -30,6 +31,21 @@ class Review {
     this.commentRanking = json["comment_ranking"];
     this.touristicPlace = json["touristic_place"];
     this.user = json["user"];
+    this.images = json["images"]
+        ?.map((item) => ReviewImage.fromJson(item))
+        ?.toList()
+        ?.cast<ReviewImage>();
+  }
+}
+
+class ReviewImage {
+  String url;
+  int number;
+
+  ReviewImage(this.url, this.number);
+  ReviewImage.fromJson(Map json) {
+    this.url = json["url"];
+    this.number = json["number"];
   }
 }
 
