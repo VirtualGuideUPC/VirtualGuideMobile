@@ -20,21 +20,23 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  bool flagRequestSubmitted = false;
   bool flagWaitingIfLoggedUser = true;
   bool isSignedIn = false;
+  LoginBloc bloc;
+  User user;
+  String email = "";
+  String name = "";
+  String picture = "";
 
   controlSignIn(GoogleSignInAccount signInAccount) async {
     if (signInAccount != null) {
       setState(() {
         isSignedIn = true;
-        var user = User();
+        user = User();
         user.email = signInAccount.email;
         user.name = signInAccount.displayName;
         user.picture = signInAccount.photoUrl;
-        Utils.mainNavigator.currentState.pushReplacementNamed(
-            routePersonalInformation,
-            arguments: user);
+        _login(bloc, context, signInAccount.email);
       });
     } else {
       setState(() {
@@ -59,13 +61,11 @@ class _LoginPageState extends State<LoginPage> {
       FacebookAuth.instance.getUserData().then((value) {
         setState(() {
           isSignedIn = true;
-          var user = User();
+          user = User();
           user.email = value["email"];
           user.name = value["name"];
           user.picture = value["picture"]["data"]["url"];
-          Utils.mainNavigator.currentState.pushReplacementNamed(
-              routePersonalInformation,
-              arguments: user);
+          _login(bloc, context, value["email"]);
         });
       });
     });
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(context) {
-    final bloc = Provider.loginBlocOf(context);
+    bloc = Provider.loginBlocOf(context);
     bloc.init();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -143,6 +143,29 @@ class _LoginPageState extends State<LoginPage> {
         )
       ])),
     );
+  }
+
+  _login(LoginBloc bloc, BuildContext context, String email){
+    BuildContext alertContext;
+    showDialog(context: context,barrierDismissible: false, builder: (context){
+      alertContext=context;
+      return AlertDialog(backgroundColor: Colors.white,content:Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(child: CircularProgressIndicator(),),
+        ],
+      ));
+    });
+
+    bloc.login(email).then((String result){
+      if(alertContext!=null)Navigator.of(alertContext).pop();
+      Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
+    }).catchError((error){
+      Utils.mainNavigator.currentState.pushReplacementNamed(
+          routePersonalInformation,
+          arguments: user);
+    });
+
   }
 
 }

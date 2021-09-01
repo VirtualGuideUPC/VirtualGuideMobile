@@ -1,11 +1,11 @@
-class Category{
+class Subcategory{
   int id;
   String name;
   String icon;
   bool isSelected;
 
-  Category.fromJson(Map json){
-    this.id=json["category_id"];
+  Subcategory.fromJson(Map json){
+    this.id=json["subcategory_id"];
     this.name=json["name"];
     this.icon=json["icon"];
     this.isSelected=json["status"];

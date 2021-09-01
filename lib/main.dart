@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
-import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
-import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
-import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
 import 'package:tour_guide/ui/pages/home/HomePage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
-import 'package:tour_guide/ui/pages/personal_information/PersonalInformationPage.dart';
-import 'package:tour_guide/ui/pages/signin/CountryInformation.dart';
-import 'package:tour_guide/ui/pages/signin/FinishRegister.dart';
-import 'package:tour_guide/ui/pages/signin/TravelStylesPage.dart';
-import 'package:tour_guide/ui/pages/signin/TravelTypePage.dart';
+import 'package:tour_guide/ui/pages/register/CountryInformation.dart';
+import 'package:tour_guide/ui/pages/register/FinishRegister.dart';
+import 'package:tour_guide/ui/pages/register/PersonalInformationPage.dart';
+import 'package:tour_guide/ui/pages/register/SigninPage.dart';
+import 'package:tour_guide/ui/pages/register/TravelStylesPage.dart';
+import 'package:tour_guide/ui/pages/register/TravelSubcategoryPage.dart';
+import 'package:tour_guide/ui/pages/register/TravelTypePage.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
-import 'package:tour_guide/ui/pages/signin/SigninPage.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +52,8 @@ class MyApp extends StatelessWidget {
             page = TravelTypePage();
           } else if (settings.name.startsWith(routeTravelStyles)) {
             page = TravelStylesPage();
+          } else if (settings.name.startsWith(routeTravelSubcategories)) {
+            page = TravelSubcategoryPage();
           } else if (settings.name.startsWith(routeFinishRegister)) {
             page = FinishRegisterPage();
           } else if (settings.name.startsWith(routePrefixHome)) {

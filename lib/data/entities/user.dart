@@ -10,6 +10,9 @@ class User {
   String birthday;
   String picture;
   bool isForeign;
+  List<int> typePlaces;
+  List<int> categories;
+  List<int> subcategories;
 
   User({
       this.id,
@@ -21,5 +24,8 @@ class User {
       this.countryId,
       this.birthday,
       this.picture,
-      this.isForeign});
+      this.isForeign,
+      this.typePlaces,
+      this.categories,
+      this.subcategories});
 }

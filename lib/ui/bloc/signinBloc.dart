@@ -30,7 +30,7 @@ class SigninBloc extends Validators{
       Rx.combineLatest6(emailStream, passwordStream,nameStream,lastNameStream,countryStream,birthDateStream, (a,b,c,d,e,f) => true );
 
   Stream<bool> get formValidStreamPersonalInformation =>
-      Rx.combineLatest4(emailStream,nameStream,lastNameStream,birthDateStream, (a,b,c,d) => true );
+      Rx.combineLatest3(emailStream,nameStream,lastNameStream, (a,b,c) => false );
 
   // Insertar valores al Stream
   Function(String) get changeEmail    => _emailController.sink.add;
@@ -76,9 +76,9 @@ class SigninBloc extends Validators{
     _requestResult=BehaviorSubject<String>();
     }
 
-     Future<String>  signin(String name, String lastName, String email, String password, String birthDate, String country) async{
+     Future<String>  signin(String name, String lastName, String email, String password, String birthDate, String country, List<int> typePlaces, List<int> categories, List<int> subcategories) async{
        try {
-          return await userProvider.signinUser(name, lastName, email, password, birthDate, country);
+          return await userProvider.signinUser(name, lastName, email, password, birthDate, country, typePlaces, categories, subcategories);
        } catch (e) {
          return Future.error(e);
        }

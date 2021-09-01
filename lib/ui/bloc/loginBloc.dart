@@ -64,9 +64,9 @@ class LoginBloc with Validators {
     _requestResult = BehaviorSubject<String>();
   }
 
-  Future<String> login(String email, String password) async {
+  Future<String> login(String email) async {
     try {
-      return await userProvider.loginUser(email, password);
+      return await userProvider.loginUser(email);
     } catch (e) {
       return Future.error(e);
     }

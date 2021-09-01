@@ -9,6 +9,7 @@ class AuthTextField extends StatelessWidget {
   final Function onTap;
   final String errorText;
   final TextEditingController controller;
+  final bool isEnabled;
 
   AuthTextField(
       {@required this.label,
@@ -18,7 +19,8 @@ class AuthTextField extends StatelessWidget {
       this.obscureText = false,
       this.isCentered = false,
       this.errorText,
-      this.controller});
+      this.controller,
+      this.isEnabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class AuthTextField extends StatelessWidget {
       TextField(
         controller: controller,
         obscureText: obscureText,
+        enabled: isEnabled,
         textAlign: isCentered ? TextAlign.center : TextAlign.left,
         decoration: InputDecoration(
             contentPadding:

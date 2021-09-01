@@ -5,6 +5,7 @@ const routePersonalInformation='/personal_information';
 const routeCountryInformation='/country_information';
 const routeTravelType='/travel_type';
 const routeTravelStyles='/travel_styles';
+const routeTravelSubcategories='/travel_subcategories';
 const routeFinishRegister='/finish_register';
 /// ************************** MAIN  ****************************/
 const routePrefixHome='/home/';

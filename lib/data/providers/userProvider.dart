@@ -3,21 +3,27 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/category.dart';
+import 'package:tour_guide/data/entities/subcategory.dart';
+import 'package:tour_guide/data/entities/typePlace.dart';
 
 class UserProvider {
   final String _url = "https://vguidebe.herokuapp.com";
   final _prefs = new UserPreferences();
 
   Future<String> signinUser(String name, String lastName, String email,
-      String password, String birthDate, String country) async {
-    final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/register/');
+      String password, String birthDate, String country, List<int> typePlaces, List<int> categories, List<int> subcategories) async {
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/register/');
+    //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/register/');
     final authData = {
       'email': email,
       'password': password,
       'name': name,
       'last_name': lastName,
       'birthday': birthDate,
-      'country': country
+      'country': country,
+      'type_place': typePlaces,
+      'category': categories,
+      'subcategory': subcategories
     };
     final http.Response resp = await http.post(url,
         headers: <String, String>{
@@ -39,9 +45,10 @@ class UserProvider {
     }
   }
 
-  Future<String> loginUser(String email, String password) async {
-    final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/login/');
-    final authData = {'email': email, 'password': password};
+  Future<String> loginUser(String email) async {
+    //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/login/');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/login/');
+    final authData = {'email': email};
 
     final http.Response resp = await http.post(url,
         headers: <String, String>{
@@ -64,8 +71,7 @@ class UserProvider {
   }
 
   Future<List<Category>> getCategories() async {
-    final url =
-        Uri.parse('https://mocki.io/v1/d8971998-d482-4517-9d48-c376d4a5e0f1');
+    final url = Uri.parse('https://mocki.io/v1/cbb3244a-1f74-4234-bd00-53700aa41c7f');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<Category> categories = decodedJson.map((categoryJson) {
@@ -75,4 +81,31 @@ class UserProvider {
     print(categories);
     return categories;
   }
+
+  Future<List<TypePlace>> getAllTypePlaces() async {
+    //final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllTypePlaces');
+    final url = Uri.parse('https://mocki.io/v1/b8d29c8f-b363-4ed7-b3fe-7e69e174eae6');
+    final resp = await http.get(url);
+    List<dynamic> decodedJson = json.decode(resp.body);
+    List<TypePlace> typePlaces = decodedJson.map((typePlaceJson) {
+      return TypePlace.fromJson(typePlaceJson);
+    }).toList();
+    print("==========");
+    print(typePlaces);
+    return typePlaces;
+  }
+
+  Future<List<Subcategory>> getAllSubcategories() async {
+    //final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllTypePlaces');
+    final url = Uri.parse('https://mocki.io/v1/8d8faa30-dd70-46ac-8442-5491d90208a3');
+    final resp = await http.get(url);
+    List<dynamic> decodedJson = json.decode(resp.body);
+    List<Subcategory> subcategories = decodedJson.map((subcategoriesJson) {
+      return Subcategory.fromJson(subcategoriesJson);
+    }).toList();
+    print("==========");
+    print(subcategories);
+    return subcategories;
+  }
+
 }

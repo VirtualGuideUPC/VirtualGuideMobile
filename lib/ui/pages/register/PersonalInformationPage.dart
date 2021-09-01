@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart'; /*birth date formal*/
 import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
@@ -7,8 +8,8 @@ import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/AuthTextFieldWidget.dart';
-import 'package:tour_guide/ui/widgets/BigButtonWidget.dart';
 
+final GoogleSignIn googleSignIn = GoogleSignIn();
 class PersonalInformationPage extends StatefulWidget {
   @override
   _PersonalInformationPageState createState() =>
@@ -48,6 +49,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
             onPressed: () {
               bloc.dispose();
               Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);
+              googleSignIn.signOut();
             },
           ),
         ),
@@ -189,15 +191,23 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                                     side: BorderSide(color: Colors.grey)))),
                         onPressed: () {
 
-                          user.name = _inputFieldNameController.text;
-                          user.lastName = _inputFieldLastnameController.text;
-                          user.email = _inputFieldEmailController.text;
-                          user.birthday = _inputFieldDateController.text;
-                          bloc.dispose();
-                          //user.gender
-                          Utils.mainNavigator.currentState.pushReplacementNamed(
-                              routeCountryInformation,
-                              arguments: user);
+                          if(_inputFieldNameController.text != "" && _inputFieldLastnameController.text != ""
+                              && _inputFieldEmailController.text != "" && _inputFieldDateController.text != ""){
+                            user.name = _inputFieldNameController.text;
+                            user.lastName = _inputFieldLastnameController.text;
+                            user.email = _inputFieldEmailController.text;
+                            user.birthday = _inputFieldDateController.text;
+                            bloc.dispose();
+                            //user.gender
+                            Utils.mainNavigator.currentState.pushReplacementNamed(
+                                routeCountryInformation,
+                                arguments: user);
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Por favor, completar los datos"),
+                            ));
+                          }
+
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -262,6 +272,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
           placeholder: "Ingrese su correo electrónico",
           errorText: snapshot.error,
           onChanged: bloc.changeEmail,
+          isEnabled: false,
         );
       },
     );
@@ -295,35 +306,5 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     }
   }
 
-  /*_signin(SigninBloc bloc, BuildContext context) {
-    if (flagRequestSubmitted) {
-      return;
-    }
-    BuildContext alertContext;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          alertContext = context;
-          return AlertDialog(
-              backgroundColor: Colors.white,
-              content: Center(
-                child: CircularProgressIndicator(),
-              ));
-        });
 
-    bloc
-        .signin(bloc.name, bloc.lastName, bloc.email, bloc.password,
-            bloc.birthDate, bloc.country)
-        .then((String result) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
-      Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);
-    }).catchError((error) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
-      bloc.changeRequestResult(error.toString());
-      flagRequestSubmitted = false;
-    });
-
-    flagRequestSubmitted = true;
-  }*/
 }
