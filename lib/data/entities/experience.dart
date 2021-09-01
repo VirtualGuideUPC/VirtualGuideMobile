@@ -89,7 +89,7 @@ class Experience {
     this.province=json["province_name"];
     this.typePlace=json["type_place"];
     this.isFavorite=json["isFavourite"]??false;
-    this.avgRanking=json["avg_ranking"]/1;
+    this.avgRanking=(json["avg_ranking"] ?? 1)  /1;
     this.nComments=json["number_comments"];
   }
   String getPosterPath(){

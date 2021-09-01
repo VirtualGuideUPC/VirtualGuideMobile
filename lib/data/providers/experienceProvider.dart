@@ -8,7 +8,7 @@ import 'package:tour_guide/data/entities/experienceDetailed.dart';
 
 class ExperienceProvider{  
   Future<List<Experience>> getExperiences(String userId, double lat, double lng) async{
-    final url=Uri.parse('https://vguidebe.herokuapp.com/api/places/nearby/');
+    final url=Uri.parse('https://virtualguide2.herokuapp.com/api/places/nearby/');
     final body = {
       'user_id':userId,
       'latitude':lat,

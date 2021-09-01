@@ -89,8 +89,7 @@ class _ExplorePageState extends State<ExplorePage>
                 onchangeValue: (val) {
                   _searchString = val;
                   print(val);
-                  //todo::this is commented for the api deprecated
-                  //placesBloc.getLocations(_searchString);
+                  placesBloc.getLocations(_searchString);
                 },
                 onEditingComplete: () {},
               ),
@@ -285,7 +284,7 @@ _showErrorAlert(String message){
             final rx=RegExp(r'Peru',caseSensitive:false);
             List<dynamic>places=snapshot.data.where((element){
               if(element['description'].contains(rx)){return true;}
-              else{return false;}
+              else{return true;}
             }).toList();
 
             return Stack(children: [

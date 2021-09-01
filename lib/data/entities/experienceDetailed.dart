@@ -29,7 +29,7 @@ class ExperienceDetailed {
     this.categories=json["categories"]?.map((item)=>Category.fromJson(item))?.toList()?.cast<Category>();
     this.latitude=json["latitude"];
     this.longitude=json["longitude"];
-    this.avgRanking=json["avg_ranking"]/1;
+    this.avgRanking= (json["avg_ranking"] ?? 1)  /1;
     this.numberComments=json["number_comments"];
     this.reviews=json["reviews"]?.map((item)=>Review.fromJson(item))?.toList()?.cast<Review>();
     this.similarExperience=json["similarExperiences"]?.map((item)=>SimilarExperience.fromJson(item))?.toList()?.cast<SimilarExperience>();
@@ -85,7 +85,7 @@ class SimilarExperience {
     this.pic=json["picture"];
     this.shortInfo=json["short_info"];
     this.province=json["province_name"];
-    this.avgRanking=json["avg_ranking"]/1;
+    this.avgRanking=(json["avg_ranking"] ?? 1)  /1;
     this.numberComments=json["number_comments"];
   }
 }
