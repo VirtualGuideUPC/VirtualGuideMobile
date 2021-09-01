@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tour_guide/main.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/pages/account_information/AccountInformation.dart';
+import 'package:tour_guide/ui/pages/account_reviews/AccountReviewsPage.dart';
 import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
 import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
@@ -103,6 +105,12 @@ class _HomePageState extends State<HomePage>
         break;
       case routeHomeAccountPage:
         page = AccountSettingsPage();
+        break;
+      case routeHomeAccountInformationPage:
+        page = AccountInformationPage();
+        break;
+      case routeHomeAccountReviewsPage:
+        page = AccountReviewsPage();
         break;
       case routeHomeFavoriteDepartmentsPage:
         page = FavoriteDepartments();

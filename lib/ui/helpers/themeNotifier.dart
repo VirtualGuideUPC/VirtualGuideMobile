@@ -11,7 +11,7 @@ class ThemeNotifier with ChangeNotifier {
       cardColor: Colors.white70,
       textTheme: TextTheme(
           bodyText1: TextStyle(color: Colors.white),
-          bodyText2: TextStyle(color: Color.fromRGBO(142, 152, 165, 1))),
+          bodyText2: TextStyle(color: Colors.grey.shade300)),
       accentColor: Colors.white,
       canvasColor: Colors.transparent,
       buttonColor: Color.fromRGBO(143, 142, 192, 1));

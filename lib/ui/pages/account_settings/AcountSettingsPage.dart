@@ -188,14 +188,22 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     children: [
                       _avatar(userProfile.name),
                       _title("CONFIGURACIÓN DE LA CUENTA"),
-                      _section("Información personal", () {}),
+                      _section("Información personal", () {
+                        Utils.homeNavigator.currentState.pushNamed(
+                            routeHomeAccountInformationPage,
+                            arguments: userProfile);
+                      }),
                       _section("Mis preferencias", () {}),
                       _switcher("Modo oscuro"),
                       _section("Mis lugares favoritos", () {
                         Utils.homeNavigator.currentState
                             .pushNamed(routeHomeFavoriteDepartmentsPage);
                       }),
-                      _section("Recopilación de experiencias", () {}),
+                      _section("Recopilación de experiencias", () {
+                        Utils.homeNavigator.currentState.pushNamed(
+                          routeHomeAccountReviewsPage,
+                        );
+                      }),
                     ],
                   ),
                   _logOutButton

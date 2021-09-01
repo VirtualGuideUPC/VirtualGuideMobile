@@ -41,7 +41,7 @@ class ExperienceDetailed {
         ?.cast<Category>();
     this.latitude = json["latitude"];
     this.longitude = json["longitude"];
-    this.avgRanking = json["avg_ranking"] / 1;
+    this.avgRanking = json["avg_ranking"] != null ? json["avg_ranking"] / 1 : 0;
     this.numberComments = json["number_comments"];
     this.reviews = json["reviews"]
         ?.map((item) => Review.fromJson(item))
