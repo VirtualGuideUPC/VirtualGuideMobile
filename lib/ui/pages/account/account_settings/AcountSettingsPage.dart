@@ -5,6 +5,7 @@ import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/helpers/themeNotifier.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/pages/account/account_information/AccountInformation.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
 class AccountSettingsPage extends StatefulWidget {
@@ -189,11 +190,16 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       _avatar(userProfile.name),
                       _title("CONFIGURACIÓN DE LA CUENTA"),
                       _section("Información personal", () {
-                        Utils.homeNavigator.currentState.pushNamed(
-                            routeHomeAccountInformationPage,
-                            arguments: userProfile);
+                        Utils.homeNavigator.currentState
+                            .push(MaterialPageRoute(builder: (builder) {
+                          return AccountInformationPage(userProfile);
+                        }));
                       }),
-                      _section("Mis preferencias", () {}),
+                      _section("Mis preferencias", () {
+                        Utils.homeNavigator.currentState.pushNamed(
+                          routeHomeAccountPreferencesPage,
+                        );
+                      }),
                       _switcher("Modo oscuro"),
                       _section("Mis lugares favoritos", () {
                         Utils.homeNavigator.currentState

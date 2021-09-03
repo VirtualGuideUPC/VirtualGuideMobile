@@ -6,7 +6,7 @@ class User {
   final String password;
   final String tokenNotification;
   final int countryId;
-  final String birthday;
+  String birthday;
   final bool isForeign;
 
   User(
@@ -28,4 +28,12 @@ class User {
         countryId: json['country'],
         lastName: json['last_name']);
   }
+}
+
+class UserUpdateDto {
+  int user;
+  String name;
+  String lastName;
+  String birthday;
+  int country;
 }

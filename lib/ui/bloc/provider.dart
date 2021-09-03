@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tour_guide/ui/bloc/loginBloc.dart';
 import 'package:tour_guide/ui/bloc/permissionBloc.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
+import 'package:tour_guide/ui/bloc/reviewsBloc.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
+import 'package:tour_guide/ui/bloc/userProfileBloc.dart';
 
 class Provider extends InheritedWidget {
   //singleton pattern
@@ -22,6 +24,8 @@ class Provider extends InheritedWidget {
   final placesBloc = PlacesBloc();
   final userBloc = UserBloc();
   final permissionBloc = PermissionBloc();
+  final reviewsBloc = ReviewsBloc();
+  final userProfileBloc = UserProfileBloc();
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
@@ -40,6 +44,16 @@ class Provider extends InheritedWidget {
 
   static UserBloc userBlocOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().userBloc;
+  }
+
+  static UserProfileBloc userProfileBlocOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<Provider>()
+        .userProfileBloc;
+  }
+
+  static ReviewsBloc reviewBlocOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>().reviewsBloc;
   }
 
   static PermissionBloc permissionBlocOf(BuildContext context) {

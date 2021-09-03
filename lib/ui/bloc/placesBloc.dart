@@ -27,12 +27,6 @@ class PlacesBloc {
   Function get changeExperiences => _experiencesController.sink.add;
   List<Experience> get experiences => _experiencesController.value;
 
-  BehaviorSubject<List<Review>> _reviewController =
-      BehaviorSubject<List<Review>>();
-  Stream<List<Review>> get reviewsStream => _reviewController.stream;
-  Function get changeReviews => _reviewController.sink.add;
-  List<Review> get reviews => _reviewController.value;
-
   void getLocations(String term) async {
     final results = await placesProvider.getLocations(term);
     changeSearchResult(results);

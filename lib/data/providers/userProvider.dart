@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/user.dart';
@@ -61,6 +63,45 @@ class UserProvider {
         return Future.error(decodedJson['detail']);
       } else {
         return Future.error('Ocurrió un error, inténtelo mas tarde');
+      }
+    }
+  }
+
+  Future<User> updateUserProfile(UserUpdateDto userUpdateDto) async {
+    final url =
+        Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/update/');
+    final String userToken = UserPreferences().getToken();
+
+    var formData = FormData.fromMap({
+      "user": _prefs.getUserId(),
+      "name": userUpdateDto.name,
+      "last_name": userUpdateDto.lastName,
+      "birthday": userUpdateDto.birthday,
+      "country": userUpdateDto.country,
+    });
+
+    var resp = await Dio().put(url.toString(),
+        data: formData,
+        options: Options(headers: <String, String>{
+          'Authorization': userToken,
+          'Cookie': 'jwt=$userToken'
+        }));
+    print("resopnde code: " + resp.statusCode.toString());
+
+    if (resp.statusCode == 200) {
+      var data = resp.data as Map<String, dynamic>;
+      var userProfile = User(
+          name: data["name"],
+          birthday: data["birthday"],
+          lastName: data["last_name"],
+          countryId: data["country"]);
+
+      return userProfile;
+    } else {
+      if (resp.statusCode == 403) {
+        logOut();
+      } else {
+        return Future.error('500');
       }
     }
   }

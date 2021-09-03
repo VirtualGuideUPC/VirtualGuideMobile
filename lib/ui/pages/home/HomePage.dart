@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tour_guide/main.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
-import 'package:tour_guide/ui/pages/account_information/AccountInformation.dart';
-import 'package:tour_guide/ui/pages/account_reviews/AccountReviewsPage.dart';
+import 'package:tour_guide/ui/pages/account/account_information/AccountInformation.dart';
+import 'package:tour_guide/ui/pages/account/account_preferences/AccountPreferences.dart';
+import 'package:tour_guide/ui/pages/account/account_reviews/AccountReviewsPage.dart';
+import 'package:tour_guide/ui/pages/account/account_settings/AcountSettingsPage.dart';
 import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
 import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
-import 'package:tour_guide/ui/pages/account_settings/AcountSettingsPage.dart';
 import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
 import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
@@ -106,9 +107,10 @@ class _HomePageState extends State<HomePage>
       case routeHomeAccountPage:
         page = AccountSettingsPage();
         break;
-      case routeHomeAccountInformationPage:
-        page = AccountInformationPage();
+      case routeHomeAccountPreferencesPage:
+        page = AccountPreferencesPage();
         break;
+
       case routeHomeAccountReviewsPage:
         page = AccountReviewsPage();
         break;

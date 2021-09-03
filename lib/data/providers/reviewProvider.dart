@@ -86,4 +86,31 @@ class ReviewProvider {
       }
     }
   }
+
+  Future<List<Review>> getReviewsByUserId(String UserId) async {
+    final url = Uri.parse(
+        'https://virtualguide2.herokuapp.com/api/reviews/user/$UserId');
+
+    final String userToken = UserPreferences().getToken();
+
+    final http.Response resp = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+    print("resopnde code: " + resp.statusCode.toString());
+
+    if (resp.statusCode == 200) {
+      var decodedJson = json.decode(resp.body) as List;
+      print(decodedJson);
+      var items = decodedJson.map((e) => Review.fromJson(e)).toList();
+      return items;
+    } else {
+      if (resp.statusCode == 403) {
+        return Future.error('401');
+      } else {
+        return Future.error('500');
+      }
+    }
+  }
 }
