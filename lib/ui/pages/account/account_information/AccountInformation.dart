@@ -137,7 +137,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
           ],
         ));
     Widget _loader = Container(
-        color: Colors.white,
+        color: Theme.of(context).dialogBackgroundColor,
         child: Center(
           child: CircularProgressIndicator(
             backgroundColor: Colors.white,

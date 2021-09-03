@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tour_guide/ui/bloc/loginBloc.dart';
 import 'package:tour_guide/ui/bloc/permissionBloc.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
+import 'package:tour_guide/ui/bloc/preferencesBloc.dart';
 import 'package:tour_guide/ui/bloc/reviewsBloc.dart';
 import 'package:tour_guide/ui/bloc/signinBloc.dart';
 import 'package:tour_guide/ui/bloc/userBloc.dart';
@@ -26,6 +27,7 @@ class Provider extends InheritedWidget {
   final permissionBloc = PermissionBloc();
   final reviewsBloc = ReviewsBloc();
   final userProfileBloc = UserProfileBloc();
+  final preferencesBloc = PreferencesBloc();
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
@@ -54,6 +56,12 @@ class Provider extends InheritedWidget {
 
   static ReviewsBloc reviewBlocOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().reviewsBloc;
+  }
+
+  static PreferencesBloc preferencesBlocOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<Provider>()
+        .preferencesBloc;
   }
 
   static PermissionBloc permissionBlocOf(BuildContext context) {
