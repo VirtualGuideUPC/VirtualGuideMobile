@@ -6,7 +6,6 @@ import 'package:tour_guide/data/providers/userProvider.dart';
 
 class ReviewsBloc {
   ReviewProvider _reviewProvider = ReviewProvider();
-  UserProvider _userProvider = UserProvider();
 
   // ignore: close_sinks
   BehaviorSubject<List<Review>> _reviewController =

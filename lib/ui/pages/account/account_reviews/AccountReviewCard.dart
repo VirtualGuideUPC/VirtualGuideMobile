@@ -32,13 +32,17 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
       child: Row(
         children: [
           Text(
-            "Puntaje",
+            widget.review.province,
             style: TextStyle(fontSize: 15, color: Colors.black),
           ),
           SizedBox(
             width: 10,
           ),
-          for (var item in stars) Icon(Icons.star),
+          for (var item in stars)
+            Icon(
+              Icons.star,
+              color: Colors.black,
+            ),
         ],
       ),
     );
@@ -50,7 +54,7 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
       child: Text(
         date,
         style: TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
         textAlign: TextAlign.start,
       ),
     );
@@ -104,9 +108,9 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
               borderRadius: BorderRadius.circular(10)),
           child: Column(
             children: [
+              title(widget.review.touristicPlaceName),
               locationAndRating(stars),
               description(),
-              title(widget.review.date),
               SizedBox(
                 height: 5,
               ),

@@ -8,6 +8,7 @@ class User {
   final int countryId;
   String birthday;
   final bool isForeign;
+  final String icon;
 
   User(
       {this.id,
@@ -18,7 +19,8 @@ class User {
       this.tokenNotification,
       this.countryId,
       this.birthday,
-      this.isForeign});
+      this.isForeign,
+      this.icon});
 
   factory User.fromJson(Map json) {
     return User(
@@ -26,6 +28,7 @@ class User {
         birthday: json['birthday'],
         email: json['email'],
         countryId: json['country'],
+        icon: json['icon'],
         lastName: json['last_name']);
   }
 }

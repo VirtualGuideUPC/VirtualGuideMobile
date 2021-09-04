@@ -18,7 +18,7 @@ class _AccountPreferencesCardState extends State<AccountPreferencesCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      elevation: 10,
+      elevation: 4,
       child: Material(
         type: MaterialType.transparency,
         child: Container(

@@ -148,66 +148,107 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
         key: _aboutMeFormKey,
         child: Column(
           children: [
-            TextFormField(
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-              readOnly: !isEditable,
-              textInputAction: TextInputAction.next,
-              onSaved: (value) {
-                _updateDto.name = value;
-              },
-              initialValue: widget.user.name,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Por favor ingrese su nombre";
-                }
-              },
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: isEditable ? Colors.blue : Colors.grey),
+            Container(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          readOnly: !isEditable,
+                          textInputAction: TextInputAction.next,
+                          onSaved: (value) {
+                            _updateDto.name = value;
+                          },
+                          initialValue: widget.user.name,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Por favor ingrese su nombre";
+                            }
+                          },
+                          decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1,
+                                    color:
+                                        isEditable ? Colors.blue : Colors.grey),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1,
+                                    color:
+                                        isEditable ? Colors.blue : Colors.grey),
+                              ),
+                              labelText: 'Nombre',
+                              labelStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color)),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          readOnly: !isEditable,
+                          textInputAction: TextInputAction.next,
+                          onSaved: (value) {
+                            _updateDto.lastName = value;
+                          },
+                          initialValue: widget.user.lastName,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Por favor ingrese su apellido";
+                            }
+                          },
+                          decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1,
+                                    color:
+                                        isEditable ? Colors.blue : Colors.grey),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1,
+                                    color:
+                                        isEditable ? Colors.blue : Colors.grey),
+                              ),
+                              labelText: 'Apellido',
+                              labelStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color)),
+                        ),
+                      ],
+                    ),
                   ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: isEditable ? Colors.blue : Colors.grey),
-                  ),
-                  labelText: 'Nombre',
-                  labelStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color)),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-              readOnly: !isEditable,
-              textInputAction: TextInputAction.next,
-              onSaved: (value) {
-                _updateDto.lastName = value;
-              },
-              initialValue: widget.user.lastName,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Por favor ingrese su apellido";
-                }
-              },
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: isEditable ? Colors.blue : Colors.grey),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: isEditable ? Colors.blue : Colors.grey),
-                  ),
-                  labelText: 'Apellido',
-                  labelStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color)),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(widget
+                                .user.icon.isNotEmpty
+                            ? "https://media.discordapp.net/attachments/876920062169202798/883583758316486716/unknown.png?width=985&height=676"
+                            : ""),
+                        radius: 65,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
             SizedBox(
               height: 5,
