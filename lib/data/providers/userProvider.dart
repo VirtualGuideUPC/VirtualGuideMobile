@@ -67,7 +67,8 @@ class UserProvider {
     }
   }
 
-  Future<User> updateUserProfile(UserUpdateDto userUpdateDto) async {
+  Future<User> updateUserProfile(
+      UserUpdateDto userUpdateDto, File image) async {
     final url =
         Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/update/');
     final String userToken = UserPreferences().getToken();
@@ -78,6 +79,7 @@ class UserProvider {
       "last_name": userUpdateDto.lastName,
       "birthday": userUpdateDto.birthday,
       "country": userUpdateDto.country,
+      "image": await MultipartFile.fromFile(image.path),
     });
 
     var resp = await Dio().put(url.toString(),

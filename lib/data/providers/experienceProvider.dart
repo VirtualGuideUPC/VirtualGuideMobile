@@ -40,10 +40,11 @@ class ExperienceProvider {
       'Authorization': userToken,
       'Cookie': 'jwt=$userToken'
     });
+
     print("resopnde c ode: " + resp.statusCode.toString());
     if (resp.statusCode == 200) {
-      dynamic decodedJson = json.decode(resp.body);
-      print(decodedJson);
+      dynamic decodedJson =
+          json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
       ExperienceDetailed experienceDetailed =
           ExperienceDetailed.fromJson(decodedJson);
       return experienceDetailed;

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/userProfileBloc.dart';
@@ -27,6 +30,58 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
   bool isLoading = false;
   bool isEditable = false;
   String _countrySelected;
+
+  File _image = File('');
+
+  _imgFromCamera() async {
+    ImagePicker picker = ImagePicker();
+    final img = await picker.pickImage(source: ImageSource.camera);
+    if (img != null) {
+      setState(() {
+        _image = File(img.path);
+      });
+    }
+  }
+
+  _imgFromGallery() async {
+    ImagePicker picker = ImagePicker();
+    final img = await picker.pickImage(source: ImageSource.gallery);
+    if (img != null) {
+      setState(() {
+        _image = File(img.path);
+      });
+    }
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+              color: Colors.white,
+              height: 120,
+              child: Column(
+                children: [
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Galería'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Cámara'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ));
+        });
+  }
+
   final List<String> _countries = [
     'Perú',
     'Chile',
@@ -55,7 +110,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
       if (this._aboutMeFormKey.currentState.validate()) {
         isLoading = true;
         this._aboutMeFormKey.currentState.save();
-        userProvider.updateUserProfile(_updateDto).then((value) {
+        userProvider.updateUserProfile(_updateDto, _image).then((value) {
           setState(() {
             this.isEditable = false;
             Utils.homeNavigator.currentState.pushReplacementNamed(
@@ -157,6 +212,36 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
             valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
         ));
+
+    Widget _avatar = Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Stack(
+          children: [
+            CircleAvatar(
+              backgroundImage: _image.path.isNotEmpty
+                  ? FileImage(_image)
+                  : NetworkImage(widget.user.icon),
+              radius: 65,
+            ),
+            if (isEditable)
+              Positioned(
+                bottom: -6,
+                right: 0,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      onPrimary: Colors.white,
+                      primary: Colors.purple.shade800,
+                      padding: EdgeInsets.all(1),
+                    ),
+                    onPressed: () {
+                      _showPicker(context);
+                    },
+                    child: Icon(Icons.photo)),
+              )
+          ],
+        ));
     Widget _aboutMeForm = Form(
         key: _aboutMeFormKey,
         child: Column(
@@ -246,19 +331,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                       ],
                     ),
                   ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(widget.user.icon.isEmpty
-                            ? "https://media.discordapp.net/attachments/876920062169202798/883583758316486716/unknown.png?width=985&height=676"
-                            : widget.user.icon),
-                        radius: 65,
-                      ),
-                    ),
-                  )
+                  Flexible(flex: 1, child: _avatar)
                 ],
               ),
             ),
