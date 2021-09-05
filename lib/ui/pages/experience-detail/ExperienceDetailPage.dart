@@ -30,20 +30,19 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    final Experience experience = ModalRoute.of(context)
-        .settings
-        .arguments; // error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
-    futureExperienceDetail =
-        ExperienceProvider().getExperienceDetail(experience.id.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
-    final placesBloc = Provider.placesBlocOf(context);
+    final Experience experience = ModalRoute.of(context)
+        .settings
+        .arguments; // error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
+    futureExperienceDetail =
+        ExperienceProvider().getExperienceDetail(experience.id.toString());
 
+    final placesBloc = Provider.placesBlocOf(context);
     return Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
@@ -57,7 +56,7 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
               padding: EdgeInsets.only(top: statusBarHeight),
               child: Column(
                 children: [
-                  _buildContent(context, placesBloc),
+                  _buildContent(context, placesBloc, futureExperienceDetail),
                 ],
               )),
         )
@@ -82,7 +81,8 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
         );
   }
 
-  Widget _buildContent(BuildContext context, PlacesBloc placesBloc) {
+  Widget _buildContent(BuildContext context, PlacesBloc placesBloc,
+      Future<ExperienceDetailed> experienceDetail) {
     return FutureBuilder(
       future: futureExperienceDetail,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -107,7 +107,10 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                               context: context,
                               builder: (ctx) => ReviewDialog(snapshot.data))
                           .whenComplete(() {
-                        setState(() {});
+                        Utils.homeNavigator.currentState.pushReplacementNamed(
+                            routeHomeExperienceDetailsPage,
+                            arguments:
+                                ModalRoute.of(context).settings.arguments);
                       });
                     },
                     child: Icon(Icons.add)))
@@ -207,6 +210,7 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                     context: context,
                     builder: (ctx) {
                       return Dialog(
+                        insetPadding: EdgeInsets.all(0),
                         backgroundColor: Colors.transparent,
                         child: Container(
                           width: deviceWidth,
@@ -214,7 +218,7 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                           child: PageView.builder(
                               physics: BouncingScrollPhysics(),
                               controller:
-                                  PageController(viewportFraction: 0.89),
+                                  PageController(viewportFraction: 0.95),
                               itemCount: review.images.length,
                               itemBuilder: (ctx, indx) {
                                 return Container(

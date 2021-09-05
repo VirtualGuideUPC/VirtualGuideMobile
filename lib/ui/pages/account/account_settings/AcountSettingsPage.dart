@@ -31,7 +31,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
 
     var themeProvider = Provider.of<ThemeNotifier>(context);
 
-    Widget _avatar(String nombre) {
+    Widget _avatar(User profile) {
       return Container(
         width: _screenSize.width,
         height: _screenHeight * 0.15,
@@ -41,13 +41,14 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           children: [
             CircleAvatar(
               radius: 40,
+              backgroundImage: NetworkImage(profile.icon),
             ),
             SizedBox(
               width: 10,
             ),
             Flexible(
               child: Text(
-                "Hola $nombre!",
+                "Hola ${profile.name}!",
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 25,
@@ -187,7 +188,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _avatar(userProfile.name),
+                      _avatar(userProfile),
                       _title("CONFIGURACIÓN DE LA CUENTA"),
                       _section("Información personal", () {
                         Utils.homeNavigator.currentState

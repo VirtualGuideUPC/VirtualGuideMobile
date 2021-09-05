@@ -13,7 +13,7 @@ class ThemeNotifier with ChangeNotifier {
           bodyText1: TextStyle(color: Colors.white),
           bodyText2: TextStyle(color: Colors.grey.shade300)),
       accentColor: Colors.white,
-      canvasColor: Colors.transparent,
+      canvasColor: Color.fromRGBO(46, 65, 89, 1),
       buttonColor: Color.fromRGBO(143, 142, 192, 1));
 
   final lightTheme = ThemeData(
@@ -27,7 +27,7 @@ class ThemeNotifier with ChangeNotifier {
           bodyText1: TextStyle(color: Colors.black),
           bodyText2: TextStyle(color: Colors.grey.shade700)),
       accentColor: Colors.white,
-      canvasColor: Colors.transparent,
+      canvasColor: Colors.white,
       buttonColor: Color.fromRGBO(143, 142, 192, 1));
 
   ThemeData _themeData;

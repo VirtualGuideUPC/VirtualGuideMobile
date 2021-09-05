@@ -26,7 +26,20 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
 
   bool isLoading = false;
   bool isEditable = false;
-
+  String _countrySelected;
+  final List<String> _countries = [
+    'Perú',
+    'Chile',
+    'México',
+    'Argentina',
+    'Bolivia',
+    'Colombia',
+    'USA',
+    'Francia',
+    'Portugal',
+    'China',
+    'Corea'
+  ];
   @override
   void initState() {
     userProfileBloc.changeBirthday(widget.user.birthday);
@@ -239,10 +252,9 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                       width: double.infinity,
                       alignment: Alignment.center,
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(widget
-                                .user.icon.isNotEmpty
+                        backgroundImage: NetworkImage(widget.user.icon.isEmpty
                             ? "https://media.discordapp.net/attachments/876920062169202798/883583758316486716/unknown.png?width=985&height=676"
-                            : ""),
+                            : widget.user.icon),
                         radius: 65,
                       ),
                     ),
@@ -309,38 +321,65 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
             SizedBox(
               height: 5,
             ),
-            TextFormField(
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-              readOnly: !isEditable,
-              textInputAction: TextInputAction.next,
-              onSaved: (value) {
-                _updateDto.country = int.parse(value);
-              },
-              initialValue: widget.user.countryId.toString(),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Por favor ingrese su país";
-                }
-              },
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: isEditable ? Colors.blue : Colors.grey),
+            isEditable
+                ? DropdownButtonFormField<String>(
+                    onChanged: (e) {
+                      setState(() {
+                        _countrySelected = e as String;
+                      });
+                    },
+                    decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: isEditable ? Colors.blue : Colors.grey),
+                        ),
+                        labelText: "País",
+                        labelStyle: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyText1.color)),
+                    value: _countries[widget.user.countryId - 1],
+                    onSaved: (value) {
+                      var index = _countries.indexOf(value);
+                      _updateDto.country = index + 1;
+                    },
+                    validator: (value) =>
+                        value == null ? 'Por favor escoja un país' : null,
+                    items: _countries
+                        .map((e) => DropdownMenuItem<String>(
+                            value: e, child: new Text(e)))
+                        .toList(),
+                  )
+                : TextFormField(
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),
+                    readOnly: !isEditable,
+                    textInputAction: TextInputAction.next,
+                    onSaved: (value) {
+                      _updateDto.country = int.parse(value);
+                    },
+                    initialValue: _countries[widget.user.countryId - 1],
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Por favor ingrese su país";
+                      }
+                    },
+                    decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: isEditable ? Colors.blue : Colors.grey),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: isEditable ? Colors.blue : Colors.grey),
+                        ),
+                        labelText: 'País',
+                        labelStyle: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyText1.color)),
                   ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: isEditable ? Colors.blue : Colors.grey),
-                  ),
-                  labelText: 'País',
-                  labelStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color)),
-            ),
-            SizedBox(
-              height: 5,
-            )
           ],
         ));
 

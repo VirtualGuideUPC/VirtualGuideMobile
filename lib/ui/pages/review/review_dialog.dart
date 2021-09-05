@@ -18,13 +18,9 @@ class ReviewDialog extends StatefulWidget {
 }
 
 class _ReviewDialog extends State<ReviewDialog> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  List<File> _pickedImages = [];
+  List<File> pickedImages = [];
 
   var pref = UserPreferences();
   CreateReviewDto _toSend = CreateReviewDto(
@@ -37,6 +33,10 @@ class _ReviewDialog extends State<ReviewDialog> {
 
   void _saveForm(userId, PlacesBloc placesBloc) {
     final isValid = _formKey.currentState.validate();
+    setState(() {
+      isLoading = true;
+    });
+
     if (isValid) {
       this._formKey.currentState.save();
       _toSend.user = int.parse(userId);
@@ -45,22 +45,32 @@ class _ReviewDialog extends State<ReviewDialog> {
       var formatter = new DateFormat('yyyy-MM-dd');
       String formattedDate = formatter.format(now);
       this._toSend.date = formattedDate;
-      placesBloc.postReview(_toSend, _pickedImages).then((value) {
+
+      placesBloc.postReview(_toSend, pickedImages).then((value) {
         Navigator.pop(context);
+        setState(() {
+          isLoading = false;
+        });
       });
-    } else
+    } else {
+      setState(() {
+        isLoading = false;
+      });
       return;
+    }
   }
 
   _uploadImage() async {
     ImagePicker picker = ImagePicker();
     final imgs = await picker.pickMultiImage();
-    if (imgs.length < 4 && imgs.length > 0) {
-      setState(() {
-        for (var img in imgs) {
-          _pickedImages.add(File(img.path));
-        }
-      });
+    if (imgs != null) {
+      if (imgs.length < 4 && imgs.length > 0) {
+        setState(() {
+          for (var img in imgs) {
+            pickedImages.add(File(img.path));
+          }
+        });
+      }
     }
   }
 
@@ -68,10 +78,21 @@ class _ReviewDialog extends State<ReviewDialog> {
   Widget build(BuildContext context) {
     var placesBloc = Provider.placesBlocOf(context);
 
+    var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
+    var _screenWidth = MediaQuery.of(context).size.width;
+
+    Widget _loader = Container(
+        child: Center(
+      child: CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+      ),
+    ));
+
     return Dialog(
       child: Container(
         width: double.infinity,
-        height: 350,
+        height: _screenHeight * 0.54,
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
@@ -138,54 +159,67 @@ class _ReviewDialog extends State<ReviewDialog> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
+                  ],
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      _uploadImage();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurple.shade400,
+                        shape: new RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25)))),
+                    icon: Icon(
+                      Icons.photo_camera,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      "Subir imágenes",
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            pickedImages.length > 0
+                ? Expanded(
+                    child: Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              _uploadImage();
-                            },
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.deepPurple.shade400,
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25)))),
-                            icon: Icon(
-                              Icons.photo_camera,
-                              color: Colors.white,
-                            ),
-                            label: Text(
-                              "Subir imágenes",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (final entry in _pickedImages)
+                        for (final entry in pickedImages)
                           Container(
                             padding: EdgeInsets.only(right: 10),
                             child: CircleAvatar(
-                              radius: 20,
+                              radius: _screenHeight * 0.03,
                               backgroundImage: FileImage(entry),
                             ),
                           )
                       ],
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
+                  ))
+                : Container(),
+            SizedBox(
+              height: 15,
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: isLoading
+                          ? _loader
+                          : ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.indigo.shade900),
                               onPressed: () {
@@ -200,11 +234,11 @@ class _ReviewDialog extends State<ReviewDialog> {
                                 "Publicar reseña",
                                 style: TextStyle(color: Colors.white),
                               )),
-                        )
-                      ],
                     )
                   ],
-                ))
+                ),
+              ),
+            )
           ],
         ),
       ),
