@@ -101,25 +101,34 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
     super.initState();
   }
 
+  void _saveForm() async {
+    if (this._aboutMeFormKey.currentState.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      this._aboutMeFormKey.currentState.save();
+      var a = 0;
+      userProvider
+          .updateUserProfile(_updateDto, _image)
+          .asStream()
+          .listen((event) {
+        a += 1;
+        print(a);
+      }).onDone(() {
+        setState(() {
+          this.isEditable = false;
+          Utils.homeNavigator.currentState.pushReplacementNamed(
+            routeHomeAccountPage,
+          );
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
     var _screenWidth = MediaQuery.of(context).size.width;
-
-    void _saveForm() async {
-      if (this._aboutMeFormKey.currentState.validate()) {
-        isLoading = true;
-        this._aboutMeFormKey.currentState.save();
-        userProvider.updateUserProfile(_updateDto, _image).then((value) {
-          setState(() {
-            this.isEditable = false;
-            Utils.homeNavigator.currentState.pushReplacementNamed(
-              routeHomeAccountPage,
-            );
-          });
-        });
-      }
-    }
 
     Widget _title = Container(
       child: Row(
@@ -204,14 +213,21 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
             )
           ],
         ));
-    Widget _loader = Container(
-        color: Theme.of(context).dialogBackgroundColor,
-        child: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+    Widget _loader = Material(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      elevation: 10,
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Theme.of(context).dialogBackgroundColor,
           ),
-        ));
+          child: Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+            ),
+          )),
+    );
 
     Widget _avatar = Container(
         width: double.infinity,
@@ -416,11 +432,21 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                       var index = _countries.indexOf(value);
                       _updateDto.country = index + 1;
                     },
+                    iconEnabledColor:
+                        Theme.of(context).textTheme.bodyText1.color,
                     validator: (value) =>
                         value == null ? 'Por favor escoja un país' : null,
                     items: _countries
                         .map((e) => DropdownMenuItem<String>(
-                            value: e, child: new Text(e)))
+                            value: e,
+                            child: new Text(
+                              e,
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color),
+                            )))
                         .toList(),
                   )
                 : TextFormField(
@@ -484,12 +510,19 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                 ],
               ),
               if (isLoading)
-                Container(
-                  width: _screenWidth,
-                  height: _screenHeight - kToolbarHeight,
-                  color: Theme.of(context).dialogBackgroundColor,
-                  child: _loader,
-                ),
+                Positioned(
+                  bottom: _screenHeight * 0.1,
+                  left: (_screenWidth * 0.4) / 2,
+                  child: Container(
+                    width: _screenWidth * 0.5,
+                    height: _screenHeight * 0.2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Theme.of(context).dialogBackgroundColor,
+                    ),
+                    child: _loader,
+                  ),
+                )
             ],
           ),
         ),

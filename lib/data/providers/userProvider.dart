@@ -79,7 +79,8 @@ class UserProvider {
       "last_name": userUpdateDto.lastName,
       "birthday": userUpdateDto.birthday,
       "country": userUpdateDto.country,
-      "image": await MultipartFile.fromFile(image.path),
+      if (image.path.isNotEmpty)
+        "image": await MultipartFile.fromFile(image.path),
     });
 
     var resp = await Dio().put(url.toString(),
