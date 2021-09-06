@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/userProfileBloc.dart';
@@ -65,16 +66,24 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
                       title: new Text('Galería'),
-                      onTap: () {
-                        _imgFromGallery();
-                        Navigator.of(context).pop();
+                      onTap: () async {
+                        if (await Permission.mediaLibrary.request().isGranted) {
+                          _imgFromGallery();
+                          Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
+                        }
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
                     title: new Text('Cámara'),
-                    onTap: () {
-                      _imgFromCamera();
-                      Navigator.of(context).pop();
+                    onTap: () async {
+                      if (await Permission.camera.request().isGranted) {
+                        _imgFromCamera();
+                        Navigator.of(context).pop();
+                      } else {
+                        Navigator.of(context).pop();
+                      }
                     },
                   ),
                 ],

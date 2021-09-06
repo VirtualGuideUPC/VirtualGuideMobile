@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/experienceDetailed.dart';
 import 'package:tour_guide/data/entities/review.dart';
@@ -168,8 +169,12 @@ class _ReviewDialog extends State<ReviewDialog> {
                   width: 10,
                 ),
                 ElevatedButton.icon(
-                    onPressed: () {
-                      _uploadImage();
+                    onPressed: () async {
+                      if (await Permission.mediaLibrary.request().isGranted) {
+                        _uploadImage();
+                      } else {
+                        return;
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.deepPurple.shade400,
