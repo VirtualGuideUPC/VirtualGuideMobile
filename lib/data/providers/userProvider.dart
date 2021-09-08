@@ -71,7 +71,7 @@ class UserProvider {
   }
 
   Future<List<Category>> getCategories() async {
-    final url = Uri.parse('https://mocki.io/v1/cbb3244a-1f74-4234-bd00-53700aa41c7f');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllCategories');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<Category> categories = decodedJson.map((categoryJson) {
@@ -83,8 +83,7 @@ class UserProvider {
   }
 
   Future<List<TypePlace>> getAllTypePlaces() async {
-    //final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllTypePlaces');
-    final url = Uri.parse('https://mocki.io/v1/b8d29c8f-b363-4ed7-b3fe-7e69e174eae6');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllTypePlaces');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<TypePlace> typePlaces = decodedJson.map((typePlaceJson) {
@@ -96,8 +95,7 @@ class UserProvider {
   }
 
   Future<List<Subcategory>> getAllSubcategories() async {
-    //final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllTypePlaces');
-    final url = Uri.parse('https://mocki.io/v1/8d8faa30-dd70-46ac-8442-5491d90208a3');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllSubcategories');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<Subcategory> subcategories = decodedJson.map((subcategoriesJson) {
