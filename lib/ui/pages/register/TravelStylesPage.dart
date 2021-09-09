@@ -230,36 +230,4 @@ class _TravelStylesPageState extends State<TravelStylesPage> {
     );
   }
 
-  /*_signin(SigninBloc bloc, BuildContext context) {
-    if (flagRequestSubmitted) {
-      return;
-    }
-    BuildContext alertContext;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          alertContext = context;
-          return AlertDialog(
-              backgroundColor: Colors.white,
-              content: Center(
-                child: CircularProgressIndicator(),
-              ));
-        });
-
-    bloc
-        .signin(
-            user.name, user.lastName, user.email, "123456", user.birthday, "1")
-        .then((String result) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
-      Utils.mainNavigator.currentState
-          .pushReplacementNamed(routeFinishRegister);
-    }).catchError((error) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
-      bloc.changeRequestResult(error.toString());
-      flagRequestSubmitted = false;
-    });
-
-    flagRequestSubmitted = true;
-  } */
 }

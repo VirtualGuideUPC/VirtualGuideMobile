@@ -20,114 +20,121 @@ class _FavoriteExperiencesState extends State<FavoriteExperiences> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
-    final Department department = ModalRoute.of(context).settings.arguments;// error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
-    futureExperiences=ExperienceProvider().getFavoriteExperiences(department.id.toString());
+
+    final Department department = ModalRoute.of(context)
+        .settings
+        .arguments; // error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
+    futureExperiences =
+        ExperienceProvider().getFavoriteExperiences(department.id.toString());
   }
+
   @override
   Widget build(BuildContext context) {
     final Department department = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme:IconThemeData(color:Colors.black),
         backgroundColor: Colors.white,
-        elevation: 0,
-        title:Text(department.name, style:TextStyle(color:Colors.black))
-      ),
-      body:_buildContent(context)
-    );
+        appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title:
+                Text(department.name, style: TextStyle(color: Colors.black))),
+        body: _buildContent(context));
   }
-    Widget _buildContent(BuildContext context){
+
+  Widget _buildContent(BuildContext context) {
     return FutureBuilder(
       future: futureExperiences,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if(snapshot.hasData){
+        if (snapshot.hasData) {
           return Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 25),
-              child: ListView(
-              children: _buildCards(context,snapshot.data)
-            ),
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: ListView(children: _buildCards(context, snapshot.data)),
           );
-        }else if(snapshot.hasError){
-          if(snapshot.error=='401'){
+        } else if (snapshot.hasError) {
+          if (snapshot.error == '401') {
             //TODO: handle session expired
-            Future.delayed(Duration.zero, () => Utils.homeNavigator.currentState.pop());
-          }else{
-            Future.delayed(Duration.zero, () => Utils.homeNavigator.currentState.pop());
+            Future.delayed(
+                Duration.zero, () => Utils.homeNavigator.currentState.pop());
+          } else {
+            Future.delayed(
+                Duration.zero, () => Utils.homeNavigator.currentState.pop());
           }
           return Container();
-        }else{
-          return Center(child:CircularProgressIndicator());
+        } else {
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
   }
-  List<Widget> _buildCards(BuildContext context, List<Experience> experiences){
-    return experiences.map((item){
+
+  List<Widget> _buildCards(BuildContext context, List<Experience> experiences) {
+    return experiences.map((item) {
       return GestureDetector(
-        onTap: (){Utils.homeNavigator.currentState.pushNamed(routeHomeExperienceDetailsPage,arguments: item);},
-        child: Container(
-        margin:EdgeInsets.only(bottom:40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
+          onTap: () {
+            Utils.homeNavigator.currentState
+                .pushNamed(routeHomeExperienceDetailsPage, arguments: item);
+          },
+          child: Container(
+            margin: EdgeInsets.only(bottom: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildCarousel(context, item),
-                Positioned(right:10,top:10,child:Icon(Icons.favorite))
+                Stack(
+                  children: [
+                    _buildCarousel(context, item),
+                    Positioned(right: 10, top: 10, child: Icon(Icons.favorite))
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(children: _buildRatingBar(context, item)),
+                SizedBox(height: 10),
+                Text(item.name, style: TextStyle(fontSize: 20))
               ],
             ),
-            SizedBox(height:10),
-            Row(children: _buildRatingBar(context, item)),
-            SizedBox(height:10),
-            Text(item.name,style:TextStyle(fontSize:20))
-          ],
-        ),
-      ));
-    }
-    ).toList();
+          ));
+    }).toList();
   }
-  Widget _buildCarousel(BuildContext context, Experience experienceDetails){
-    final _screenSize=MediaQuery.of(context).size;
+
+  Widget _buildCarousel(BuildContext context, Experience experienceDetails) {
+    final _screenSize = MediaQuery.of(context).size;
     return ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-        width: double.infinity,
-        height:_screenSize.width*0.5,
-        child:Image(
-          image:Utils.getPosterImage(experienceDetails.picture),
-          fit: BoxFit.cover,
-        )
-      )
-      // child:Carousel(
-      //   borderRadius: true,
-      //   radius: Radius.circular(20),
-      //   images:experienceDetails.pictures.map(
-      //     (item) => NetworkImage(item)
-      //   ).toList()
-      // )
-    );
+            width: double.infinity,
+            height: _screenSize.width * 0.5,
+            child: Image(
+              image: Utils.getPosterImage(experienceDetails.picture),
+              fit: BoxFit.cover,
+            ))
+        // child:Carousel(
+        //   borderRadius: true,
+        //   radius: Radius.circular(20),
+        //   images:experienceDetails.pictures.map(
+        //     (item) => NetworkImage(item)
+        //   ).toList()
+        // )
+        );
   }
-  List<Widget> _buildRatingBar(BuildContext context, Experience experienceDetailed){
-    int numFillStars=experienceDetailed.avgRanking.toInt();
-    bool halfStart=experienceDetailed.avgRanking%1!=0;
-    List<Widget> stars=[];
-    for(int i=1;i<=5;i++){
-      if(i<=numFillStars){
+
+  List<Widget> _buildRatingBar(
+      BuildContext context, Experience experienceDetailed) {
+    int numFillStars = experienceDetailed.avgRanking.toInt();
+    bool halfStart = experienceDetailed.avgRanking % 1 != 0;
+    List<Widget> stars = [];
+    for (int i = 1; i <= 5; i++) {
+      if (i <= numFillStars) {
         stars.add(Icon(Icons.star_outlined));
-      }else{
-        if(halfStart){
+      } else {
+        if (halfStart) {
           stars.add(Icon(Icons.star_half_outlined));
-          halfStart=false;
-        }
-        else{ 
+          halfStart = false;
+        } else {
           stars.add(Icon(Icons.star_outline));
         }
       }
     }
     return stars;
   }
-
 }

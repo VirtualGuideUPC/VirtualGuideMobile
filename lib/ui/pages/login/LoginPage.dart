@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         user = User();
         user.email = signInAccount.email;
         user.name = signInAccount.displayName;
-        user.picture = signInAccount.photoUrl;
+        user.icon = signInAccount.photoUrl;
         _login(bloc, context, signInAccount.email);
       });
     } else {
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
           user = User();
           user.email = value["email"];
           user.name = value["name"];
-          user.picture = value["picture"]["data"]["url"];
+          user.icon = value["picture"]["data"]["url"];
           _login(bloc, context, value["email"]);
         });
       });

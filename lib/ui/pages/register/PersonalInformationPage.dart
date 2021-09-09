@@ -77,7 +77,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                 CircleAvatar(
                     radius: 45,
                     backgroundColor: Colors.grey,
-                    backgroundImage: CachedNetworkImageProvider(user.picture)),
+                    backgroundImage: CachedNetworkImageProvider(user.icon)),
                 Divider(
                   height: 20.0,
                   color: Colors.white,

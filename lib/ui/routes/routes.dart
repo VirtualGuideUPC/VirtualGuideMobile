@@ -1,3 +1,4 @@
+
 /// ************************** AUTH  ****************************/
 const routeLogin='/login';
 const routeSignin='/signin';
@@ -16,3 +17,6 @@ const routeHomeAccountPage='account';
 const routeHomeExperienceDetailsPage='experience_details';
 const routeHomeFavoriteDepartmentsPage='favorite_departments';
 const routeHomeFavoriteExperiencesPage='favorite_experiences';
+const routeHomeAccountInformationPage = 'account_information';
+const routeHomeAccountReviewsPage = 'account_reviews';
+const routeHomeAccountPreferencesPage = 'account_preferences';

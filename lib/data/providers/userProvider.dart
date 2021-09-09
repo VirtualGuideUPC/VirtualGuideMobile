@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/category.dart';
 import 'package:tour_guide/data/entities/subcategory.dart';
 import 'package:tour_guide/data/entities/typePlace.dart';
+import 'package:tour_guide/data/entities/user.dart';
+import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/routes/routes.dart';
 
 class UserProvider {
   final String _url = "https://vguidebe.herokuapp.com";
@@ -106,4 +111,83 @@ class UserProvider {
     return subcategories;
   }
 
+
+  Future<User> updateUserProfile(
+      UserUpdateDto userUpdateDto, File image) async {
+    final url =
+        Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/update/');
+    final String userToken = UserPreferences().getToken();
+
+    var formData = FormData.fromMap({
+      "user": _prefs.getUserId(),
+      "name": userUpdateDto.name,
+      "last_name": userUpdateDto.lastName,
+      "birthday": userUpdateDto.birthday,
+      "country": userUpdateDto.country,
+      "image": await MultipartFile.fromFile(image.path),
+    });
+
+    var resp = await Dio().put(url.toString(),
+        data: formData,
+        options: Options(headers: <String, String>{
+          'Authorization': userToken,
+          'Cookie': 'jwt=$userToken'
+        }));
+    print("resopnde code: " + resp.statusCode.toString());
+
+    if (resp.statusCode == 200) {
+      var data = resp.data as Map<String, dynamic>;
+      var userProfile = User(
+          name: data["name"],
+          birthday: data["birthday"],
+          lastName: data["last_name"],
+          countryId: data["country"]);
+
+      return userProfile;
+    } else {
+      if (resp.statusCode == 403) {
+        logOut();
+      } else {
+        return Future.error('500');
+      }
+    }
+  }
+
+  Future<User> getUserProfile() async {
+    final url =
+        Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/');
+
+    final String userToken = UserPreferences().getToken();
+
+    final http.Response resp = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+
+    if (resp.statusCode == 200) {
+      var decodedJson = json.decode(resp.body);
+      print(decodedJson);
+      var userProfile = User.fromJson(decodedJson);
+      return userProfile;
+    } else {
+      if (resp.statusCode == 403) {
+        logOut();
+      } else {
+        return Future.error('500');
+      }
+    }
+  }
+
+  void logOut() {
+    final futures = <Future>[];
+
+    final _prefs = UserPreferences();
+    futures.add(_prefs.removeToken());
+    futures.add(_prefs.removeUserId());
+
+    Future.wait(futures).then((value) {
+      Utils.mainNavigator.currentState.pushReplacementNamed(routeLogin);
+    });
+  }
 }
