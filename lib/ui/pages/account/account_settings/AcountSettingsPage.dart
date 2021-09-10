@@ -165,7 +165,13 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 ),
               ),
               onPressed: () {
-                themeProvider.setLightMode();
+                setState(() {
+                  if (themeProvider.getThemeMode() == true) {
+                    themeProvider.setLightMode();
+                  } else {
+                    themeProvider.setDarkMode();
+                  }
+                });
               },
             ),
           ),

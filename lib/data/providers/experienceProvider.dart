@@ -63,7 +63,7 @@ class ExperienceProvider {
     final int userId = UserPreferences().getUserId();
 
     final url = Uri.parse(
-        'https://virtualguide2.herokuapp.com/api/users/$userId/favourites/departments/'); //TODO: Correct url
+        'https://virtualguide2.herokuapp.com/api/users/$userId/favourites/departments/');
 
     final http.Response resp = await http.get(
       url,
@@ -96,7 +96,7 @@ class ExperienceProvider {
     final String userToken = UserPreferences().getToken();
     final int userId = UserPreferences().getUserId();
     final url = Uri.parse(
-        'https://virtualguide2.herokuapp.com/api/users/$userId/favourites/departments/$departmentId/'); //TODO: Correct url
+        'https://virtualguide2.herokuapp.com/api/users/$userId/favourites/departments/$departmentId/');
 
     final http.Response resp = await http.get(
       url,
@@ -128,8 +128,7 @@ class ExperienceProvider {
 
   Future postAddFavoriteExperience(String experienceId) async {
     final url = Uri.parse(
-        'https://virtualguide2s.herokuapp.com/api/users/favourite/create/'); //TODO: Correct url
-
+        'https://virtualguide2s.herokuapp.com/api/users/favourite/create/');
     final String userToken = UserPreferences().getToken();
     final int userId = UserPreferences().getUserId();
 
