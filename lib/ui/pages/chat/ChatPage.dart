@@ -47,7 +47,12 @@ class _ChatPageState extends State<ChatPage> {
                   return MessageBubble(messages[indx], indx);
                 });
           } else {
-            return Text("loading");
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+            );
           }
         },
       );

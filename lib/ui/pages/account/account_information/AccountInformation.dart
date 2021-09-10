@@ -233,7 +233,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
           child: Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.white,
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
             ),
           )),
     );
