@@ -68,18 +68,18 @@ class _HomePageState extends State<HomePage>
             tabs: [
               Tab(
                 icon: Icon(
-                  Icons.directions_car,
+                  Icons.map_outlined,
                   color: Theme.of(context).iconTheme.color,
                 ),
               ),
               Tab(
                   icon: Icon(
-                Icons.directions_transit,
+                Icons.chat_bubble_outline,
                 color: Theme.of(context).iconTheme.color,
               )),
               Tab(
                   icon: Icon(
-                Icons.directions_bike,
+                Icons.perm_identity_outlined,
                 color: Theme.of(context).iconTheme.color,
               )),
             ],

@@ -16,7 +16,7 @@ class UserProvider {
   final _prefs = new UserPreferences();
 
   Future<String> signinUser(String name, String lastName, String email,
-      String password, String birthDate, String country, List<int> typePlaces, List<int> categories, List<int> subcategories) async {
+      String password, String birthDate, String country, String icon, List<int> typePlaces, List<int> categories, List<int> subcategories) async {
     final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/register/');
     //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/register/');
     final authData = {
@@ -26,6 +26,7 @@ class UserProvider {
       'last_name': lastName,
       'birthday': birthDate,
       'country': country,
+      'icon': icon,
       'type_place': typePlaces,
       'category': categories,
       'subcategory': subcategories

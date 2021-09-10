@@ -246,9 +246,9 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
 
     bloc
         .signin(
-        user.name, user.lastName, user.email, "123456", user.birthday, "1", user.typePlaces, user.categories, user.subcategories)
+        user.name, user.lastName, user.email, "123456", user.birthday, "1", user.icon, user.typePlaces, user.categories, user.subcategories)
         .then((String result) {
-      if (alertContext != null) Navigator.of(alertContext).pop();
+      //if (alertContext != null) Navigator.of(alertContext).pop();
       Utils.mainNavigator.currentState
           .pushReplacementNamed(routeFinishRegister);
     }).catchError((error) {
