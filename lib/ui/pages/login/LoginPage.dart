@@ -71,6 +71,14 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  testLogin(){
+    user = User();
+    user.email = "diego.salcedo.123@gmail.com";
+    user.name = "Diego";
+    user.icon = "ww.www.ww";
+    _login(bloc, context, user.email);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -125,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
               Divider(
                 color: Colors.white,
               ),
-              customElevatedButton("Continuar con Facebook", 'assets/img/ic_fb.png', loginWithFb),
+              customElevatedButton("Continuar con Facebook", 'assets/img/ic_fb.png', testLogin),
               Divider(
                 height: 22,
                 color: Colors.white,

@@ -16,6 +16,8 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     messagesBloc.getMessages();
     setState(() {
+     // _textController.h
+      //_textController.
       _textController.text = "¡Escribe Algo!";
     });
     super.initState();
