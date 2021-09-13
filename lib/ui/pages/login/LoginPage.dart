@@ -19,7 +19,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   bool flagWaitingIfLoggedUser = true;
   bool isSignedIn = false;
   LoginBloc bloc;
@@ -53,11 +52,9 @@ class _LoginPageState extends State<LoginPage> {
     googleSignIn.signOut();
   }
 
-  loginWithFb(){
-    FacebookAuth.instance.login(permissions: [
-      "public_profile",
-      "email"
-    ]).then((value) {
+  loginWithFb() {
+    FacebookAuth.instance
+        .login(permissions: ["public_profile", "email"]).then((value) {
       FacebookAuth.instance.getUserData().then((value) {
         setState(() {
           isSignedIn = true;
@@ -71,11 +68,12 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  testLogin(){
+  testLogin() {
     user = User();
-    user.email = "diego.salcedo.123@gmail.com";
-    user.name = "Diego";
-    user.icon = "ww.www.ww";
+    user.email = "linotest@test.com";
+    user.name = "test123";
+    user.icon =
+        "https://res.cloudinary.com/dyifsbjuf/image/upload/v1630902125/z8grwvbljnfylp2hin8l.jpg";
     _login(bloc, context, user.email);
   }
 
@@ -129,11 +127,13 @@ class _LoginPageState extends State<LoginPage> {
               Text("Te damos la bienvenida",
                   style: Theme.of(context).textTheme.headline5),
               Image.asset('assets/img/img_home.png'),
-              customElevatedButton("Continuar con Google", 'assets/img/ic_google.png', loginWithGoogle),
+              customElevatedButton("Continuar con Google",
+                  'assets/img/ic_google.png', loginWithGoogle),
               Divider(
                 color: Colors.white,
               ),
-              customElevatedButton("Continuar con Facebook", 'assets/img/ic_fb.png', testLogin),
+              customElevatedButton(
+                  "Continuar con Facebook", 'assets/img/ic_fb.png', testLogin),
               Divider(
                 height: 22,
                 color: Colors.white,
@@ -153,27 +153,31 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context, String email){
+  _login(LoginBloc bloc, BuildContext context, String email) {
     BuildContext alertContext;
-    showDialog(context: context,barrierDismissible: false, builder: (context){
-      alertContext=context;
-      return AlertDialog(backgroundColor: Colors.white,content:Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(child: CircularProgressIndicator(),),
-        ],
-      ));
-    });
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          alertContext = context;
+          return AlertDialog(
+              backgroundColor: Colors.white,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              ));
+        });
 
-    bloc.login(email).then((String result){
-      if(alertContext!=null)Navigator.of(alertContext).pop();
+    bloc.login(email).then((String result) {
+      if (alertContext != null) Navigator.of(alertContext).pop();
       Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
-    }).catchError((error){
-      Utils.mainNavigator.currentState.pushReplacementNamed(
-          routePersonalInformation,
-          arguments: user);
+    }).catchError((error) {
+      Utils.mainNavigator.currentState
+          .pushReplacementNamed(routePersonalInformation, arguments: user);
     });
-
   }
-
 }

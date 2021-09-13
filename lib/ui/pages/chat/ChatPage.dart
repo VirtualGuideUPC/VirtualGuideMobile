@@ -15,11 +15,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     messagesBloc.getMessages();
-    setState(() {
-     // _textController.h
-      //_textController.
-      _textController.text = "¡Escribe Algo!";
-    });
+
     super.initState();
   }
 
@@ -71,11 +67,13 @@ class _ChatPageState extends State<ChatPage> {
                 child: Container(
                   child: TextFormField(
                     controller: _textController,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                         fontSize: 18,
                         color: Theme.of(context).textTheme.bodyText1.color),
                     decoration: InputDecoration(
+                      hintText: "¡Escribe Algo!",
+                      hintStyle: TextStyle(),
                       labelStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1.color),
                       enabledBorder: OutlineInputBorder(

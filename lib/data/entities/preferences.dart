@@ -1,56 +1,30 @@
-import 'package:flutter/foundation.dart';
+import 'package:tour_guide/data/entities/category.dart';
+import 'package:tour_guide/data/entities/subcategory.dart';
+import 'package:tour_guide/data/entities/typePlace.dart';
 
 class Preferences {
   List<Category> categories;
-  List<TypePlaces> typeplaces;
+  List<TypePlace> typeplaces;
   List<Subcategory> subcategories;
-  Preferences({this.categories, this.typeplaces});
+  Preferences({this.categories, this.typeplaces, this.subcategories});
 
   factory Preferences.fromJson(Map<String, dynamic> json) {
     var categoriesdata = json["categories"] as List;
     var typeplacesdata = json["typeplaces"] as List;
+    var subcategoriesdata = json["subcategories"] as List;
 
     var categories =
         categoriesdata.map((cat) => Category.fromJson(cat)).toList();
 
     var typeplaces =
-        typeplacesdata.map((tp) => TypePlaces.fromJson(tp)).toList();
+        typeplacesdata.map((tp) => TypePlace.fromJson(tp)).toList();
 
-    return Preferences(categories: categories, typeplaces: typeplaces);
+    var subcategories =
+        subcategoriesdata.map((tp) => Subcategory.fromJson(tp)).toList();
+
+    return Preferences(
+        categories: categories,
+        typeplaces: typeplaces,
+        subcategories: subcategories);
   }
 }
-
-class Category {
-  int id;
-  String name;
-  String icon;
-  bool status;
-
-  Category({this.id, this.name, this.icon, this.status});
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-        icon: json["icon"],
-        id: json["category_id"],
-        name: json["name"],
-        status: json["status"]);
-  }
-}
-
-class TypePlaces {
-  int id;
-  String name;
-  String icon;
-  bool status;
-  TypePlaces({this.id, this.name, this.icon, this.status});
-
-  factory TypePlaces.fromJson(Map<String, dynamic> json) {
-    return TypePlaces(
-        icon: json["icon"],
-        id: json["category_id"],
-        name: json["name"],
-        status: json["status"]);
-  }
-}
-
-class Subcategory {}
