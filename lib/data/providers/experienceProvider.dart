@@ -11,7 +11,7 @@ class ExperienceProvider {
   Future<List<Experience>> getExperiences(
       String userId, double lat, double lng) async {
     final url =
-        Uri.parse('https://virtualguide2.herokuapp.com/api/places/nearby/');
+        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/nearby/');
     final body = {'user_id': userId, 'latitude': lat, 'longitude': lng};
     final http.Response resp = await http.post(url,
         headers: {
@@ -32,7 +32,7 @@ class ExperienceProvider {
 
   Future<ExperienceDetailed> getExperienceDetail(String experienceId) async {
     final url = Uri.parse(
-        'https://virtualguide2.herokuapp.com/api/places/tp/$experienceId/');
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/tp/$experienceId/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -63,7 +63,7 @@ class ExperienceProvider {
     final int userId = UserPreferences().getUserId();
 
     final url = Uri.parse(
-        'https://virtualguide2.herokuapp.com/api/users/$userId/favourites/departments/');
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/$userId/favourites/departments/');
 
     final http.Response resp = await http.get(
       url,
@@ -96,7 +96,7 @@ class ExperienceProvider {
     final String userToken = UserPreferences().getToken();
     final int userId = UserPreferences().getUserId();
     final url = Uri.parse(
-        'https://virtualguide2.herokuapp.com/api/users/$userId/favourites/departments/$departmentId/');
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/$userId/favourites/departments/$departmentId/');
 
     final http.Response resp = await http.get(
       url,
