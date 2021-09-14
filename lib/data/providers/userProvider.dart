@@ -17,7 +17,8 @@ class UserProvider {
 
   Future<String> signinUser(String name, String lastName, String email,
       String password, String birthDate, String country, String icon, List<int> typePlaces, List<int> categories, List<int> subcategories) async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/register/');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/register/');
+    //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/register/');
     final authData = {
       'email': email,
       'password': password,
@@ -52,7 +53,7 @@ class UserProvider {
 
   Future<String> loginUser(String email) async {
     //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/login/');
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/login/');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/login/');
     final authData = {'email': email};
 
     final http.Response resp = await http.post(url,
@@ -76,7 +77,7 @@ class UserProvider {
   }
 
   Future<List<Category>> getCategories() async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllCategories');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllCategories');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<Category> categories = decodedJson.map((categoryJson) {
@@ -88,7 +89,7 @@ class UserProvider {
   }
 
   Future<List<TypePlace>> getAllTypePlaces() async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllTypePlaces');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllTypePlaces');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<TypePlace> typePlaces = decodedJson.map((typePlaceJson) {
@@ -100,7 +101,7 @@ class UserProvider {
   }
 
   Future<List<Subcategory>> getAllSubcategories() async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllSubcategories');
+    final url = Uri.parse('https://virtualguide2.herokuapp.com/api/users/getAllSubcategories');
     final resp = await http.get(url);
     List<dynamic> decodedJson = json.decode(resp.body);
     List<Subcategory> subcategories = decodedJson.map((subcategoriesJson) {
@@ -115,7 +116,7 @@ class UserProvider {
   Future<User> updateUserProfile(
       UserUpdateDto userUpdateDto, File image) async {
     final url =
-        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/update/');
+        Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/update/');
     final String userToken = UserPreferences().getToken();
 
     var formData = FormData.fromMap({
@@ -156,7 +157,7 @@ class UserProvider {
 
   Future<User> getUserProfile() async {
     final url =
-        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/');
+        Uri.parse('https://virtualguide2.herokuapp.com/api/users/user/');
 
     final String userToken = UserPreferences().getToken();
 

@@ -9,7 +9,7 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/message/userid/${userId}');
+        'https://virtualguide2.herokuapp.com/api/users/message/userid/${userId}');
 
     final String userToken = UserPreferences().getToken();
 
@@ -40,7 +40,7 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/message/create/');
+        'https://virtualguide2.herokuapp.com/api/users/message/create/');
 
     final String userToken = UserPreferences().getToken();
 
