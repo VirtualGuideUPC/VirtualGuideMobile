@@ -52,6 +52,45 @@ class _AccountReviewsPageState extends State<AccountReviewsPage> {
           ),
         ));
 
+    Widget _content() {
+      return Expanded(
+        child: StreamBuilder(
+            stream: reviewBloc.reviewsStream,
+            builder: (ctx, snapshot) {
+              if (snapshot.hasData) {
+                var reviews = snapshot.data as List<Review>;
+                return reviews.length > 0
+                    ? Container(
+                        child: ListView.builder(
+                          itemBuilder: (ctx, indx) {
+                            return AccountReviewCard(reviews[indx]);
+                          },
+                          itemCount: reviews.length,
+                        ),
+                      )
+                    : Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("No ha creado ninguna reseña")
+                          ],
+                        ),
+                      );
+              } else {
+                return _loader;
+              }
+            }),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -68,28 +107,7 @@ class _AccountReviewsPageState extends State<AccountReviewsPage> {
         height: _screenHeight - kToolbarHeight,
         color: Theme.of(context).dialogBackgroundColor,
         child: Column(
-          children: [
-            _title,
-            Expanded(
-              child: StreamBuilder(
-                  stream: reviewBloc.reviewsStream,
-                  builder: (ctx, snapshot) {
-                    if (snapshot.hasData) {
-                      var reviews = snapshot.data as List<Review>;
-                      return Container(
-                        child: ListView.builder(
-                          itemBuilder: (ctx, indx) {
-                            return AccountReviewCard(reviews[indx]);
-                          },
-                          itemCount: reviews.length,
-                        ),
-                      );
-                    } else {
-                      return _loader;
-                    }
-                  }),
-            )
-          ],
+          children: [_title, _content()],
         ),
       ),
     );

@@ -14,7 +14,6 @@ class TravelSubcategoryPage extends StatefulWidget {
 }
 
 class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
-
   User user;
   String headerText = "Intereses seleccionados:";
   Future<List<Subcategory>> futureSubcategories;
@@ -31,14 +30,12 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    user = ModalRoute
-        .of(context)
-        .settings
-        .arguments;
+    user = ModalRoute.of(context).settings.arguments;
   }
 
   @override
   Widget build(BuildContext context) {
+    var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
     final bloc = Provider.signinBlocOf(context);
     bloc.init();
     return Scaffold(
@@ -54,47 +51,53 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
           ),
         ),
         backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            _buildContent(context),
-            Expanded(
-              child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0,right: 10, left: 10),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                side: BorderSide(color: Colors.grey)))),
-                    onPressed: () {
-                      selectedSubcategoriesIds = selectedSubcategories.map((e) => e.id).toList();
-                      user.subcategories = selectedSubcategoriesIds;
-                      _signin(bloc, context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Siguiente",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        SizedBox(
-                          height: 52.0,
-                        ),
-                      ],
+        body: Container(
+          height: _screenHeight,
+          child: Column(
+            children: [
+              Container(
+                  height: _screenHeight * 0.8, child: _buildContent(context)),
+              Expanded(
+                child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 20.0, right: 10, left: 10),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      side: BorderSide(color: Colors.grey)))),
+                      onPressed: () {
+                        selectedSubcategoriesIds =
+                            selectedSubcategories.map((e) => e.id).toList();
+                        user.subcategories = selectedSubcategoriesIds;
+                        _signin(bloc, context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Siguiente",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            height: 52.0,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        )
-    );
+            ],
+          ),
+        ));
   }
 
   Widget _buildContent(BuildContext context) {
@@ -105,16 +108,22 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
           return Container(
             color: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
+            child: ListView(
               children: [
-                Text( "Elige algunos intereses tuyos",
+                Text("Elige algunos intereses tuyos",
                     style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center),
-                Divider(height: 12, color: Colors.white,),
-                Text( "Esto hará que tengas recomendaciones más acertadas de lugares turísticos",
+                Divider(
+                  height: 12,
+                  color: Colors.white,
+                ),
+                Text(
+                    "Esto hará que tengas recomendaciones más acertadas de lugares turísticos",
                     style: Theme.of(context).textTheme.subtitle1,
                     textAlign: TextAlign.center),
-                Divider(color: Colors.white,),
+                Divider(
+                  color: Colors.white,
+                ),
                 Container(
                   height: 108,
                   color: Colors.grey.shade300,
@@ -129,10 +138,12 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
                   ),
                 ),
                 Divider(),
-                Text(  "Intereses sugeridos",
+                Text("Intereses sugeridos",
                     style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center),
-                Divider(color: Colors.white,),
+                Divider(
+                  color: Colors.white,
+                ),
                 _showSubcategoriesTags(snapshot.data)
               ],
             ),
@@ -162,20 +173,21 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
           scrollDirection: Axis.horizontal,
           children: <Widget>[
             if (subcategories != null)
-              for (var subcategory in subcategories) if(subcategory.isSelected) uploadSubcategory(subcategory)
-            else
-              Text("") //CircularProgressIndicator()
+              for (var subcategory in subcategories)
+                if (subcategory.isSelected)
+                  uploadSubcategory(subcategory)
+                else
+                  Text("") //CircularProgressIndicator()
           ],
         ));
   }
 
   GestureDetector uploadSubcategory(Subcategory subcategory) {
     return GestureDetector(
-      onTap: ()  => updateSubcategorySelection(subcategory),
+      onTap: () => updateSubcategorySelection(subcategory),
       child: Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: getSubcategoryWidget(subcategory)
-      ),
+          child: getSubcategoryWidget(subcategory)),
     );
   }
 
@@ -185,10 +197,19 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
         padding: const EdgeInsets.only(right: 12, left: 12),
         child: Row(
           children: [
-            Text(subcategory.name,
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-            VerticalDivider(width: 6,),
-            Icon(Icons.clear, color: Colors.white, size: 16,)
+            Text(
+              subcategory.name,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            VerticalDivider(
+              width: 6,
+            ),
+            Icon(
+              Icons.clear,
+              color: Colors.white,
+              size: 16,
+            )
           ],
         ),
       ),
@@ -196,19 +217,16 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
       decoration: BoxDecoration(
           color: Colors.black,
           border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(6)
-      ),
+          borderRadius: BorderRadius.circular(6)),
     );
   }
 
-
-  _showSubcategoriesTags(List<Subcategory> subcategories){
-
+  _showSubcategoriesTags(List<Subcategory> subcategories) {
     subcategories = subcategories.where((i) => !i.isSelected).toList();
     return Tags(
       alignment: WrapAlignment.start,
       itemCount: subcategories.length,
-      itemBuilder: (int index){
+      itemBuilder: (int index) {
         final subcategory = subcategories[index];
         return ItemTags(
           index: index,
@@ -246,7 +264,16 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
 
     bloc
         .signin(
-        user.name, user.lastName, user.email, "123456", user.birthday, "1", user.icon, user.typePlaces, user.categories, user.subcategories)
+            user.name,
+            user.lastName,
+            user.email,
+            "123456",
+            user.birthday,
+            "1",
+            user.icon,
+            user.typePlaces,
+            user.categories,
+            user.subcategories)
         .then((String result) {
       //if (alertContext != null) Navigator.of(alertContext).pop();
       Utils.mainNavigator.currentState
@@ -260,15 +287,14 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
     flagRequestSubmitted = true;
   }
 
-  updateSubcategorySelection(Subcategory subcategory){
+  updateSubcategorySelection(Subcategory subcategory) {
     if (!subcategory.isSelected) {
       selectedSubcategories.add(subcategory);
     }
     setState(() {
       subcategory.isSelected = !subcategory.isSelected;
     });
-   // selectedSubcategories.add(subcategory);
+    // selectedSubcategories.add(subcategory);
     // headerText = "Has escogido " + selectedSubcategories.length.toString() + " subcategorías";
   }
-
 }

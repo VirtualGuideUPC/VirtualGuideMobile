@@ -10,7 +10,7 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     message.isUser = true;
     return Align(
-      alignment: message.isUser ? Alignment.centerLeft : Alignment.centerRight,
+      alignment: !message.isUser ? Alignment.centerLeft : Alignment.centerRight,
       child: Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(5),
@@ -20,10 +20,10 @@ class MessageBubble extends StatelessWidget {
                 : Color.fromRGBO(143, 142, 191, 1),
             borderRadius: BorderRadius.only(
                 topRight:
-                    message.isUser ? Radius.circular(10) : Radius.circular(0),
+                    !message.isUser ? Radius.circular(10) : Radius.circular(0),
                 bottomLeft: Radius.circular(10),
                 topLeft:
-                    !message.isUser ? Radius.circular(10) : Radius.circular(0),
+                    message.isUser ? Radius.circular(10) : Radius.circular(0),
                 bottomRight: Radius.circular(10))),
         child: Text(
           message.text,

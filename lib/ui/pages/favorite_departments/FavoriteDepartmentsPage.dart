@@ -40,11 +40,33 @@ class _FavoritePlacesState extends State<FavoriteDepartments> {
       future: futureDepartments,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          return Container(
-            color: Theme.of(context).dialogBackgroundColor,
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: ListView(children: _buildCards(context, snapshot.data)),
-          );
+          var data = snapshot.data as List;
+          return data.length > 0
+              ? Container(
+                  height: double.infinity,
+                  color: Theme.of(context).dialogBackgroundColor,
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child:
+                      ListView(children: _buildCards(context, snapshot.data)),
+                )
+              : Container(
+                  height: double.infinity,
+                  color: Theme.of(context).dialogBackgroundColor,
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error,
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("No tiene favoritos agregados")
+                    ],
+                  ),
+                );
         } else if (snapshot.hasError) {
           if (snapshot.error == '401') {
             //TODO: handle session expired

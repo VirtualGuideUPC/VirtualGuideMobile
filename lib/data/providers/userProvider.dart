@@ -5,9 +5,11 @@ import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/category.dart';
+import 'package:tour_guide/data/entities/preferences.dart';
 import 'package:tour_guide/data/entities/subcategory.dart';
 import 'package:tour_guide/data/entities/typePlace.dart';
 import 'package:tour_guide/data/entities/user.dart';
+import 'package:tour_guide/data/providers/preferencesProvider.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
@@ -15,9 +17,19 @@ class UserProvider {
   final String _url = "https://vguidebe.herokuapp.com";
   final _prefs = new UserPreferences();
 
-  Future<String> signinUser(String name, String lastName, String email,
-      String password, String birthDate, String country, String icon, List<int> typePlaces, List<int> categories, List<int> subcategories) async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/register/');
+  Future<String> signinUser(
+      String name,
+      String lastName,
+      String email,
+      String password,
+      String birthDate,
+      String country,
+      String icon,
+      List<int> typePlaces,
+      List<int> categories,
+      List<int> subcategories) async {
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/register/');
     final authData = {
       'email': email,
       'password': password,
@@ -52,7 +64,8 @@ class UserProvider {
 
   Future<String> loginUser(String email) async {
     //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/login/');
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/login/');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/login/');
     final authData = {'email': email};
 
     final http.Response resp = await http.post(url,
@@ -76,9 +89,12 @@ class UserProvider {
   }
 
   Future<List<Category>> getCategories() async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllCategories');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllCategories');
     final resp = await http.get(url);
-    List<dynamic> decodedJson = json.decode(resp.body);
+
+    List<dynamic> decodedJson =
+        json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
     List<Category> categories = decodedJson.map((categoryJson) {
       return Category.fromJson(categoryJson);
     }).toList();
@@ -88,9 +104,11 @@ class UserProvider {
   }
 
   Future<List<TypePlace>> getAllTypePlaces() async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllTypePlaces');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllTypePlaces');
     final resp = await http.get(url);
-    List<dynamic> decodedJson = json.decode(resp.body);
+    List<dynamic> decodedJson =
+        json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
     List<TypePlace> typePlaces = decodedJson.map((typePlaceJson) {
       return TypePlace.fromJson(typePlaceJson);
     }).toList();
@@ -100,9 +118,11 @@ class UserProvider {
   }
 
   Future<List<Subcategory>> getAllSubcategories() async {
-    final url = Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllSubcategories');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllSubcategories');
     final resp = await http.get(url);
-    List<dynamic> decodedJson = json.decode(resp.body);
+    List<dynamic> decodedJson =
+        json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
     List<Subcategory> subcategories = decodedJson.map((subcategoriesJson) {
       return Subcategory.fromJson(subcategoriesJson);
     }).toList();
@@ -111,11 +131,10 @@ class UserProvider {
     return subcategories;
   }
 
-
   Future<User> updateUserProfile(
       UserUpdateDto userUpdateDto, File image) async {
-    final url =
-        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/update/');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/update/');
     final String userToken = UserPreferences().getToken();
 
     var formData = FormData.fromMap({
@@ -155,8 +174,8 @@ class UserProvider {
   }
 
   Future<User> getUserProfile() async {
-    final url =
-        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -178,6 +197,49 @@ class UserProvider {
         return Future.error('500');
       }
     }
+  }
+
+  Future<void> updateCategory(Category category) async {
+    var pref = await PreferencesProvider().getPreferencesByUser();
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preference/category/update/');
+    var categories = pref.categories;
+    var userId = UserPreferences().getUserId();
+    final String userToken = UserPreferences().getToken();
+
+    final body = {
+      "user": userId,
+      "category": category.id,
+      "status": category.isSelected
+    };
+
+    final http.Response resp =
+        await http.put(url, body: jsonEncode(body), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+  }
+
+  Future<void> updateTypePlace(TypePlace typePlace) async {
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preference/typeplace/update/');
+    var userId = UserPreferences().getUserId();
+    final String userToken = UserPreferences().getToken();
+
+    final body = {
+      "user": userId,
+      "type_place": typePlace.id,
+      "status": typePlace.isSelected
+    };
+
+    final http.Response resp =
+        await http.put(url, body: jsonEncode(body), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+    print(resp);
   }
 
   void logOut() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tour_guide/data/entities/message.dart';
 import 'package:tour_guide/ui/bloc/messagesBloc.dart';
 import 'package:tour_guide/ui/pages/chat/MessageBubble.dart';
 
@@ -26,6 +27,19 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  Widget _labelDay(String date) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(106, 194, 194, 1),
+          borderRadius: BorderRadius.circular(10)),
+      child: Text(
+        date,
+        style: TextStyle(color: Colors.black),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var _screenWidth = MediaQuery.of(context).size.width;
@@ -37,13 +51,39 @@ class _ChatPageState extends State<ChatPage> {
         stream: messagesBloc.messagesStream,
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
-            var messages = snapshot.data;
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: messages.length,
-                itemBuilder: (ctx, indx) {
-                  return MessageBubble(messages[indx], indx);
-                });
+            var messages = snapshot.data as List<Message>;
+            return messages.length > 0
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: messages.length,
+                    itemBuilder: (ctx, indx) {
+                      Widget _labelday = SizedBox();
+
+                      if (indx != 0 &&
+                          messages[indx].date != messages[indx - 1].date) {
+                        _labelday = _labelDay(messages[indx].date);
+                      }
+
+                      return Column(
+                        children: [
+                          _labelday,
+                          MessageBubble(messages[indx], indx)
+                        ],
+                      );
+                    })
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.message,
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("No ha creado mensajes")
+                    ],
+                  );
           } else {
             return Center(
               child: CircularProgressIndicator(
@@ -73,7 +113,8 @@ class _ChatPageState extends State<ChatPage> {
                         color: Theme.of(context).textTheme.bodyText1.color),
                     decoration: InputDecoration(
                       hintText: "¡Escribe Algo!",
-                      hintStyle: TextStyle(),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
                       labelStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1.color),
                       enabledBorder: OutlineInputBorder(
@@ -116,17 +157,6 @@ class _ChatPageState extends State<ChatPage> {
         ),
       );
     }
-
-    Widget _labelDay = Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(106, 194, 194, 1),
-          borderRadius: BorderRadius.circular(10)),
-      child: Text(
-        "Hoy",
-        style: TextStyle(color: Colors.black),
-      ),
-    );
 
     return Scaffold(
         body: Container(

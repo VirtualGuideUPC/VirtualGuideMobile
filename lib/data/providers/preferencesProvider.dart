@@ -22,7 +22,8 @@ class PreferencesProvider {
     print("resopnde code: " + resp.statusCode.toString());
 
     if (resp.statusCode == 200) {
-      var decodedJson = json.decode(resp.body);
+      var decodedJson =
+          json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
       var preferences = Preferences.fromJson(decodedJson);
       return preferences;
     } else {
