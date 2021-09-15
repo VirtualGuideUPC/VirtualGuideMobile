@@ -10,6 +10,7 @@ import 'package:tour_guide/ui/bloc/preferencesBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/account/account_preferences/AccountPreferencesCard.dart';
 import 'package:tour_guide/ui/pages/account/account_preferences/edits/TravelStyleDialog.dart';
+import 'package:tour_guide/ui/pages/account/account_preferences/edits/TravelSubCategoryDialog.dart';
 import 'package:tour_guide/ui/pages/account/account_preferences/edits/TypePlacesDialog.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
@@ -38,7 +39,7 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
 
   @override
   Widget build(BuildContext context) {
-    var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
+    var _screenHeight = MediaQuery.of(context).size.height - 2 * kToolbarHeight;
     var _screenWidth = MediaQuery.of(context).size.width;
 
     Widget _loader = Container(
@@ -212,6 +213,7 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
     _showSubcategoriesTags(List<Subcategory> subcategories) {
       subcategories = subcategories.where((i) => !i.isSelected).toList();
       return Tags(
+        horizontalScroll: true,
         alignment: WrapAlignment.start,
         itemCount: subcategories.length,
         itemBuilder: (int index) {
@@ -219,12 +221,10 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
           return ItemTags(
             index: index,
             // required
+            pressEnabled: false,
             title: subcategory.name,
             active: true,
             combine: ItemTagsCombine.withTextBefore,
-            icon: ItemTagsIcon(
-              icon: Icons.add,
-            ),
             activeColor: Colors.black,
             color: Colors.white,
           );
@@ -234,8 +234,8 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
 
     Widget _subcategories(List<Subcategory> subcategories) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        height: _screenHeight * 0.10,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        height: _screenHeight * 0.15,
         child: Column(
           children: [
             Row(
@@ -247,16 +247,26 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
                         fontSize: 17,
                         color: Theme.of(context).textTheme.bodyText2.color,
                         fontWeight: FontWeight.w600)),
-                Text(
-                  "Editar Intereses",
-                  style: TextStyle(color: Colors.red),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctx) =>
+                            TravelSubCategoryDialog()).whenComplete(() => {
+                          Utils.homeNavigator.currentState.pushReplacementNamed(
+                            routeHomeAccountPreferencesPage,
+                          )
+                        });
+                  },
+                  child: Text(
+                    "Editar Intereses",
+                    style: TextStyle(color: Colors.red),
+                  ),
                 )
                 //TODO Editar estilos
               ],
             ),
-            SizedBox(
-              height: 5,
-            ),
+            SizedBox(),
             subcategories.length > 0
                 ? Container(
                     child: _showSubcategoriesTags(subcategories),
@@ -330,7 +340,7 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
     Widget _typeplaces(List<TypePlace> typeplaces) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        height: _screenHeight * 0.45,
+        height: _screenHeight * 0.50,
         child: Column(
           children: [
             Row(

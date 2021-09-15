@@ -242,6 +242,27 @@ class UserProvider {
     print(resp);
   }
 
+  Future<void> updateSubCategory(Subcategory subcategory) async {
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preference/subcategory/update/');
+    var userId = UserPreferences().getUserId();
+    final String userToken = UserPreferences().getToken();
+
+    final body = {
+      "user": userId,
+      "subcategory": subcategory.id,
+      "status": subcategory.isSelected
+    };
+
+    final http.Response resp =
+        await http.put(url, body: jsonEncode(body), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+    print(resp);
+  }
+
   void logOut() {
     final futures = <Future>[];
 
