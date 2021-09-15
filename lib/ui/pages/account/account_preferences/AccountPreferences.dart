@@ -152,71 +152,59 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
     }
 
     Widget _categories(List<Category> categories) {
-      return FutureBuilder(
-        future: UserProvider().getCategories(),
-        builder: (ctx, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              height: _screenHeight * 0.33,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("ESTILO",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 17,
-                              color:
-                                  Theme.of(context).textTheme.bodyText2.color,
-                              fontWeight: FontWeight.w600)),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                                  context: context,
-                                  builder: (ctx) => TravelStyleDialog())
-                              .whenComplete(() => {
-                                    Utils.homeNavigator.currentState
-                                        .pushReplacementNamed(
-                                      routeHomeAccountPreferencesPage,
-                                    )
-                                  });
-                        },
-                        child: Text(
-                          "Editar Estilos",
-                          style: TextStyle(color: Colors.red),
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        height: _screenHeight * 0.33,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("ESTILO",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Theme.of(context).textTheme.bodyText2.color,
+                        fontWeight: FontWeight.w600)),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctx) =>
+                            TravelStyleDialog()).whenComplete(() => {
+                          Utils.homeNavigator.currentState.pushReplacementNamed(
+                            routeHomeAccountPreferencesPage,
+                          )
+                        });
+                  },
+                  child: Text(
+                    "Editar Estilos",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            categories.length > 0
+                ? Expanded(
+                    child: showCategories(categories),
+                  )
+                : Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.report,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  categories.length > 0
-                      ? Expanded(
-                          child: showCategories(categories),
-                        )
-                      : Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.report,
-                                color:
-                                    Theme.of(context).textTheme.bodyText1.color,
-                              ),
-                              Text("No ha agregado ningún estilo")
-                            ],
-                          ),
-                        )
-                ],
-              ),
-            );
-          } else {
-            return Text("");
-          }
-        },
+                        Text("No ha agregado ningún estilo")
+                      ],
+                    ),
+                  )
+          ],
+        ),
       );
     }
 
