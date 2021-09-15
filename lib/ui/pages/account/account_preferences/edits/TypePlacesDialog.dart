@@ -25,15 +25,19 @@ class _TypePlacesDialogState extends State<TypePlacesDialog> {
   }
 
   chooseTypePlace(List<TypePlace> typeplaces, TypePlace typeplace) {
-    typeplaces.forEach((element) {
-      if (element.isSelected) {
-        element.isSelected = false;
-        preferencesBloc.updateTypePlace(element);
-      }
-    });
     if (typeplace.isSelected == false) {
+      typeplaces.forEach((element) {
+        if (element.isSelected) {
+          element.isSelected = false;
+          preferencesBloc.updateTypePlace(element);
+        }
+      });
+
       typeplace.isSelected = !typeplace.isSelected;
 
+      preferencesBloc.updateTypePlace(typeplace);
+    }
+    if (typeplace.isSelected == true) {
       preferencesBloc.updateTypePlace(typeplace);
     }
   }
