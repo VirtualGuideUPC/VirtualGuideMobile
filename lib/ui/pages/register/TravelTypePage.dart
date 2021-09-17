@@ -53,11 +53,6 @@ class _TravelTypePageState extends State<TravelTypePage> {
               height: double.infinity,
               width: double.infinity,
               alignment: Alignment.center,),
-            /*style.isSelected ? Positioned(
-                top: 0, right: 0, bottom: 0, left: 0, //give the values according to your requirement
-                child: Icon(Icons.favorite, color: Colors.white, size: 35,)
-              //IconButton(icon: Icon(Icons.delete_forever, color: Colors.redAccent,), onPressed: () {  },),
-            ) : Text(""),*/
             Positioned(
                 bottom: 15,
                 left: 15,

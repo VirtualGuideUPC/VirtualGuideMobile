@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide/data/entities/category.dart';
-import 'package:tour_guide/data/entities/preferences.dart';
-import 'package:tour_guide/data/providers/preferencesProvider.dart';
 import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/preferencesBloc.dart';
-import 'package:tour_guide/ui/bloc/userBloc.dart';
-import 'package:tour_guide/ui/helpers/utils.dart';
 
 class TravelStyleDialog extends StatefulWidget {
   TravelStyleDialog();
@@ -104,8 +100,8 @@ class _TravelStyleDialogState extends State<TravelStyleDialog> {
                       left: 0,
                       child: Icon(
                         Icons.favorite,
-                        color: Colors.black,
-                        size: 35,
+                        color: Colors.white,
+                        size: 50,
                       ))
                   : Text(""),
               Positioned(

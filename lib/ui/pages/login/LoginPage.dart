@@ -96,11 +96,11 @@ class _LoginPageState extends State<LoginPage> {
       print("Error message " + gError);
     });
 
-    googleSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
+    /*googleSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
       controlSignIn(gSignInAccount);
     }).catchError((gError) {
       print("Error message " + gError);
-    });
+    });*/
   }
 
   @override

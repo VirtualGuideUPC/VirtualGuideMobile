@@ -78,6 +78,7 @@ class SigninBloc extends Validators{
 
      Future<String>  signin(String name, String lastName, String email, String password, String birthDate, String country, String icon, List<int> typePlaces, List<int> categories, List<int> subcategories) async{
        try {
+         print("hey2 ");
           return await userProvider.signinUser(name, lastName, email, password, birthDate, country, icon, typePlaces, categories, subcategories);
        } catch (e) {
          return Future.error(e);

@@ -113,8 +113,8 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
                       left: 0,
                       child: Icon(
                         Icons.favorite,
-                        color: Colors.black,
-                        size: 35,
+                        color: Colors.white,
+                        size: 50,
                       ))
                   : Text(""),
               Positioned(
@@ -307,11 +307,6 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
                 width: double.infinity,
                 alignment: Alignment.center,
               ),
-              /*style.isSelected ? Positioned(
-                top: 0, right: 0, bottom: 0, left: 0, //give the values according to your requirement
-                child: Icon(Icons.favorite, color: Colors.white, size: 35,)
-              //IconButton(icon: Icon(Icons.delete_forever, color: Colors.redAccent,), onPressed: () {  },),
-            ) : Text(""),*/
               Container(
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.4),

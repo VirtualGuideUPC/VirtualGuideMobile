@@ -246,6 +246,7 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
   }
 
   _signin(SigninBloc bloc, BuildContext context) {
+    print("hey!");
     if (flagRequestSubmitted) {
       return;
     }
@@ -294,7 +295,5 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
     setState(() {
       subcategory.isSelected = !subcategory.isSelected;
     });
-    // selectedSubcategories.add(subcategory);
-    // headerText = "Has escogido " + selectedSubcategories.length.toString() + " subcategorías";
   }
 }

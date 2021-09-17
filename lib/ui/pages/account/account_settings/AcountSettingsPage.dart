@@ -109,7 +109,9 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
 
     Future<Null> signOutWithGoogle() async {
       // Sign out with google
-      await googleSignIn.signOut();
+      await googleSignIn.isSignedIn().then((s) {
+         googleSignIn.signOut();
+      });
     }
 
     Widget _logOutButton = Align(

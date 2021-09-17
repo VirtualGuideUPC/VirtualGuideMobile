@@ -291,15 +291,8 @@ class _ExplorePageState extends State<ExplorePage>
         stream: placesBloc.searchResultStream,
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData && snapshot.data.length > 0) {
-            //filtering places
-            final rx = RegExp(r'Peru', caseSensitive: false);
-            List<dynamic> places = snapshot.data.where((element) {
-              if (element['description'].contains(rx)) {
-                return true;
-              } else {
-                return false;
-              }
-            }).toList();
+
+            List<dynamic> places = snapshot.data.toList();
 
             return Stack(children: [
               Container(color: Color.fromRGBO(255, 255, 255, 0.87)),

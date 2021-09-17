@@ -8,7 +8,7 @@ class PlacesProvider{
 
 
   Future<List<dynamic>> getLocations(String searchTerm) async{
-    final url=Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=$_apiKey&input=$searchTerm');
+    final url=Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=$_apiKey&input=$searchTerm&components=country:pe');
     try {
       final requestStartMoment=DateTime.now();
 

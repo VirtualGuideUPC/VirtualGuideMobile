@@ -119,7 +119,7 @@ class _TypePlacesDialogState extends State<TypePlacesDialog> {
                       child: Icon(
                         Icons.favorite,
                         color: Colors.white,
-                        size: 35,
+                        size: 50,
                       ),
                       //IconButton(icon: Icon(Icons.delete_forever, color: Colors.redAccent,), onPressed: () {  },),
 

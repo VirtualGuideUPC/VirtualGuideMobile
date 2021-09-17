@@ -49,14 +49,22 @@ class UserProvider {
         body: json.encode(authData));
     Map decodedJson = json.decode(resp.body);
     if (resp.statusCode == 200) {
+
+      print("hey3");
       return 'ok';
     } else {
+
+      print("hey4");
       List<dynamic> responseValues = decodedJson.values.toList();
       if (responseValues.length > 0 &&
           responseValues[0] is List &&
           responseValues[0].length > 0) {
+        print("hey5");
+        print("message " + responseValues[0][0]);
         return Future.error(responseValues[0][0]);
+
       } else {
+        print("hey6");
         return Future.error('Ocurrió un error, inténtelo mas tarde');
       }
     }

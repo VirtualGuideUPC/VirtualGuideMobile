@@ -65,8 +65,8 @@ class _TravelStylesPageState extends State<TravelStylesPage> {
                     //give the values according to your requirement
                     child: Icon(
                       Icons.favorite,
-                      color: Colors.black,
-                      size: 35,
+                      color: Colors.white,
+                      size: 50,
                     )
                     //IconButton(icon: Icon(Icons.delete_forever, color: Colors.redAccent,), onPressed: () {  },),
                     )
