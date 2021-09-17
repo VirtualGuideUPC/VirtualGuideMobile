@@ -270,14 +270,14 @@ class _TravelSubcategoryPageState extends State<TravelSubcategoryPage> {
             "123456",
             user.birthday,
             "1",
-            user.icon,
+            user.icon != null ? user.icon : "none",
             user.typePlaces,
             user.categories,
             user.subcategories)
         .then((String result) {
       //if (alertContext != null) Navigator.of(alertContext).pop();
       Utils.mainNavigator.currentState
-          .pushReplacementNamed(routeFinishRegister);
+          .pushReplacementNamed(routeFinishRegister, arguments: user);
     }).catchError((error) {
       if (alertContext != null) Navigator.of(alertContext).pop();
       bloc.changeRequestResult(error.toString());

@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white,
               ),
               customElevatedButton(
-                  "Continuar con Facebook", 'assets/img/ic_fb.png', testLogin),
+                  "Continuar con Facebook", 'assets/img/ic_fb.png', loginWithFb),
               Divider(
                 height: 22,
                 color: Colors.white,

@@ -180,7 +180,6 @@ class _TravelStylesPageState extends State<TravelStylesPage> {
                     selectedCategoriesIds = selectedCategories.map((e) => e.id).toList();
                     user.categories = selectedCategoriesIds;
                     Utils.mainNavigator.currentState.pushReplacementNamed(routeTravelSubcategories, arguments: user);
-                    //_signin(bloc, context);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -7,6 +7,9 @@ import 'package:tour_guide/ui/bloc/userBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/account/account_information/AccountInformation.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+final GoogleSignIn googleSignIn = GoogleSignIn();
 
 class AccountSettingsPage extends StatefulWidget {
   AccountSettingsPage({Key key}) : super(key: key);
@@ -104,11 +107,17 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
       ]);
     }
 
+    Future<Null> signOutWithGoogle() async {
+      // Sign out with google
+      await googleSignIn.signOut();
+    }
+
     Widget _logOutButton = Align(
       alignment: Alignment.bottomCenter,
       child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(primary: Colors.red),
           onPressed: () {
+            signOutWithGoogle();
             UserProvider().logOut();
           },
           icon: Icon(
