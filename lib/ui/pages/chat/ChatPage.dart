@@ -59,6 +59,10 @@ class _ChatPageState extends State<ChatPage> {
                     itemBuilder: (ctx, indx) {
                       Widget _labelday = SizedBox();
 
+                      if (indx == 0) {
+                        _labelday = _labelDay(messages[0].date);
+                      }
+
                       if (indx != 0 &&
                           messages[indx].date != messages[indx - 1].date) {
                         _labelday = _labelDay(messages[indx].date);

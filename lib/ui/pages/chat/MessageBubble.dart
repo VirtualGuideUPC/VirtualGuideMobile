@@ -8,7 +8,6 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    message.isUser = true;
     return Align(
       alignment: !message.isUser ? Alignment.centerLeft : Alignment.centerRight,
       child: Container(

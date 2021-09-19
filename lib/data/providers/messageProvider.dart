@@ -40,7 +40,7 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/message/create/');
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/message/chatbot/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -51,7 +51,6 @@ class MessageProvider {
       "text": message,
       "user": int.parse(userId),
       "date": dateFormat,
-      "is_user": true,
       "url": "www.test10.com"
     };
 
