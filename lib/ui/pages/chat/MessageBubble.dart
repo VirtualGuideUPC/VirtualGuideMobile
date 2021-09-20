@@ -24,6 +24,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _screenWidth = MediaQuery.of(context).size.width;
     return Align(
       alignment: !message.isUser ? Alignment.centerLeft : Alignment.centerRight,
       child: Container(
@@ -48,7 +49,7 @@ class MessageBubble extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             Container(
-              width: 55,
+              width: _screenWidth * 0.15,
               child: Row(
                 children: [
                   Text(
