@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tour_guide/data/datasource/messagesDb.dart';
 import 'package:tour_guide/data/entities/message.dart';
 import 'package:tour_guide/ui/bloc/messagesBloc.dart';
 import 'package:tour_guide/ui/pages/chat/MessageBubble.dart';
@@ -169,6 +170,11 @@ class _ChatPageState extends State<ChatPage> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
+            /* ElevatedButton(
+                onPressed: () {
+                  MessagesDb().deleteDftabase();
+                },
+                child: Text("Bajarse DB")),*/
             Expanded(
               child: Container(
                 child: _messagesArea(),
