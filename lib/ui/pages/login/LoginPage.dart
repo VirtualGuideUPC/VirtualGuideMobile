@@ -8,6 +8,7 @@ import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/ui/bloc/loginBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
+import 'package:tour_guide/ui/pages/login/initPage.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/CustomElevatedButton.dart';
 
@@ -82,12 +83,22 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     final _prefs = UserPreferences();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      if (_prefs.getToken() != '') {
-        Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
-      }
-      flagWaitingIfLoggedUser = false;
-      setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      showDialog(
+          context: context,
+          builder: (ctx) {
+            return InitPage();
+          });
+
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        if (_prefs.getToken() != '') {
+          Utils.mainNavigator.currentState.pushReplacementNamed(routeHomeStart);
+        } else {
+          Navigator.of(context).pop();
+        }
+        flagWaitingIfLoggedUser = false;
+        setState(() {});
+      });
     });
 
     googleSignIn.onCurrentUserChanged.listen((gSigninAccount) {
