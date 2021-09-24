@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,7 +25,19 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
   Future<ExperienceDetailed> futureExperienceDetail;
   @override
   void initState() {
+    BackButtonInterceptor.add(myInterceptor);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Utils.homeNavigator.currentState.pop();
+    return true;
   }
 
   @override
