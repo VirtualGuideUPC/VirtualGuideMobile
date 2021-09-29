@@ -35,9 +35,10 @@ class _ChatPageState extends State<ChatPage> {
 
   void sendMessage() {
     if (_textController.text.isNotEmpty) {
-      messagesBloc.sendMessage(_textController.text);
+      messagesBloc
+          .sendMessage(_textController.text)
+          .then((value) => {scrollDown()});
       _textController.clear();
-      scrollDown();
     }
   }
 
@@ -56,7 +57,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void scrollDown() {
     scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
+      scrollController.position.maxScrollExtent + 40,
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 500),
     );
@@ -65,14 +66,12 @@ class _ChatPageState extends State<ChatPage> {
   void _scrollListener() {
     if (scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
-      print("Scroll abaoj");
       setState(() {
         _visible = false;
       });
     }
     if (scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
-      print("Scroll arriba");
       setState(() {
         _visible = true;
       });
@@ -241,6 +240,11 @@ class _ChatPageState extends State<ChatPage> {
                   Container(
                     child: _messagesArea(),
                   ),
+                  /*ElevatedButton(
+                      onPressed: () {
+                        MessagesDb().deleteDftabase();
+                      },
+                      child: Text("Bajarse DB")),*/
                   downButton,
                 ],
               ),

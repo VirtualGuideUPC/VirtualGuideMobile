@@ -171,7 +171,8 @@ class _FavoritePlacesState extends State<FavoriteDepartments> {
                 ),
                 Container(
                     padding: EdgeInsets.all(20),
-                    child: Text(item.name, style: TextStyle(fontSize: 20)))
+                    child: Text(item.name,
+                        style: TextStyle(fontSize: 20, color: Colors.black)))
               ],
             ),
           ),

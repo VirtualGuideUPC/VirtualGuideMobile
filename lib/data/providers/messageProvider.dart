@@ -40,8 +40,8 @@ class MessageProvider {
   Future<Message> createMessage(String message) async {
     final String userId = UserPreferences().getUserId().toString();
 
-    final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/message/chatbot/');
+    final url =
+        Uri.parse('http://ec2-54-235-10-1.compute-1.amazonaws.com/prediction');
 
     final String userToken = UserPreferences().getToken();
 
@@ -52,7 +52,8 @@ class MessageProvider {
       "text": message,
       "user": int.parse(userId),
       "date": dateFormat,
-      "url": "www.test10.com"
+      "url": "www.test10.com",
+      "is_user": true
     };
 
     final http.Response resp =
@@ -68,7 +69,7 @@ class MessageProvider {
           json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
 
       var messageHuman = Message.fromJson(decodedJson['human_message']);
-      var messageBot = Message.fromJson(decodedJson['bot_response']);
+      var messageBot = Message.fromJson(decodedJson['robot_response']);
 
       print(messageHuman);
       print(messageBot);

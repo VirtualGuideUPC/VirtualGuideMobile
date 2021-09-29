@@ -99,7 +99,9 @@ class _ReviewDialog extends State<ReviewDialog> {
           children: [
             Text(
               "Crear reseña",
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(
+                  fontSize: 25,
+                  color: Theme.of(context).textTheme.bodyText1.color),
             ),
             Form(
                 key: _formKey,
@@ -124,9 +126,13 @@ class _ReviewDialog extends State<ReviewDialog> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.reviews),
-                        labelText: 'Reseña',
-                      ),
+                          prefixIcon: Icon(Icons.reviews,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          labelText: 'Reseña',
+                          labelStyle: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color)),
                     ),
                     SizedBox(
                       height: 10,
@@ -153,9 +159,13 @@ class _ReviewDialog extends State<ReviewDialog> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.star),
-                        labelText: 'Puntuacion',
-                      ),
+                          prefixIcon: Icon(Icons.star,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          labelText: 'Puntuacion',
+                          labelStyle: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color)),
                     ),
                     SizedBox(
                       height: 10,

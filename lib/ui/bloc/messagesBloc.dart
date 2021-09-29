@@ -27,7 +27,7 @@ class MessagesBloc {
     }
   }
 
-  void sendMessage(message) async {
+  Future<void> sendMessage(message) async {
     await messageProvider.createMessage(message).then((value) {
       getMessages();
     });
