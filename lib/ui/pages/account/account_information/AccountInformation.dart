@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -107,7 +108,20 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
   @override
   void initState() {
     userProfileBloc.changeBirthday(widget.user.birthday);
+    BackButtonInterceptor.add(myInterceptor);
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Utils.homeNavigator.currentState.pop();
+    return true;
   }
 
   void _saveForm() async {

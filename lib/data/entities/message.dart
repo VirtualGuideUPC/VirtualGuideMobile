@@ -18,4 +18,14 @@ class Message {
         url: json["url"],
         user: json["user"]);
   }
+  Map<String, dynamic> ToJson(Message message) {
+    return {
+      'id': message.id,
+      'text': message.text,
+      'date': message.date,
+      'is_user': message.isUser,
+      'time': message.time,
+      'url': message.url
+    };
+  }
 }

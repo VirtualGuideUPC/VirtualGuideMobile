@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:tour_guide/data/entities/category.dart';
@@ -34,7 +35,19 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
   @override
   void initState() {
     preferencesBloc.getPreferencesData();
+    BackButtonInterceptor.add(myInterceptor);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Utils.homeNavigator.currentState.pop();
+    return true;
   }
 
   @override

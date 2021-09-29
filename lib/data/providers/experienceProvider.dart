@@ -6,12 +6,11 @@ import 'package:tour_guide/data/entities/department.dart';
 import 'package:tour_guide/data/entities/experience.dart';
 import 'package:tour_guide/data/entities/experienceDetailed.dart';
 
-
 class ExperienceProvider {
   Future<List<Experience>> getExperiences(
       String userId, double lat, double lng) async {
-    final url =
-        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/nearby/');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/nearby/');
     final body = {'user_id': userId, 'latitude': lat, 'longitude': lng};
     final http.Response resp = await http.post(url,
         headers: {
@@ -126,13 +125,13 @@ class ExperienceProvider {
     }
   }
 
-  Future postAddFavoriteExperience(String experienceId) async {
+  Future<bool> postAddFavoriteExperience(String experienceId) async {
     final url = Uri.parse(
-        'https://virtualguide2s.herokuapp.com/api/users/favourite/create/');
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/favourite/create/');
     final String userToken = UserPreferences().getToken();
     final int userId = UserPreferences().getUserId();
 
-    final body = {'user': userId, 'touristic_place': experienceId};
+    final body = {'user': userId, 'touristic_place': int.parse(experienceId)};
 
     final http.Response resp = await http.post(url,
         headers: <String, String>{
@@ -141,6 +140,10 @@ class ExperienceProvider {
           'Cookie': 'jwt=$userToken'
         },
         body: json.encode(body));
-    print("responde->>>" + resp.statusCode.toString());
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

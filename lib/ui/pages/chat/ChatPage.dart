@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:tour_guide/data/datasource/messagesDb.dart';
 import 'package:tour_guide/data/entities/message.dart';
 import 'package:tour_guide/ui/bloc/messagesBloc.dart';
 import 'package:tour_guide/ui/pages/chat/MessageBubble.dart';
+import 'dart:math' as math;
 
 class ChatPage extends StatefulWidget {
   ChatPage({Key key}) : super(key: key);
@@ -13,16 +16,28 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   var _textController = TextEditingController();
   var messagesBloc = MessagesBloc();
+  bool _visible = true;
+  ScrollController scrollController;
+
   @override
   void initState() {
     messagesBloc.getMessages();
+    scrollController = new ScrollController()..addListener(_scrollListener);
 
     super.initState();
   }
 
+  @override
+  void dispose() {
+    scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
   void sendMessage() {
     if (_textController.text.isNotEmpty) {
-      messagesBloc.sendMessage(_textController.text);
+      messagesBloc
+          .sendMessage(_textController.text)
+          .then((value) => {scrollDown()});
       _textController.clear();
     }
   }
@@ -40,6 +55,29 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  void scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent + 40,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  void _scrollListener() {
+    if (scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      setState(() {
+        _visible = false;
+      });
+    }
+    if (scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      setState(() {
+        _visible = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var _screenWidth = MediaQuery.of(context).size.width;
@@ -54,10 +92,15 @@ class _ChatPageState extends State<ChatPage> {
             var messages = snapshot.data as List<Message>;
             return messages.length > 0
                 ? ListView.builder(
+                    controller: scrollController,
                     shrinkWrap: true,
                     itemCount: messages.length,
                     itemBuilder: (ctx, indx) {
                       Widget _labelday = SizedBox();
+
+                      if (indx == 0) {
+                        _labelday = _labelDay(messages[0].date);
+                      }
 
                       if (indx != 0 &&
                           messages[indx].date != messages[indx - 1].date) {
@@ -158,6 +201,32 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
+    Widget downButton = Positioned(
+      left: 0,
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 500),
+        opacity: _visible ? 1.0 : 0.0,
+        child: Transform.rotate(
+          angle: 270 * math.pi / 180,
+          child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                primary: Color.fromRGBO(106, 194, 194, 1),
+                padding: EdgeInsets.all(0),
+              ),
+              onPressed: () {
+                scrollController.animateTo(
+                  scrollController.position.maxScrollExtent,
+                  curve: Curves.easeOut,
+                  duration: const Duration(milliseconds: 500),
+                );
+              },
+              icon: Icon(Icons.arrow_back),
+              label: Text("")),
+        ),
+      ),
+    );
+
     return Scaffold(
         body: Container(
       decoration: BoxDecoration(color: backgroundColor),
@@ -166,8 +235,18 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                child: _messagesArea(),
+              child: Stack(
+                children: [
+                  Container(
+                    child: _messagesArea(),
+                  ),
+                  /*ElevatedButton(
+                      onPressed: () {
+                        MessagesDb().deleteDftabase();
+                      },
+                      child: Text("Bajarse DB")),*/
+                  downButton,
+                ],
               ),
             ),
             _messageInput()

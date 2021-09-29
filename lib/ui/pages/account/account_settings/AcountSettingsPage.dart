@@ -44,7 +44,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundImage: NetworkImage(profile.icon != null ?  profile.icon : ""),
+              backgroundImage:
+                  NetworkImage(profile.icon != null ? profile.icon : ""),
             ),
             SizedBox(
               width: 10,

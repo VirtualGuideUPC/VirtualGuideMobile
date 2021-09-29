@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/experience.dart';
 import 'package:tour_guide/ui/bloc/permissionBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
@@ -34,8 +35,9 @@ class _ExplorePageState extends State<ExplorePage>
   Map<String, double> oldCameraPosition = {'lat': null, 'lng': null};
   Map<String, double> newCameraPosition = {'lat': null, 'lng': null};
   List<Marker> mapMarkersList = <Marker>[];
-
+  Position currentLocation;
   StreamSubscription subscriptionExperiences;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +52,18 @@ class _ExplorePageState extends State<ExplorePage>
     //     _closeBottomSheet(context);
     //   });
     // });
+
+    UserBloc().getCurrentLocation().then((value) {
+      final placesBloc = Provider.placesBlocOf(context);
+      final userbloc = Provider.userBlocOf(context);
+
+      currentLocation = value;
+      final _prefs = new UserPreferences();
+
+      placesBloc.getExperiences(_prefs.getUserId().toString(),
+          currentLocation.latitude, currentLocation.longitude);
+    });
+
     Future.delayed(Duration.zero, () {
       final placesBloc = Provider.placesBlocOf(context);
       subscriptionExperiences = placesBloc.experiencesStream.listen((event) {
@@ -355,11 +369,16 @@ class _ExplorePageState extends State<ExplorePage>
   }
 
   List<Marker> _createMapMarkersFromExperiences(List<Experience> experiences) {
+    print(experiences);
     return experiences.map((experience) {
       return Marker(
           markerId: MarkerId(experience.name),
           draggable: false,
           visible: true,
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              experiences.indexOf(experience) == 0
+                  ? BitmapDescriptor.hueGreen
+                  : BitmapDescriptor.hueRed),
           infoWindow:
               InfoWindow(title: experience.name, snippet: experience.shortInfo),
           position: LatLng(double.parse(experience.latitude),

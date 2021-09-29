@@ -1,4 +1,5 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:tour_guide/data/datasource/messagesDb.dart';
 import 'package:tour_guide/data/entities/message.dart';
 import 'package:tour_guide/data/providers/messageProvider.dart';
 
@@ -12,11 +13,21 @@ class MessagesBloc {
   List<Message> get messages => _messagesController.value;
 
   void getMessages() async {
-    var messages = await messageProvider.getMessages();
-    changeMessages(messages);
+    List<Message> dbMessages = await MessagesDb().getAllMessagesDb();
+    if (dbMessages.length > 0) {
+      changeMessages(dbMessages);
+    } else if (dbMessages.length == 0) {
+      var messages = await messageProvider.getMessages();
+
+      messages.forEach((element) {
+        MessagesDb().insertMessage(element);
+      });
+
+      changeMessages(messages);
+    }
   }
 
-  void sendMessage(message) async {
+  Future<void> sendMessage(message) async {
     await messageProvider.createMessage(message).then((value) {
       getMessages();
     });

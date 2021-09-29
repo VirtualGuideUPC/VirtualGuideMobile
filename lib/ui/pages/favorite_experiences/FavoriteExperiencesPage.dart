@@ -32,13 +32,14 @@ class _FavoriteExperiencesState extends State<FavoriteExperiences> {
   Widget build(BuildContext context) {
     final Department department = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.black),
-            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(
+                color: Theme.of(context).textTheme.bodyText1.color),
+            backgroundColor: Theme.of(context).dialogBackgroundColor,
             elevation: 0,
-            title:
-                Text(department.name, style: TextStyle(color: Colors.black))),
+            title: Text(department.name,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color))),
         body: _buildContent(context));
   }
 
@@ -48,7 +49,7 @@ class _FavoriteExperiencesState extends State<FavoriteExperiences> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return Container(
-            color: Colors.white,
+            color: Theme.of(context).dialogBackgroundColor,
             padding: EdgeInsets.symmetric(horizontal: 25),
             child: ListView(children: _buildCards(context, snapshot.data)),
           );
@@ -77,21 +78,34 @@ class _FavoriteExperiencesState extends State<FavoriteExperiences> {
                 .pushNamed(routeHomeExperienceDetailsPage, arguments: item);
           },
           child: Container(
-            margin: EdgeInsets.only(bottom: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
+            margin: EdgeInsets.only(bottom: 20),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              elevation: 5,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildCarousel(context, item),
-                    Positioned(right: 10, top: 10, child: Icon(Icons.favorite))
+                    Stack(
+                      children: [
+                        _buildCarousel(context, item),
+                        Positioned(
+                            right: 10, top: 10, child: Icon(Icons.favorite))
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(children: _buildRatingBar(context, item)),
+                    SizedBox(height: 10),
+                    Text(item.name,
+                        style: TextStyle(fontSize: 20, color: Colors.black))
                   ],
                 ),
-                SizedBox(height: 10),
-                Row(children: _buildRatingBar(context, item)),
-                SizedBox(height: 10),
-                Text(item.name, style: TextStyle(fontSize: 20))
-              ],
+              ),
             ),
           ));
     }).toList();

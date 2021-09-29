@@ -41,57 +41,62 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     return SafeArea(
-      child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: TabBar(
-            onTap: (index) {
-              switch (index) {
-                case 0:
-                  Utils.homeNavigator.currentState
-                      .pushReplacementNamed(routeHomeExplorerPage);
-                  break;
-                case 1:
-                  Utils.homeNavigator.currentState
-                      .pushReplacementNamed(routeHomeChatPage);
-                  break;
-                case 2:
-                  Utils.homeNavigator.currentState
-                      .pushReplacementNamed(routeHomeAccountPage);
-                  break;
-              }
-              print(index);
-              _streamIndexCurrentTab.add(index);
-            },
-            indicatorColor: Colors.transparent,
-            physics: NeverScrollableScrollPhysics(),
-            controller: tabController,
-            tabs: [
-              Tab(
-                icon: Icon(
-                  Icons.map_outlined,
-                  color: Theme.of(context).iconTheme.color,
+      child: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: TabBar(
+              onTap: (index) {
+                switch (index) {
+                  case 0:
+                    Utils.homeNavigator.currentState
+                        .pushReplacementNamed(routeHomeExplorerPage);
+                    break;
+                  case 1:
+                    Utils.homeNavigator.currentState
+                        .pushReplacementNamed(routeHomeChatPage);
+                    break;
+                  case 2:
+                    Utils.homeNavigator.currentState
+                        .pushReplacementNamed(routeHomeAccountPage);
+                    break;
+                }
+                print(index);
+                _streamIndexCurrentTab.add(index);
+              },
+              indicatorColor: Colors.transparent,
+              physics: NeverScrollableScrollPhysics(),
+              controller: tabController,
+              tabs: [
+                Tab(
+                  icon: Icon(
+                    Icons.map_outlined,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                 ),
-              ),
-              Tab(
-                  icon: Icon(
-                Icons.chat_bubble_outline,
-                color: Theme.of(context).iconTheme.color,
-              )),
-              Tab(
-                  icon: Icon(
-                Icons.perm_identity_outlined,
-                color: Theme.of(context).iconTheme.color,
-              )),
-            ],
-          ),
-          body: SafeArea(
-            top: true,
-            child: Navigator(
-              key: Utils.homeNavigator,
-              initialRoute: widget.homePageRoute,
-              onGenerateRoute: _onGenerateRoute,
+                Tab(
+                    icon: Icon(
+                  Icons.chat_bubble_outline,
+                  color: Theme.of(context).iconTheme.color,
+                )),
+                Tab(
+                    icon: Icon(
+                  Icons.perm_identity_outlined,
+                  color: Theme.of(context).iconTheme.color,
+                )),
+              ],
             ),
-          )),
+            body: SafeArea(
+              top: true,
+              child: Navigator(
+                key: Utils.homeNavigator,
+                initialRoute: widget.homePageRoute,
+                onGenerateRoute: _onGenerateRoute,
+              ),
+            )),
+      ),
     );
   }
 
@@ -110,7 +115,6 @@ class _HomePageState extends State<HomePage>
       case routeHomeAccountPreferencesPage:
         page = AccountPreferencesPage();
         break;
-
       case routeHomeAccountReviewsPage:
         page = AccountReviewsPage();
         break;

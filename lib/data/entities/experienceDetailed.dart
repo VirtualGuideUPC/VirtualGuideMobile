@@ -8,6 +8,7 @@ class ExperienceDetailed {
   String latitude;
   String longitude;
   double avgRanking;
+  bool isFavourite;
   int numberComments;
   int id;
   List<Review> reviews;
@@ -24,7 +25,8 @@ class ExperienceDetailed {
       this.numberComments,
       this.reviews,
       this.similarExperience,
-      this.id});
+      this.id,
+      this.isFavourite});
 
   ExperienceDetailed.fromJson(Map json) {
     this.id = json["id"];
@@ -42,6 +44,7 @@ class ExperienceDetailed {
         ?.cast<Category>();
     this.latitude = json["latitude"];
     this.longitude = json["longitude"];
+    this.isFavourite = json["isFavourite"];
     this.avgRanking = json["avg_ranking"] != null ? json["avg_ranking"] / 1 : 0;
     this.numberComments = json["number_comments"];
     this.reviews = json["reviews"]

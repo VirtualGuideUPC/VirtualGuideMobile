@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:tour_guide/data/entities/department.dart';
 import 'package:tour_guide/data/providers/experienceProvider.dart';
@@ -17,8 +18,20 @@ class _FavoritePlacesState extends State<FavoriteDepartments> {
   @override
   void initState() {
     super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+
     futureDepartments =
         ExperienceProvider().getFavoriteExperiencesDepartments();
+  }
+
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Utils.homeNavigator.currentState.pop();
+    return true;
   }
 
   Widget build(BuildContext context) {
@@ -158,7 +171,8 @@ class _FavoritePlacesState extends State<FavoriteDepartments> {
                 ),
                 Container(
                     padding: EdgeInsets.all(20),
-                    child: Text(item.name, style: TextStyle(fontSize: 20)))
+                    child: Text(item.name,
+                        style: TextStyle(fontSize: 20, color: Colors.black)))
               ],
             ),
           ),

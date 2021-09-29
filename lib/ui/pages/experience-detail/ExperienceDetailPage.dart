@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:tour_guide/data/entities/experienceDetailed.dart';
 import 'package:tour_guide/data/providers/experienceProvider.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/notificationUtil.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/review/review_dialog.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
@@ -24,7 +26,19 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
   Future<ExperienceDetailed> futureExperienceDetail;
   @override
   void initState() {
+    BackButtonInterceptor.add(myInterceptor);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    Utils.homeNavigator.currentState.pop();
+    return true;
   }
 
   @override
@@ -99,7 +113,7 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       onPrimary: Colors.white,
-                      primary: Colors.red,
+                      primary: Color.fromRGBO(106, 194, 194, 1),
                       padding: EdgeInsets.all(15),
                     ),
                     onPressed: () {
@@ -146,7 +160,7 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
 
   Widget _buildDetails(
       BuildContext context, ExperienceDetailed experienceDetails) {
-    final info = _section(experienceDetails.name, () {
+    final info = _sectionWithIcon(experienceDetails.name, () {
       return Container(
           child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -155,6 +169,33 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
           style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ));
+    }, () {
+      return experienceDetails.isFavourite
+          ? GestureDetector(
+              onTap: () {
+                ExperienceProvider()
+                    .postAddFavoriteExperience(experienceDetails.id.toString());
+              },
+              child: Icon(
+                Icons.favorite,
+                color: Theme.of(context).textTheme.bodyText1.color,
+              ))
+          : IconButton(
+              onPressed: () {
+                ExperienceProvider()
+                    .postAddFavoriteExperience(experienceDetails.id.toString())
+                    .then((value) {
+                  if (value) {
+                    NotificationUtil().showSnackbar(
+                        context,
+                        "Se ha agregado a favoritos correctamente",
+                        "success",
+                        null);
+                  }
+                });
+              },
+              icon: Icon(Icons.favorite_border,
+                  color: Theme.of(context).textTheme.bodyText1.color));
     });
 
     final more = _section("Descubre más de ...", () {
@@ -352,11 +393,37 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
         padding: EdgeInsets.all(15),
         child: Column(
           children: [
-            Text(
-              title,
-              style: TextStyle(color: Colors.white, fontSize: 25),
-              textAlign: TextAlign.start,
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                title,
+                style: TextStyle(color: Colors.white, fontSize: 25),
+                textAlign: TextAlign.start,
+              )
+            ]),
+            SizedBox(
+              height: 15,
             ),
+            body()
+          ],
+        ));
+  }
+
+  Widget _sectionWithIcon(String title, Function body, Function icon) {
+    return Container(
+        padding: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Flexible(
+                flex: 4,
+                child: Text(
+                  title,
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Flexible(flex: 1, child: icon())
+            ]),
             SizedBox(
               height: 15,
             ),
