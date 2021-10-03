@@ -9,6 +9,7 @@ import 'package:tour_guide/ui/pages/account/account_reviews/AccountReviewsPage.d
 import 'package:tour_guide/ui/pages/account/account_settings/AcountSettingsPage.dart';
 import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
 import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
+import 'package:tour_guide/ui/pages/experience-detail/NewExperienceDetailPage.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
 import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
 import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage>
         page = FavoriteExperiences();
         break;
       case routeHomeExperienceDetailsPage:
-        page = ExperienceDetails();
+        page = NewExperienceDetailPage();
         break;
       default:
         print("NOMBRE SUBRUTA: " + settings.name);

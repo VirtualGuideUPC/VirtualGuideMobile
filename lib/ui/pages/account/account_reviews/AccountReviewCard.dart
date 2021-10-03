@@ -42,13 +42,13 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
           ),
           for (var paintedStar in paintedStars)
             Icon(
-              Icons.star,
+              Icons.circle,
               color: Colors.black,
             ),
           for (var noPaintedStar in noPaintedStars)
             Icon(
-              Icons.star_border,
-              color: Colors.black,
+              Icons.circle,
+              color: Colors.black.withOpacity(0.4),
             ),
         ],
       ),
