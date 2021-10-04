@@ -25,9 +25,11 @@ class NewExperienceDetailPage extends StatefulWidget {
 class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
   final bloc = ExperienceDetailBloc();
   Future<ExperienceDetailed> futureExperienceDetail;
-
+  var _scrollController = new ScrollController();
+  int counter = 0;
   void initState() {
     BackButtonInterceptor.add(myInterceptor);
+
     super.initState();
   }
 
@@ -512,6 +514,10 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
             ),
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: bloc.detailedState == ExperienceDetailState.details
+                    ? BouncingScrollPhysics()
+                    : NeverScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -566,7 +572,8 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                           onVerticalDragUpdate: _onVerticalGesture,
                           child: Container(
                             width: double.infinity,
-                            height: (size.height - kToolbarHeight) * 0.92,
+                            height: (size.height - kToolbarHeight) * 0.97 -
+                                MediaQuery.of(context).padding.top,
                             child: _buildDetails(context, snapshot.data),
                             decoration: BoxDecoration(
                                 color: Color.fromRGBO(79, 77, 140, 1),
