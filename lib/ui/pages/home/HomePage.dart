@@ -14,6 +14,7 @@ import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
 import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
 import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
+import 'package:tour_guide/ui/pages/review/review_dialog.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
@@ -127,6 +128,9 @@ class _HomePageState extends State<HomePage>
         break;
       case routeHomeExperienceDetailsPage:
         page = NewExperienceDetailPage();
+        break;
+      case routeHomeExperienceDetailsReviewsPage:
+        page = AddReview();
         break;
       default:
         print("NOMBRE SUBRUTA: " + settings.name);

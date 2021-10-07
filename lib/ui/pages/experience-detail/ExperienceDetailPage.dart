@@ -117,15 +117,9 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                       padding: EdgeInsets.all(15),
                     ),
                     onPressed: () {
-                      showDialog(
-                              context: context,
-                              builder: (ctx) => ReviewDialog(snapshot.data))
-                          .whenComplete(() {
-                        Utils.homeNavigator.currentState.pushReplacementNamed(
-                            routeHomeExperienceDetailsPage,
-                            arguments:
-                                ModalRoute.of(context).settings.arguments);
-                      });
+                      Utils.homeNavigator.currentState.pushReplacementNamed(
+                          routeHomeExperienceDetailsPage,
+                          arguments: ModalRoute.of(context).settings.arguments);
                     },
                     child: Icon(Icons.add)))
           ]);

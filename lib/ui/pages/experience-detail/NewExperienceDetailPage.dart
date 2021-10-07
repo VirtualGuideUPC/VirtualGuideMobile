@@ -421,24 +421,43 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                   padding: EdgeInsets.all(15),
                 ),
                 onPressed: () {
-                  showDialog(
-                          context: context,
-                          builder: (ctx) => ReviewDialog(experienceDetails))
-                      .whenComplete(() {
-                    Utils.homeNavigator.currentState.pushReplacementNamed(
-                        routeHomeExperienceDetailsPage,
-                        arguments: ModalRoute.of(context).settings.arguments);
-                  });
+                  Utils.homeNavigator.currentState
+                      .pushNamed(routeHomeExperienceDetailsReviewsPage,
+                          arguments: experienceDetails)
+                      .then((_) => setState(() {
+                            Utils.homeNavigator.currentState
+                                .pushReplacementNamed(
+                                    routeHomeExperienceDetailsPage,
+                                    arguments: ModalRoute.of(context)
+                                        .settings
+                                        .arguments);
+                          }));
                 },
                 child: Text("Escribir una reseña")),
             Divider(),
             ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: experienceDetails.reviews.length,
+                itemCount: 2,
                 itemBuilder: (ctx, indx) {
                   return singleReview(experienceDetails.reviews[indx]);
-                })
+                }),
+            Container(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                    onPrimary: Colors.white,
+                    elevation: 0,
+                    primary: Color.fromRGBO(79, 77, 140, 1),
+                    padding: EdgeInsets.all(15),
+                  ),
+                  onPressed: () {},
+                  child:
+                      Text('Ver ${experienceDetails.reviews.length} reseñas')),
+            )
           ]),
         );
       });

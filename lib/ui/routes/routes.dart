@@ -16,6 +16,7 @@ const routeHomeChatPage = 'chat';
 const routeHomeAccountPage = 'account';
 
 const routeHomeExperienceDetailsPage = 'experience_details';
+const routeHomeExperienceDetailsReviewsPage = 'experience_details_revies';
 const routeHomeFavoriteDepartmentsPage = 'favorite_departments';
 const routeHomeFavoriteExperiencesPage = 'favorite_experiences';
 const routeHomeAccountInformationPage = 'account_information';
