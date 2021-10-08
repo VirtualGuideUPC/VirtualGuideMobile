@@ -11,7 +11,7 @@ import 'package:tour_guide/ui/bloc/placesBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/helpers/notificationUtil.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
-import 'package:tour_guide/ui/pages/review/review_dialog.dart';
+import 'package:tour_guide/ui/pages/review/CreateReview.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/FlipCardWidget.dart';
 
@@ -117,15 +117,9 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
                       padding: EdgeInsets.all(15),
                     ),
                     onPressed: () {
-                      showDialog(
-                              context: context,
-                              builder: (ctx) => ReviewDialog(snapshot.data))
-                          .whenComplete(() {
-                        Utils.homeNavigator.currentState.pushReplacementNamed(
-                            routeHomeExperienceDetailsPage,
-                            arguments:
-                                ModalRoute.of(context).settings.arguments);
-                      });
+                      Utils.homeNavigator.currentState.pushReplacementNamed(
+                          routeHomeExperienceDetailsPage,
+                          arguments: ModalRoute.of(context).settings.arguments);
                     },
                     child: Icon(Icons.add)))
           ]);

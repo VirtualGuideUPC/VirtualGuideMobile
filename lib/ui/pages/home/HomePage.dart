@@ -9,10 +9,14 @@ import 'package:tour_guide/ui/pages/account/account_reviews/AccountReviewsPage.d
 import 'package:tour_guide/ui/pages/account/account_settings/AcountSettingsPage.dart';
 import 'package:tour_guide/ui/pages/chat/ChatPage.dart';
 import 'package:tour_guide/ui/pages/experience-detail/ExperienceDetailPage.dart';
+import 'package:tour_guide/ui/pages/experience-detail/MoreInfoExperienceDetailPage.dart';
+import 'package:tour_guide/ui/pages/experience-detail/NewExperienceDetailPage.dart';
 import 'package:tour_guide/ui/pages/explore/ExplorePage.dart';
 import 'package:tour_guide/ui/pages/favorite_departments/FavoriteDepartmentsPage.dart';
 import 'package:tour_guide/ui/pages/favorite_experiences/FavoriteExperiencesPage.dart';
 import 'package:tour_guide/ui/pages/login/LoginPage.dart';
+import 'package:tour_guide/ui/pages/review/AllReviews.dart';
+import 'package:tour_guide/ui/pages/review/CreateReview.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
@@ -125,7 +129,16 @@ class _HomePageState extends State<HomePage>
         page = FavoriteExperiences();
         break;
       case routeHomeExperienceDetailsPage:
-        page = ExperienceDetails();
+        page = NewExperienceDetailPage();
+        break;
+      case routeHomeExperienceDetailsCreateReviewsPage:
+        page = AddReview();
+        break;
+      case routeHomeExperienceDetailsReviewsPage:
+        page = AllReviews();
+        break;
+      case routeHomeExperienceDetailsMoreInfoPage:
+        page = MoreInfoExperienceDetailedPage();
         break;
       default:
         print("NOMBRE SUBRUTA: " + settings.name);

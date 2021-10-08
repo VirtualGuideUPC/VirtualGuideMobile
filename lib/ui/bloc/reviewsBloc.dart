@@ -14,6 +14,15 @@ class ReviewsBloc {
   Function get changeReviews => _reviewController.sink.add;
   List<Review> get reviews => _reviewController.value;
 
+  BehaviorSubject<int> reviewStars = BehaviorSubject<int>();
+  Stream<int> get reviewStarsStream => reviewStars.stream;
+  Function get changeStarsStream => reviewStars.sink.add;
+  int get stars => reviewStars.stream.value;
+
+  void changerating(stars) {
+    changeStarsStream(stars);
+  }
+
   void getReviewsByUserId() async {
     final _prefs = UserPreferences();
 
