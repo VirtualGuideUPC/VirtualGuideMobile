@@ -10,7 +10,7 @@ import 'package:tour_guide/ui/bloc/experienceDetailBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/experience-detail/LocationAndRatingStars.dart';
-import 'package:tour_guide/ui/pages/review/review_dialog.dart';
+import 'package:tour_guide/ui/pages/review/CreateReview.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 import 'package:tour_guide/ui/widgets/FlipCardWidget.dart';
 
@@ -191,9 +191,30 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
       }
 
       final about = _section("Acerca de", () {
-        return Text(
-          experienceDetails.longInfo,
-          textAlign: TextAlign.justify,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              experienceDetails.longInfo,
+              textAlign: TextAlign.justify,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            GestureDetector(
+              onTap: () {
+                Utils.homeNavigator.currentState.pushNamed(
+                    routeHomeExperienceDetailsMoreInfoPage,
+                    arguments: experienceDetails);
+              },
+              child: Text(
+                "Mostrar Más",
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            )
+          ],
         );
       });
       final location = _section("La zona", () {
@@ -422,7 +443,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 ),
                 onPressed: () {
                   Utils.homeNavigator.currentState
-                      .pushNamed(routeHomeExperienceDetailsReviewsPage,
+                      .pushNamed(routeHomeExperienceDetailsCreateReviewsPage,
                           arguments: experienceDetails)
                       .then((_) => setState(() {
                             Utils.homeNavigator.currentState
@@ -454,7 +475,11 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                     primary: Color.fromRGBO(79, 77, 140, 1),
                     padding: EdgeInsets.all(15),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Utils.homeNavigator.currentState.pushNamed(
+                        routeHomeExperienceDetailsReviewsPage,
+                        arguments: experienceDetails.reviews);
+                  },
                   child:
                       Text('Ver ${experienceDetails.reviews.length} reseñas')),
             )
