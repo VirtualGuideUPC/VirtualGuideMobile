@@ -97,8 +97,8 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
               : Image(image: AssetImage("assets/img/no-image.jpg")));
     }
 
-    Widget _buildDetails(
-        BuildContext context, ExperienceDetailed experienceDetails) {
+    Widget _buildDetails(BuildContext context,
+        ExperienceDetailed experienceDetails, controller) {
       var stars = new List.filled(experienceDetails.avgRanking.toInt(), 1);
 
       Widget locationAndRating(List paintedStars) {
@@ -543,25 +543,20 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           children: [
-            GestureDetector(
-              child: Container(
-                width: double.infinity,
-                height: 40,
-                child: Center(
-                  child: Container(
-                    width: 100,
-                    height: 3,
-                    color: Colors.black,
-                  ),
+            Container(
+              width: double.infinity,
+              height: 40,
+              child: Center(
+                child: Container(
+                  width: 100,
+                  height: 3,
+                  color: Colors.black,
                 ),
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
-                controller: _scrollController,
-                physics: bloc.detailedState == ExperienceDetailState.details
-                    ? BouncingScrollPhysics()
-                    : NeverScrollableScrollPhysics(),
+                controller: controller,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -596,8 +591,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 if (snapshot.hasData) {
                   return Stack(
                     children: [
-                      AnimatedPositioned(
-                        duration: Duration(milliseconds: 300),
+                      Positioned(
                         top: _getTopForSlider(bloc.detailedState, size),
                         right: 0,
                         left: 0,
@@ -607,23 +601,21 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                           child: _buildCarousel(context, snapshot.data),
                         ),
                       ),
-                      AnimatedPositioned(
-                        duration: Duration(milliseconds: 300),
-                        top: _getTopForDetails(bloc.detailedState, size),
+                      Positioned.fill(
+                        bottom: 0,
                         right: 0,
-                        left: 0,
-                        child: GestureDetector(
-                          onVerticalDragUpdate: _onVerticalGesture,
-                          child: Container(
-                            width: double.infinity,
-                            height: (size.height - kToolbarHeight) * 0.97 -
-                                MediaQuery.of(context).padding.top,
-                            child: _buildDetails(context, snapshot.data),
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(79, 77, 140, 1),
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(10))),
-                          ),
+                        child: DraggableScrollableSheet(
+                          maxChildSize: 1,
+                          minChildSize: 0.5,
+                          builder: (ctx, controller) {
+                            return Container(
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(79, 77, 140, 1),
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(10))),
+                                child: _buildDetails(
+                                    context, snapshot.data, controller));
+                          },
                         ),
                       )
                     ],
