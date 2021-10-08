@@ -9,16 +9,13 @@ class InitPage extends StatelessWidget {
     var _screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        height: _screenHeight,
-        width: _screenWidth,
-        color: Colors.white,
-        child: Center(
-          child: Text(
-            "Virtual Guide",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
+          height: _screenHeight,
+          width: _screenWidth,
+          color: Colors.white,
+          child: Image(
+            fit: BoxFit.cover,
+            image: AssetImage('assets/img/init_page.jpeg'),
+          )),
     );
   }
 }
