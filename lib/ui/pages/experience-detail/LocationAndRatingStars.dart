@@ -98,22 +98,11 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                     size: widget.starsize,
                   ),
                 for (var i = 0; i < noPaintedStars.length; i++)
-                  widget.clickeable
-                      ? GestureDetector(
-                          onTap: () {
-                            bloc.changerating(i + 1);
-                          },
-                          child: Icon(
-                            Icons.circle,
-                            color: Colors.white.withOpacity(0.4),
-                            size: widget.starsize,
-                          ),
-                        )
-                      : Icon(
-                          Icons.circle,
-                          color: Colors.white.withOpacity(0.4),
-                          size: widget.starsize,
-                        ),
+                  Icon(
+                    Icons.circle,
+                    color: Colors.white.withOpacity(0.4),
+                    size: widget.starsize,
+                  ),
                 SizedBox(
                   width: 10,
                 ),

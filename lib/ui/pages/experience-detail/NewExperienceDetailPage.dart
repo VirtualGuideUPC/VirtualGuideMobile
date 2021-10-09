@@ -341,7 +341,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
 
       Widget similarExperiences;
       if (experienceDetails.similarExperience != null) {
-        similarExperiences = _section("Experiencias similaress", () {
+        similarExperiences = _section("Experiencias similares", () {
           return _slider(experienceDetails.similarExperience.length, 0.45, 250,
               (context, i) {
             final Experience experience = Experience(
@@ -456,33 +456,45 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 },
                 child: Text("Escribir una reseña")),
             Divider(),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 2,
-                itemBuilder: (ctx, indx) {
-                  return singleReview(experienceDetails.reviews[indx]);
-                }),
-            Container(
-              width: double.infinity,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    onPrimary: Colors.white,
-                    elevation: 0,
-                    primary: Color.fromRGBO(79, 77, 140, 1),
-                    padding: EdgeInsets.all(15),
+            experienceDetails.reviews.length > 0
+                ? ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: experienceDetails.reviews.length != 2
+                        ? experienceDetails.reviews.length
+                        : 2,
+                    itemBuilder: (ctx, indx) {
+                      return singleReview(experienceDetails.reviews[indx]);
+                    })
+                : Column(
+                    children: [
+                      Text("Aun no hay reseñas creadas"),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    Utils.homeNavigator.currentState.pushNamed(
-                        routeHomeExperienceDetailsReviewsPage,
-                        arguments: experienceDetails.reviews);
-                  },
-                  child:
-                      Text('Ver ${experienceDetails.reviews.length} reseñas')),
-            )
+            if (experienceDetails.reviews.length > 0)
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      onPrimary: Colors.white,
+                      elevation: 0,
+                      primary: Color.fromRGBO(79, 77, 140, 1),
+                      padding: EdgeInsets.all(15),
+                    ),
+                    onPressed: () {
+                      Utils.homeNavigator.currentState.pushNamed(
+                          routeHomeExperienceDetailsReviewsPage,
+                          arguments: experienceDetails.reviews);
+                    },
+                    child: Text(
+                        'Ver ${experienceDetails.reviews.length} reseñas')),
+              )
           ]),
         );
       });
