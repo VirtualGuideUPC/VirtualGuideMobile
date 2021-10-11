@@ -8,6 +8,7 @@ import 'package:tour_guide/data/entities/review.dart';
 import 'package:tour_guide/data/providers/experienceProvider.dart';
 import 'package:tour_guide/ui/bloc/experienceDetailBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/notificationUtil.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/experience-detail/LocationAndRatingStars.dart';
 import 'package:tour_guide/ui/pages/review/CreateReview.dart';
@@ -134,12 +135,40 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              experienceDetails.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    experienceDetails.name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: IconButton(
+                      onPressed: () {
+                        ExperienceProvider()
+                            .postAddFavoriteExperience(
+                                experienceDetails.id.toString())
+                            .then((value) {
+                          if (value) {
+                            NotificationUtil().showSnackbar(
+                                context,
+                                "Se ha agregado a favoritos correctamente",
+                                "success",
+                                null);
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.favorite_border,
+                          color: Theme.of(context).textTheme.bodyText1.color)),
+                )
+              ],
             ),
             LocationAndRatingStars(
               numberStars: experienceDetails.avgRanking.toInt(),
