@@ -240,7 +240,7 @@ class _ChatPageState extends State<ChatPage> {
                   Container(
                     child: _messagesArea(),
                   ),
-                  /*ElevatedButton(
+                  /* ElevatedButton(
                       onPressed: () {
                         MessagesDb().deleteDftabase();
                       },

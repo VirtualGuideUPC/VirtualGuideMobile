@@ -37,7 +37,7 @@ class _ExplorePageState extends State<ExplorePage>
   List<Marker> mapMarkersList = <Marker>[];
   Position currentLocation;
   StreamSubscription subscriptionExperiences;
-
+  bool isRecommended = false;
   @override
   void initState() {
     super.initState();
@@ -115,9 +115,10 @@ class _ExplorePageState extends State<ExplorePage>
                 fit: StackFit.loose,
                 children: [
                   Container(child: _buildMap(userBloc)),
+                  _buildRecommendedButton(placesBloc),
                   _buildSearchResults(placesBloc),
                   _buildCarousel(placesBloc),
-                  _buildFooter(placesBloc)
+                  _buildFooter(placesBloc),
                 ],
               ),
             )
@@ -345,6 +346,29 @@ class _ExplorePageState extends State<ExplorePage>
             return Container();
           }
         });
+  }
+
+  Widget _buildRecommendedButton(PlacesBloc placesBloc) {
+    return Positioned(
+        top: 10,
+        right: 10,
+        child: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              this.isRecommended = !this.isRecommended;
+            });
+            placesBloc.changeListToRecommended(isRecommended);
+          },
+          child: Icon(
+            Icons.thumb_up,
+            color: isRecommended ? Colors.white : Colors.black,
+          ),
+          style: ElevatedButton.styleFrom(
+            shape: CircleBorder(),
+            primary: Color.fromRGBO(176, 143, 251, 1),
+            padding: EdgeInsets.all(10),
+          ),
+        ));
   }
 
   void _showBottomSheet(
