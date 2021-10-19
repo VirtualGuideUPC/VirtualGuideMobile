@@ -11,7 +11,6 @@ class LocationAndRatingStars extends StatefulWidget {
   bool clickeable = false;
   BehaviorSubject<int> bs = null;
   double starsize = 25;
-
   LocationAndRatingStars(
       {@required this.numberStars,
       this.numberComments = 0,
@@ -26,6 +25,8 @@ class LocationAndRatingStars extends StatefulWidget {
 }
 
 class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
+  IconData icon = Icons.star;
+
   ReviewsBloc bloc = ReviewsBloc();
 
   changeStars(List starList, numberOfStars) {
@@ -57,7 +58,7 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                             widget.bs.add(i + 1);
                           },
                           child: Icon(
-                            Icons.circle,
+                            icon,
                             color: starsList[i]
                                 ? Colors.white
                                 : Colors.white.withOpacity(0.4),
@@ -93,13 +94,13 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
               children: [
                 for (var paintedStar in paintedStars)
                   Icon(
-                    Icons.circle,
+                    icon,
                     color: Colors.white,
                     size: widget.starsize,
                   ),
                 for (var i = 0; i < noPaintedStars.length; i++)
                   Icon(
-                    Icons.circle,
+                    icon,
                     color: Colors.white.withOpacity(0.4),
                     size: widget.starsize,
                   ),
