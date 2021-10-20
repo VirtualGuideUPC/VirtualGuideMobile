@@ -4,6 +4,7 @@ import 'package:tour_guide/data/entities/review.dart';
 import 'package:tour_guide/ui/bloc/reviewsBloc.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/account/account_reviews/AccountReviewCard.dart';
+import 'package:tour_guide/ui/pages/experience-detail/LocationAndRatingStars.dart';
 
 class AccountReviewsPage extends StatefulWidget {
   AccountReviewsPage();
@@ -120,7 +121,10 @@ class _AccountReviewsPageState extends State<AccountReviewsPage> {
         height: _screenHeight - kToolbarHeight,
         color: Theme.of(context).dialogBackgroundColor,
         child: Column(
-          children: [_title, _content()],
+          children: [
+            _title,
+            _content(),
+          ],
         ),
       ),
     );

@@ -49,14 +49,24 @@ class MessageBubble extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             Container(
-              width: _screenWidth * 0.15,
+              width: _screenWidth * 0.2,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     parseTime(message.time),
                     textAlign: TextAlign.end,
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
+                  if (!message.isUser)
+                    Container(
+                      margin: EdgeInsets.all(5),
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    )
                 ],
               ),
             )

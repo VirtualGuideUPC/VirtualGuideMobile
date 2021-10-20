@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:tour_guide/ui/bloc/reviewsBloc.dart';
 
-// ignore: must_be_immutable
 class LocationAndRatingStars extends StatefulWidget {
   int numberStars;
   int numberComments = 0;
@@ -11,12 +10,14 @@ class LocationAndRatingStars extends StatefulWidget {
   bool clickeable = false;
   BehaviorSubject<int> bs = null;
   double starsize = 25;
+  Color primaryColor = Colors.white;
   LocationAndRatingStars(
       {@required this.numberStars,
       this.numberComments = 0,
       this.withNumbersOfComments = false,
       this.starsize = 25,
       this.bs = null,
+      this.primaryColor = Colors.white,
       this.clickeable = false,
       this.withLabel = true});
 
@@ -60,8 +61,8 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                           child: Icon(
                             icon,
                             color: starsList[i]
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.4),
+                                ? widget.primaryColor
+                                : widget.primaryColor.withOpacity(0.4),
                             size: widget.starsize,
                           ),
                         ),
@@ -95,13 +96,13 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                 for (var paintedStar in paintedStars)
                   Icon(
                     icon,
-                    color: Colors.white,
+                    color: widget.primaryColor,
                     size: widget.starsize,
                   ),
                 for (var i = 0; i < noPaintedStars.length; i++)
                   Icon(
                     icon,
-                    color: Colors.white.withOpacity(0.4),
+                    color: widget.primaryColor.withOpacity(0.4),
                     size: widget.starsize,
                   ),
                 SizedBox(

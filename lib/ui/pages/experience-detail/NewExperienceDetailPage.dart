@@ -489,7 +489,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: experienceDetails.reviews.length != 2
+                    itemCount: experienceDetails.reviews.length == 2
                         ? experienceDetails.reviews.length
                         : 2,
                     itemBuilder: (ctx, indx) {
