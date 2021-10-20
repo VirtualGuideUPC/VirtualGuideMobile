@@ -74,13 +74,16 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                           widget.withNumbersOfComments)
                         widget.numberComments > 1
                             ? Text(
-                                widget.numberComments.toString() + " Opiniones")
+                                widget.numberComments.toString() + " Opiniones",
+                                style: TextStyle(color: Colors.white))
                             : Text(
-                                widget.numberComments.toString() + " Opinión"),
+                                widget.numberComments.toString() + " Opinión",
+                                style: TextStyle(color: Colors.white)),
                       if (!widget.withLabel &&
                           widget.numberComments > 0 &&
                           widget.withNumbersOfComments)
-                        Text(widget.numberComments.toString()),
+                        Text(widget.numberComments.toString(),
+                            style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 );
@@ -112,12 +115,15 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                     widget.numberComments > 0 &&
                     widget.withNumbersOfComments)
                   widget.numberComments > 1
-                      ? Text(widget.numberComments.toString() + " Opiniones")
-                      : Text(widget.numberComments.toString() + " Opinión"),
+                      ? Text(widget.numberComments.toString() + " Opiniones",
+                          style: TextStyle(color: Colors.white))
+                      : Text(widget.numberComments.toString() + " Opinión",
+                          style: TextStyle(color: Colors.white)),
                 if (!widget.withLabel &&
                     widget.numberComments > 0 &&
                     widget.withNumbersOfComments)
-                  Text(widget.numberComments.toString()),
+                  Text(widget.numberComments.toString(),
+                      style: TextStyle(color: Colors.white)),
               ],
             ),
           );

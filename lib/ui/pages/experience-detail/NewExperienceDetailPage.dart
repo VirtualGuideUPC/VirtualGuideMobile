@@ -179,13 +179,14 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
             SizedBox(
               height: 10,
             ),
-            Text("Barranco, Lima"),
+            Text("Barranco, Lima", style: TextStyle(color: Colors.white)),
             SizedBox(
               height: 10,
             ),
             Text(
               "Abierto Ahora",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(
               height: 5,
@@ -223,10 +224,9 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              experienceDetails.longInfo,
-              textAlign: TextAlign.justify,
-            ),
+            Text(experienceDetails.longInfo,
+                textAlign: TextAlign.justify,
+                style: TextStyle(color: Colors.white)),
             SizedBox(
               height: 15,
             ),
@@ -239,6 +239,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
               child: Text(
                 "Mostrar Más",
                 style: TextStyle(
+                  color: Colors.white,
                   decoration: TextDecoration.underline,
                 ),
               ),
@@ -254,11 +255,14 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Dirección", style: TextStyle(fontWeight: FontWeight.bold)),
+              Text("Dirección",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white)),
               SizedBox(
                 height: 5,
               ),
-              Text("Av. Pedro de Osma 409, Barranco"),
+              Text("Av. Pedro de Osma 409, Barranco",
+                  style: TextStyle(color: Colors.white)),
               SizedBox(
                 height: 5,
               ),
@@ -441,11 +445,11 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
               SizedBox(
                 height: 10,
               ),
-              Text(review.date),
+              Text(review.date, style: TextStyle(color: Colors.white)),
               SizedBox(
                 height: 10,
               ),
-              Text(review.comment),
+              Text(review.comment, style: TextStyle(color: Colors.white)),
               SizedBox(
                 height: 10,
               ),
@@ -550,13 +554,15 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Puente de los Suspiros"),
+                      Text("Puente de los Suspiros",
+                          style: TextStyle(color: Colors.white)),
                       LocationAndRatingStars(
                           numberStars: 4,
                           numberComments: 40,
                           withNumbersOfComments: true,
                           withLabel: false),
-                      Text("Barranco, Lima")
+                      Text("Barranco, Lima",
+                          style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
