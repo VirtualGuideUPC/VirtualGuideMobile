@@ -27,6 +27,9 @@ class PlacesBloc {
   Function get changeExperiences => _experiencesController.sink.add;
   List<Experience> get experiences => _experiencesController.value;
 
+  List<Experience> recommended = [];
+  List<Experience> all = [];
+
   void getLocations(String term) async {
     final results = await placesProvider.getLocations(term);
     changeSearchResult(results);
@@ -36,7 +39,16 @@ class PlacesBloc {
     final List<Experience> experiences =
         await _getExperiences(userId, lat, long);
     changeExperiences(experiences);
+    all = experiences;
+    all.forEach((element) {
+      if (element.isRecommended == true) recommended.add(element);
+    });
+    print(recommended);
     print("Experiencas encontradas -> " + experiences.length.toString());
+  }
+
+  void changeListToRecommended(bool isRecommended) {
+    isRecommended ? changeExperiences(recommended) : changeExperiences(all);
   }
 
   Future<Map> getLocationDetail(String placeId) async {

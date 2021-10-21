@@ -237,110 +237,112 @@ class _AddReview extends State<AddReview> {
                 width: double.infinity,
                 height: _screenHeight,
                 padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    title,
-                    Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text('¿Cómo calificarías tu experiencia?',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .color)),
-                            LocationAndRatingStars(
-                                clickeable: true,
-                                starsize: 40,
-                                bs: bloc.reviewStars,
-                                numberStars: snapshot.data),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text('Escribe tu reseña del lugar',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .color)),
-                            TextFormField(
-                              keyboardType: TextInputType.text,
-                              onFieldSubmitted: (_) {},
-                              style: TextStyle(color: Colors.white),
-                              onSaved: (value) {
-                                _toSend = CreateReviewDto(
-                                    ranking: _toSend.ranking,
-                                    comment: value,
-                                    commentRanking: _toSend.ranking,
-                                    date: _toSend.date,
-                                    touristicPlace: _toSend.touristicPlace,
-                                    user: _toSend.user);
-                              },
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Por favor ingrese su reseña";
-                                }
-                              },
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                enabledBorder: const UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 1),
-                                ),
-                                hintText: "Es un gran...",
-                                labelStyle: TextStyle(color: Colors.white),
-                                hintStyle: TextStyle(color: Colors.white),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title,
+                      Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 10,
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            images
-                          ],
-                        )),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: isLoading
-                              ? _loader
-                              : ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.transparent,
-                                      shape: new RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              width: 2, color: Colors.white),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(25)))),
-                                  onPressed: () {
-                                    _saveForm(pref.getUserId().toString(),
-                                        placesBloc, pageArguments.id);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15),
-                                    child: Text(
-                                      "Enviar",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    ),
-                                  )),
-                        )
-                      ],
-                    ),
-                  ],
+                              Text('¿Cómo calificarías tu experiencia?',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color)),
+                              LocationAndRatingStars(
+                                  clickeable: true,
+                                  starsize: 40,
+                                  bs: bloc.reviewStars,
+                                  numberStars: snapshot.data),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text('Escribe tu reseña del lugar',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color)),
+                              TextFormField(
+                                keyboardType: TextInputType.text,
+                                onFieldSubmitted: (_) {},
+                                style: TextStyle(color: Colors.white),
+                                onSaved: (value) {
+                                  _toSend = CreateReviewDto(
+                                      ranking: _toSend.ranking,
+                                      comment: value,
+                                      commentRanking: _toSend.ranking,
+                                      date: _toSend.date,
+                                      touristicPlace: _toSend.touristicPlace,
+                                      user: _toSend.user);
+                                },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Por favor ingrese su reseña";
+                                  }
+                                },
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 1),
+                                  ),
+                                  hintText: "Es un gran...",
+                                  labelStyle: TextStyle(color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              images
+                            ],
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: isLoading
+                                ? _loader
+                                : ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.transparent,
+                                        shape: new RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                width: 2, color: Colors.white),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(25)))),
+                                    onPressed: () {
+                                      _saveForm(pref.getUserId().toString(),
+                                          placesBloc, pageArguments.id);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
+                                      child: Text(
+                                        "Enviar",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                    )),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

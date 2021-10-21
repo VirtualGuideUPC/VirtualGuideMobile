@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide/data/entities/experienceDetailed.dart';
 import 'package:tour_guide/data/entities/review.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
+import 'package:tour_guide/ui/pages/experience-detail/LocationAndRatingStars.dart';
 
 class AccountReviewCard extends StatefulWidget {
   final Review review;
@@ -23,35 +23,6 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
       ),
       width: double.infinity,
       height: 150,
-    );
-  }
-
-  Widget locationAndRating(List paintedStars) {
-    var noPaintedStars = List.filled(5 - paintedStars.length, 1);
-
-    return Container(
-      width: double.infinity,
-      child: Row(
-        children: [
-          Text(
-            widget.review.province,
-            style: TextStyle(fontSize: 15, color: Colors.black),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          for (var paintedStar in paintedStars)
-            Icon(
-              Icons.circle,
-              color: Colors.black,
-            ),
-          for (var noPaintedStar in noPaintedStars)
-            Icon(
-              Icons.circle,
-              color: Colors.black.withOpacity(0.4),
-            ),
-        ],
-      ),
     );
   }
 
@@ -131,8 +102,6 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
 
   @override
   Widget build(BuildContext context) {
-    var stars = new List.filled(widget.review.ranking, 1);
-
     var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
     var _screenWidth = MediaQuery.of(context).size.width;
 
@@ -151,8 +120,10 @@ class _AccountReviewCardState extends State<AccountReviewCard> {
           child: Column(
             children: [
               title(widget.review.touristicPlaceName),
-              locationAndRating(stars),
               description(),
+              LocationAndRatingStars(
+                  primaryColor: Colors.black,
+                  numberStars: widget.review.ranking.toInt()),
               SizedBox(
                 height: 5,
               ),

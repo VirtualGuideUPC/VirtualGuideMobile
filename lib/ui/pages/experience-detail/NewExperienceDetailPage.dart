@@ -8,6 +8,7 @@ import 'package:tour_guide/data/entities/review.dart';
 import 'package:tour_guide/data/providers/experienceProvider.dart';
 import 'package:tour_guide/ui/bloc/experienceDetailBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/notificationUtil.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/pages/experience-detail/LocationAndRatingStars.dart';
 import 'package:tour_guide/ui/pages/review/CreateReview.dart';
@@ -134,12 +135,40 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              experienceDetails.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    experienceDetails.name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: IconButton(
+                      onPressed: () {
+                        ExperienceProvider()
+                            .postAddFavoriteExperience(
+                                experienceDetails.id.toString())
+                            .then((value) {
+                          if (value) {
+                            NotificationUtil().showSnackbar(
+                                context,
+                                "Se ha agregado a favoritos correctamente",
+                                "success",
+                                null);
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.favorite_border,
+                          color: Theme.of(context).textTheme.bodyText1.color)),
+                )
+              ],
             ),
             LocationAndRatingStars(
               numberStars: experienceDetails.avgRanking.toInt(),
@@ -150,13 +179,14 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
             SizedBox(
               height: 10,
             ),
-            Text("Barranco, Lima"),
+            Text("Barranco, Lima", style: TextStyle(color: Colors.white)),
             SizedBox(
               height: 10,
             ),
             Text(
               "Abierto Ahora",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(
               height: 5,
@@ -194,10 +224,9 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              experienceDetails.longInfo,
-              textAlign: TextAlign.justify,
-            ),
+            Text(experienceDetails.longInfo,
+                textAlign: TextAlign.justify,
+                style: TextStyle(color: Colors.white)),
             SizedBox(
               height: 15,
             ),
@@ -210,6 +239,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
               child: Text(
                 "Mostrar Más",
                 style: TextStyle(
+                  color: Colors.white,
                   decoration: TextDecoration.underline,
                 ),
               ),
@@ -225,11 +255,14 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Dirección", style: TextStyle(fontWeight: FontWeight.bold)),
+              Text("Dirección",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white)),
               SizedBox(
                 height: 5,
               ),
-              Text("Av. Pedro de Osma 409, Barranco"),
+              Text("Av. Pedro de Osma 409, Barranco",
+                  style: TextStyle(color: Colors.white)),
               SizedBox(
                 height: 5,
               ),
@@ -341,7 +374,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
 
       Widget similarExperiences;
       if (experienceDetails.similarExperience != null) {
-        similarExperiences = _section("Experiencias similaress", () {
+        similarExperiences = _section("Experiencias similares", () {
           return _slider(experienceDetails.similarExperience.length, 0.45, 250,
               (context, i) {
             final Experience experience = Experience(
@@ -412,11 +445,11 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
               SizedBox(
                 height: 10,
               ),
-              Text(review.date),
+              Text(review.date, style: TextStyle(color: Colors.white)),
               SizedBox(
                 height: 10,
               ),
-              Text(review.comment),
+              Text(review.comment, style: TextStyle(color: Colors.white)),
               SizedBox(
                 height: 10,
               ),
@@ -456,33 +489,45 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 },
                 child: Text("Escribir una reseña")),
             Divider(),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 2,
-                itemBuilder: (ctx, indx) {
-                  return singleReview(experienceDetails.reviews[indx]);
-                }),
-            Container(
-              width: double.infinity,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.white, width: 2),
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    onPrimary: Colors.white,
-                    elevation: 0,
-                    primary: Color.fromRGBO(79, 77, 140, 1),
-                    padding: EdgeInsets.all(15),
+            experienceDetails.reviews.length > 0
+                ? ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: experienceDetails.reviews.length == 2
+                        ? experienceDetails.reviews.length
+                        : 2,
+                    itemBuilder: (ctx, indx) {
+                      return singleReview(experienceDetails.reviews[indx]);
+                    })
+                : Column(
+                    children: [
+                      Text("Aun no hay reseñas creadas"),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    Utils.homeNavigator.currentState.pushNamed(
-                        routeHomeExperienceDetailsReviewsPage,
-                        arguments: experienceDetails.reviews);
-                  },
-                  child:
-                      Text('Ver ${experienceDetails.reviews.length} reseñas')),
-            )
+            if (experienceDetails.reviews.length > 0)
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      onPrimary: Colors.white,
+                      elevation: 0,
+                      primary: Color.fromRGBO(79, 77, 140, 1),
+                      padding: EdgeInsets.all(15),
+                    ),
+                    onPressed: () {
+                      Utils.homeNavigator.currentState.pushNamed(
+                          routeHomeExperienceDetailsReviewsPage,
+                          arguments: experienceDetails.reviews);
+                    },
+                    child: Text(
+                        'Ver ${experienceDetails.reviews.length} reseñas')),
+              )
           ]),
         );
       });
@@ -509,13 +554,15 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Puente de los Suspiros"),
+                      Text("Puente de los Suspiros",
+                          style: TextStyle(color: Colors.white)),
                       LocationAndRatingStars(
                           numberStars: 4,
                           numberComments: 40,
                           withNumbersOfComments: true,
                           withLabel: false),
-                      Text("Barranco, Lima")
+                      Text("Barranco, Lima",
+                          style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),

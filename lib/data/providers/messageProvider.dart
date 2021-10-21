@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:tour_guide/data/datasource/messagesDb.dart';
 import 'package:tour_guide/data/datasource/userPreferences.dart';
 import 'package:tour_guide/data/entities/message.dart';
@@ -46,30 +47,30 @@ class MessageProvider {
     final String userToken = UserPreferences().getToken();
 
     String dateFormat =
-        "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+        "${DateTime.now().toLocal().year.toString()}-${DateTime.now().toLocal().month.toString().padLeft(2, '0')}-${DateTime.now().toLocal().day.toString().padLeft(2, '0')}";
 
     var body = {
       "text": message,
       "user": int.parse(userId),
       "date": dateFormat,
-      "url": "www.test10.com",
+      "url": "www.test14.com",
       "is_user": true
     };
 
-    final http.Response resp =
-        await http.post(url, body: jsonEncode(body), headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': userToken,
-      'Cookie': 'jwt=$userToken'
-    });
+    var resp = await Dio().post(url.toString(),
+        data: body,
+        options: Options(headers: <String, String>{
+          'Authorization': userToken,
+          'Cookie': 'session=$userToken',
+          'Connection': 'keep-alive',
+          'Keep-Alive': 'timeout=5,max=100',
+          'Content-Type': 'application/json; charset=UTF-8',
+        }));
 
     print("resopnde code: " + resp.statusCode.toString());
     if (resp.statusCode == 200) {
-      Map<dynamic, dynamic> decodedJson =
-          json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
-
-      var messageHuman = Message.fromJson(decodedJson['human_message']);
-      var messageBot = Message.fromJson(decodedJson['robot_response']);
+      var messageHuman = Message.fromJson(resp.data['human_message']);
+      var messageBot = Message.fromJson(resp.data['robot_response']);
 
       print(messageHuman);
       print(messageBot);

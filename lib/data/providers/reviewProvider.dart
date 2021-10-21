@@ -36,8 +36,8 @@ class ReviewProvider {
 
   Future<Review> createReview(
       CreateReviewDto createReviewDto, List<File> pictures) async {
-    final url =
-        Uri.parse('http://ec2-34-226-195-132.compute-1.amazonaws.com/api/reviews/create/');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/reviews/create/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -101,7 +101,8 @@ class ReviewProvider {
     print("resopnde code: " + resp.statusCode.toString());
 
     if (resp.statusCode == 200) {
-      var decodedJson = json.decode(resp.body) as List;
+      var decodedJson =
+          json.decode(Utf8Decoder().convert(resp.bodyBytes).toString()) as List;
       print(decodedJson);
       var items = decodedJson.map((e) => Review.fromJson(e)).toList();
       return items;

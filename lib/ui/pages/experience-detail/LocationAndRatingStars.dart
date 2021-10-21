@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:tour_guide/ui/bloc/reviewsBloc.dart';
 
-// ignore: must_be_immutable
 class LocationAndRatingStars extends StatefulWidget {
   int numberStars;
   int numberComments = 0;
@@ -11,13 +10,14 @@ class LocationAndRatingStars extends StatefulWidget {
   bool clickeable = false;
   BehaviorSubject<int> bs = null;
   double starsize = 25;
-
+  Color primaryColor = Colors.white;
   LocationAndRatingStars(
       {@required this.numberStars,
       this.numberComments = 0,
       this.withNumbersOfComments = false,
       this.starsize = 25,
       this.bs = null,
+      this.primaryColor = Colors.white,
       this.clickeable = false,
       this.withLabel = true});
 
@@ -26,6 +26,8 @@ class LocationAndRatingStars extends StatefulWidget {
 }
 
 class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
+  IconData icon = Icons.star;
+
   ReviewsBloc bloc = ReviewsBloc();
 
   changeStars(List starList, numberOfStars) {
@@ -57,10 +59,10 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                             widget.bs.add(i + 1);
                           },
                           child: Icon(
-                            Icons.circle,
+                            icon,
                             color: starsList[i]
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.4),
+                                ? widget.primaryColor
+                                : widget.primaryColor.withOpacity(0.4),
                             size: widget.starsize,
                           ),
                         ),
@@ -72,13 +74,16 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                           widget.withNumbersOfComments)
                         widget.numberComments > 1
                             ? Text(
-                                widget.numberComments.toString() + " Opiniones")
+                                widget.numberComments.toString() + " Opiniones",
+                                style: TextStyle(color: Colors.white))
                             : Text(
-                                widget.numberComments.toString() + " Opinión"),
+                                widget.numberComments.toString() + " Opinión",
+                                style: TextStyle(color: Colors.white)),
                       if (!widget.withLabel &&
                           widget.numberComments > 0 &&
                           widget.withNumbersOfComments)
-                        Text(widget.numberComments.toString()),
+                        Text(widget.numberComments.toString(),
+                            style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 );
@@ -93,27 +98,16 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
               children: [
                 for (var paintedStar in paintedStars)
                   Icon(
-                    Icons.circle,
-                    color: Colors.white,
+                    icon,
+                    color: widget.primaryColor,
                     size: widget.starsize,
                   ),
                 for (var i = 0; i < noPaintedStars.length; i++)
-                  widget.clickeable
-                      ? GestureDetector(
-                          onTap: () {
-                            bloc.changerating(i + 1);
-                          },
-                          child: Icon(
-                            Icons.circle,
-                            color: Colors.white.withOpacity(0.4),
-                            size: widget.starsize,
-                          ),
-                        )
-                      : Icon(
-                          Icons.circle,
-                          color: Colors.white.withOpacity(0.4),
-                          size: widget.starsize,
-                        ),
+                  Icon(
+                    icon,
+                    color: widget.primaryColor.withOpacity(0.4),
+                    size: widget.starsize,
+                  ),
                 SizedBox(
                   width: 10,
                 ),
@@ -121,12 +115,15 @@ class _LocationAndRatingStarsState extends State<LocationAndRatingStars> {
                     widget.numberComments > 0 &&
                     widget.withNumbersOfComments)
                   widget.numberComments > 1
-                      ? Text(widget.numberComments.toString() + " Opiniones")
-                      : Text(widget.numberComments.toString() + " Opinión"),
+                      ? Text(widget.numberComments.toString() + " Opiniones",
+                          style: TextStyle(color: Colors.white))
+                      : Text(widget.numberComments.toString() + " Opinión",
+                          style: TextStyle(color: Colors.white)),
                 if (!widget.withLabel &&
                     widget.numberComments > 0 &&
                     widget.withNumbersOfComments)
-                  Text(widget.numberComments.toString()),
+                  Text(widget.numberComments.toString(),
+                      style: TextStyle(color: Colors.white)),
               ],
             ),
           );

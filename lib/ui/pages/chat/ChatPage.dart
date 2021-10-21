@@ -17,6 +17,7 @@ class _ChatPageState extends State<ChatPage> {
   var _textController = TextEditingController();
   var messagesBloc = MessagesBloc();
   bool _visible = true;
+  bool _isLoading = false;
   ScrollController scrollController;
 
   @override
@@ -33,11 +34,11 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  void sendMessage() {
+  void sendMessage() async {
     if (_textController.text.isNotEmpty) {
       messagesBloc
           .sendMessage(_textController.text)
-          .then((value) => {scrollDown()});
+          .then((value) => {scrollDown(), FocusScope.of(context).unfocus()});
       _textController.clear();
     }
   }
@@ -57,9 +58,9 @@ class _ChatPageState extends State<ChatPage> {
 
   void scrollDown() {
     scrollController.animateTo(
-      scrollController.position.maxScrollExtent + 40,
+      scrollController.position.maxScrollExtent,
       curve: Curves.easeOut,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
     );
   }
 
@@ -148,53 +149,90 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
                 flex: 5,
                 child: Container(
-                  child: TextFormField(
-                    controller: _textController,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Theme.of(context).textTheme.bodyText1.color),
-                    decoration: InputDecoration(
-                      hintText: "¡Escribe Algo!",
-                      hintStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
-                      labelStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(
+                  child: StreamBuilder(
+                      stream: messagesBloc.singleMessage,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          controller: _textController,
+                          textAlign: TextAlign.left,
+                          onChanged: (val) =>
+                              messagesBloc.sinksingleMessage.add(val),
+                          style: TextStyle(
+                              fontSize: 18,
                               color:
-                                  Theme.of(context).textTheme.bodyText1.color)),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color)),
-                    ),
-                  ),
+                                  Theme.of(context).textTheme.bodyText1.color),
+                          decoration: InputDecoration(
+                            hintText: "¡Escribe Algo!",
+                            hintStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
+                            labelStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .color),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color)),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color)),
+                          ),
+                        );
+                      }),
                 )),
             Flexible(
                 flex: 1,
                 child: Container(
                   margin: EdgeInsets.only(left: 10),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        primary: Color.fromRGBO(106, 194, 194, 1),
-                        padding: EdgeInsets.all(15),
-                      ),
-                      onPressed: () {
-                        sendMessage();
-                      },
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.black,
-                      )),
+                  child: StreamBuilder(
+                      stream: messagesBloc.singleMessage,
+                      builder: (context, snapshot) {
+                        print(snapshot.data);
+                        return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              primary: _textController.text.length > 0
+                                  ? Color.fromRGBO(106, 194, 194, 1)
+                                  : Colors.grey,
+                              padding: EdgeInsets.all(15),
+                            ),
+                            onPressed: () async {
+                              if (_textController.text.length > 0) {
+                                sendMessage();
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                await Future.delayed(Duration(seconds: 2))
+                                    .then((value) {
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                });
+                              }
+                            },
+                            child: Icon(
+                              Icons.send,
+                              color: Colors.black,
+                            ));
+                      }),
                 ))
           ],
         ),
@@ -231,28 +269,49 @@ class _ChatPageState extends State<ChatPage> {
         body: Container(
       decoration: BoxDecoration(color: backgroundColor),
       child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Container(
-                    child: _messagesArea(),
+          child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Container(
+                        child: _messagesArea(),
+                      ),
+                      /* ElevatedButton(
+                        onPressed: () {
+                          MessagesDb().deleteDftabase();
+                        },
+                        child: Text("Bajarse DB")),*/
+                      downButton,
+                    ],
                   ),
-                  /*ElevatedButton(
-                      onPressed: () {
-                        MessagesDb().deleteDftabase();
-                      },
-                      child: Text("Bajarse DB")),*/
-                  downButton,
-                ],
+                ),
+                _messageInput()
+              ],
+            ),
+          ),
+          if (_isLoading)
+            Container(
+              width: _screenWidth,
+              height: _screenHeight,
+              color: Color.fromRGBO(240, 253, 254, 0.9),
+              child: Center(
+                child: Material(
+                  elevation: 5,
+                  shape: CircleBorder(),
+                  child: CircleAvatar(
+                    radius: 100,
+                    backgroundImage: AssetImage('assets/img/bot.gif'),
+                  ),
+                ),
               ),
             ),
-            _messageInput()
-          ],
-        ),
-      ),
+        ],
+      )),
     ));
   }
 }
