@@ -36,10 +36,12 @@ class _ChatPageState extends State<ChatPage> {
 
   void sendMessage() async {
     if (_textController.text.isNotEmpty) {
-      messagesBloc
-          .sendMessage(_textController.text)
-          .then((value) => {scrollDown(), FocusScope.of(context).unfocus()});
-      _textController.clear();
+      Future.delayed(Duration(seconds: 2)).then((value) {
+        messagesBloc
+            .sendMessage(_textController.text)
+            .then((value) => {scrollDown(), FocusScope.of(context).unfocus()});
+        _textController.clear();
+      });
     }
   }
 
@@ -92,29 +94,44 @@ class _ChatPageState extends State<ChatPage> {
           if (snapshot.hasData) {
             var messages = snapshot.data as List<Message>;
             return messages.length > 0
-                ? ListView.builder(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    itemCount: messages.length,
-                    itemBuilder: (ctx, indx) {
-                      Widget _labelday = SizedBox();
+                ? Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                            controller: scrollController,
+                            shrinkWrap: true,
+                            itemCount: messages.length,
+                            itemBuilder: (ctx, indx) {
+                              Widget _labelday = SizedBox();
 
-                      if (indx == 0) {
-                        _labelday = _labelDay(messages[0].date);
-                      }
+                              if (indx == 0) {
+                                _labelday = _labelDay(messages[0].date);
+                              }
 
-                      if (indx != 0 &&
-                          messages[indx].date != messages[indx - 1].date) {
-                        _labelday = _labelDay(messages[indx].date);
-                      }
+                              if (indx != 0 &&
+                                  messages[indx].date !=
+                                      messages[indx - 1].date) {
+                                _labelday = _labelDay(messages[indx].date);
+                              }
 
-                      return Column(
-                        children: [
-                          _labelday,
-                          MessageBubble(messages[indx], indx)
-                        ],
-                      );
-                    })
+                              return Column(
+                                children: [
+                                  _labelday,
+                                  MessageBubble(messages[indx], indx)
+                                ],
+                              );
+                            }),
+                      ),
+                      if (_isLoading)
+                        Container(
+                            width: double.infinity - 100,
+                            height: 40,
+                            child: Image.asset(
+                              'assets/img/loading-nobackground.gif',
+                              fit: BoxFit.cover,
+                            ))
+                    ],
+                  )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -294,22 +311,6 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
           ),
-          if (_isLoading)
-            Container(
-              width: _screenWidth,
-              height: _screenHeight,
-              color: Color.fromRGBO(240, 253, 254, 0.9),
-              child: Center(
-                child: Material(
-                  elevation: 5,
-                  shape: CircleBorder(),
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('assets/img/bot.gif'),
-                  ),
-                ),
-              ),
-            ),
         ],
       )),
     ));
