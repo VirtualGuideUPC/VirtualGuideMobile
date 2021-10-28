@@ -412,7 +412,7 @@ class _AccountPreferencesPageState extends State<AccountPreferencesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("PREFERENCIAS",
+        title: Text("MIS PREFERENCIAS",
             style:
                 TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
         elevation: 0,

@@ -81,7 +81,7 @@ class _AddReview extends State<AddReview> {
   @override
   void initState() {
     super.initState();
-    bloc.changerating(0);
+    // bloc.changerating(1);
   }
 
   @override
@@ -109,7 +109,7 @@ class _AddReview extends State<AddReview> {
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.bodyText1.color)),
+                color: Colors.white)),
         Container(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Row(
@@ -181,9 +181,7 @@ class _AddReview extends State<AddReview> {
         Text(
           "Reseña",
           style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.bodyText1.color),
+              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         SizedBox(
           height: 15,
@@ -211,9 +209,9 @@ class _AddReview extends State<AddReview> {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).textTheme.bodyText1.color)),
-                    Text("Barranco, Lima")
+                            color: Colors.white)),
+                    Text("Barranco, Lima",
+                        style: TextStyle(color: Colors.white))
                   ],
                 ),
               ),
@@ -226,6 +224,7 @@ class _AddReview extends State<AddReview> {
         stream: bloc.reviewStarsStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            //print(snapshot.data);
             return Scaffold(
               extendBodyBehindAppBar: false,
               appBar: AppBar(
@@ -254,10 +253,7 @@ class _AddReview extends State<AddReview> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .color)),
+                                      color: Colors.white)),
                               LocationAndRatingStars(
                                   clickeable: true,
                                   starsize: 40,
@@ -270,10 +266,7 @@ class _AddReview extends State<AddReview> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .color)),
+                                      color: Colors.white)),
                               TextFormField(
                                 keyboardType: TextInputType.text,
                                 onFieldSubmitted: (_) {},

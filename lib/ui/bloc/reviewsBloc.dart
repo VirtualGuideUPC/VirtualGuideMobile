@@ -14,7 +14,7 @@ class ReviewsBloc {
   Function get changeReviews => _reviewController.sink.add;
   List<Review> get reviews => _reviewController.value;
 
-  BehaviorSubject<int> reviewStars = BehaviorSubject<int>();
+  BehaviorSubject<int> reviewStars = BehaviorSubject<int>.seeded(1);
   Stream<int> get reviewStarsStream => reviewStars.stream;
   Function get changeStarsStream => reviewStars.sink.add;
   int get stars => reviewStars.stream.value;
