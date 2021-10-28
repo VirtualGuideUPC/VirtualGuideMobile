@@ -92,7 +92,7 @@ class _AllReviewsState extends State<AllReviews> {
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyText1.color),
+                  color: Colors.white),
             ),
             SizedBox(
               height: 10,
@@ -133,11 +133,15 @@ class _AllReviewsState extends State<AllReviews> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(pageArguments[indx].date),
+                          Text(
+                            pageArguments[indx].date,
+                            style: TextStyle(color: Colors.white),
+                          ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text(pageArguments[indx].comment),
+                          Text(pageArguments[indx].comment,
+                              style: TextStyle(color: Colors.white)),
                           SizedBox(
                             height: 10,
                           ),

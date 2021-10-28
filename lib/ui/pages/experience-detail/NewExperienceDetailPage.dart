@@ -170,12 +170,13 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 )
               ],
             ),
-            LocationAndRatingStars(
-              numberStars: experienceDetails.avgRanking.toInt(),
-              withLabel: true,
-              withNumbersOfComments: true,
-              numberComments: experienceDetails.numberComments,
-            ),
+            if (experienceDetails.avgRanking > 0)
+              LocationAndRatingStars(
+                numberStars: experienceDetails.avgRanking.toInt(),
+                withLabel: true,
+                withNumbersOfComments: true,
+                numberComments: experienceDetails.numberComments,
+              ),
             SizedBox(
               height: 10,
             ),
@@ -191,9 +192,8 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
             SizedBox(
               height: 5,
             ),
-            Text(
-              "De 10:00 a 21:00 horas",
-            ),
+            Text("De 10:00 a 21:00 horas",
+                style: TextStyle(color: Colors.white)),
           ],
         ),
       );
@@ -493,21 +493,22 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: experienceDetails.reviews.length == 2
-                        ? experienceDetails.reviews.length
-                        : 2,
+                    itemCount: experienceDetails.reviews.length,
                     itemBuilder: (ctx, indx) {
                       return singleReview(experienceDetails.reviews[indx]);
                     })
                 : Column(
                     children: [
-                      Text("Aun no hay reseñas creadas"),
+                      Text(
+                        "Aun no hay reseñas creadas",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       SizedBox(
                         height: 15,
                       ),
                     ],
                   ),
-            if (experienceDetails.reviews.length > 0)
+            if (experienceDetails.reviews.length > 2)
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -612,7 +613,8 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                     location,
                     closestPlaces,
                     reviews,
-                    similarExperiences,
+                    if (experienceDetails.similarExperience.length > 0)
+                      similarExperiences,
                   ],
                 ),
               ),

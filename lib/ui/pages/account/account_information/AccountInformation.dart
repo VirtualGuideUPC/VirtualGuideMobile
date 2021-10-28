@@ -4,6 +4,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/streams.dart';
 import 'package:tour_guide/data/entities/user.dart';
 import 'package:tour_guide/data/providers/userProvider.dart';
 import 'package:tour_guide/ui/bloc/userProfileBloc.dart';
@@ -26,6 +27,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
 
   UserProvider userProvider = UserProvider();
   UserUpdateDto _updateDto = UserUpdateDto();
+  UserUpdateDto _NoupdateDto = UserUpdateDto();
 
   UserProfileBloc userProfileBloc = UserProfileBloc();
 
@@ -107,6 +109,13 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
   ];
   @override
   void initState() {
+    //print(widget.user);
+
+    _NoupdateDto.birthday = widget.user.birthday;
+    _NoupdateDto.country = widget.user.countryId;
+    _NoupdateDto.name = widget.user.name;
+    _NoupdateDto.lastName = widget.user.lastName;
+
     userProfileBloc.changeBirthday(widget.user.birthday);
     BackButtonInterceptor.add(myInterceptor);
 
@@ -148,6 +157,14 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
     }
   }
 
+  void resetForm() {
+    _aboutMeFormKey.currentState.reset();
+
+    userProfileBloc.changeBirthday(_NoupdateDto.birthday);
+    userProfileBloc.sinkLastname.add(_NoupdateDto.lastName);
+    userProfileBloc.sinkName.add(_NoupdateDto.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
@@ -185,6 +202,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                 IconButton(
                   onPressed: () {
                     setState(() {
+                      resetForm();
                       this.isEditable = false;
                     });
                   },
@@ -294,79 +312,107 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                     flex: 1,
                     child: Column(
                       children: [
-                        TextFormField(
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color),
-                          readOnly: !isEditable,
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) {
-                            _updateDto.name = value;
-                          },
-                          initialValue: widget.user.name,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Por favor ingrese su nombre";
-                            }
-                          },
-                          decoration: InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color:
-                                        isEditable ? Colors.blue : Colors.grey),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color:
-                                        isEditable ? Colors.blue : Colors.grey),
-                              ),
-                              labelText: 'Nombre',
-                              labelStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .color)),
-                        ),
+                        StreamBuilder(
+                            stream: userProfileBloc.name,
+                            builder: (context, snapshot) {
+                              return TextFormField(
+                                //   key: Key(widget.user.name),
+                                onChanged: (val) =>
+                                    userProfileBloc.sinkName.add(val),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color),
+                                readOnly: !isEditable,
+                                textInputAction: TextInputAction.next,
+                                onSaved: (value) {
+                                  _updateDto.name = value;
+                                },
+                                initialValue: widget.user.name,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Por favor ingrese su nombre";
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    errorText: snapshot.hasError
+                                        ? snapshot.error.toString()
+                                        : null,
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color: isEditable
+                                              ? Colors.blue
+                                              : Colors.grey),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color: isEditable
+                                              ? Colors.blue
+                                              : Colors.grey),
+                                    ),
+                                    labelText: 'Nombre',
+                                    labelStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .color)),
+                              );
+                            }),
                         SizedBox(
                           height: 5,
                         ),
-                        TextFormField(
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color),
-                          readOnly: !isEditable,
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) {
-                            _updateDto.lastName = value;
-                          },
-                          initialValue: widget.user.lastName,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Por favor ingrese su apellido";
-                            }
-                          },
-                          decoration: InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color:
-                                        isEditable ? Colors.blue : Colors.grey),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color:
-                                        isEditable ? Colors.blue : Colors.grey),
-                              ),
-                              labelText: 'Apellido',
-                              labelStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .color)),
-                        ),
+                        StreamBuilder(
+                            stream: userProfileBloc.lastname,
+                            builder: (context, snapshot) {
+                              return TextFormField(
+                                //     key: Key(widget.user.lastName),
+                                onChanged: (val) =>
+                                    userProfileBloc.sinkLastname.add(val),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color),
+                                readOnly: !isEditable,
+                                textInputAction: TextInputAction.next,
+                                onSaved: (value) {
+                                  _updateDto.lastName = value;
+                                },
+                                initialValue: widget.user.lastName,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Por favor ingrese su apellido";
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    errorText: snapshot.hasError
+                                        ? snapshot.error.toString()
+                                        : null,
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color: isEditable
+                                              ? Colors.blue
+                                              : Colors.grey),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color: isEditable
+                                              ? Colors.blue
+                                              : Colors.grey),
+                                    ),
+                                    labelText: 'Apellido',
+                                    labelStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .color)),
+                              );
+                            }),
                       ],
                     ),
                   ),
@@ -382,6 +428,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                 builder: (ctx, snapshot) {
                   _dateController.text = userProfileBloc.getBirthday;
                   return TextFormField(
+                    //key: Key(widget.user.birthday),
                     controller: _dateController,
                     style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color),
@@ -391,7 +438,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                       _updateDto.birthday = value;
                     },
                     onChanged: (value) {
-                      userProfileBloc.changeBirthday(value);
+                      userProfileBloc.sinkBirthday.add(value);
                     },
                     onTap: () {
                       if (isEditable) {
@@ -414,6 +461,9 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                       }
                     },
                     decoration: InputDecoration(
+                        errorText: snapshot.hasError
+                            ? snapshot.error.toString()
+                            : null,
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                               width: 1,
@@ -473,6 +523,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                         .toList(),
                   )
                 : TextFormField(
+                    //  key: Key(widget.user.countryId.toString()),
                     style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color),
                     readOnly: !isEditable,
