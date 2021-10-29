@@ -56,4 +56,9 @@ class UserProfileBloc {
 
     return years > 14;
   }
+
+  Stream<List<dynamic>> get submitValid {
+    return Rx.combineLatest3(
+        birthdayStream, lastname, name, (a, b, c) => [a, b, c]);
+  }
 }

@@ -31,6 +31,10 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
 
   UserProfileBloc userProfileBloc = UserProfileBloc();
 
+  bool errorBirthday = false;
+  bool errorName = false;
+  bool errorLastname = false;
+
   bool isLoading = false;
   bool isEditable = false;
   String _countrySelected;
@@ -137,6 +141,9 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
     if (this._aboutMeFormKey.currentState.validate()) {
       setState(() {
         isLoading = true;
+        errorBirthday = false;
+        errorName = false;
+        errorLastname = false;
       });
       this._aboutMeFormKey.currentState.save();
       var a = 0;
@@ -167,6 +174,24 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    userProfileBloc.name.listen((event) {
+      errorName = false;
+    }).onError((a) {
+      errorName = true;
+    });
+
+    userProfileBloc.lastname.listen((event) {
+      errorLastname = false;
+    }).onError((a) {
+      errorLastname = true;
+    });
+
+    userProfileBloc.birthdayStream.listen((event) {
+      errorBirthday = false;
+    }).onError((a) {
+      errorBirthday = true;
+    });
+
     var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
     var _screenWidth = MediaQuery.of(context).size.width;
 
@@ -194,7 +219,11 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
               children: [
                 IconButton(
                   onPressed: () {
-                    _saveForm();
+                    print(errorBirthday.toString() +
+                        errorLastname.toString() +
+                        errorName.toString());
+                    if (!errorBirthday && !errorLastname && !errorName)
+                      _saveForm();
                   },
                   icon: Icon(Icons.done,
                       color: Theme.of(context).textTheme.bodyText1.color),

@@ -80,7 +80,7 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
                           Flexible(
                               child: Text(
                             "${experience.avgRanking}(${experience.nComments}). ${experience.province}",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16, color: Colors.black),
                             overflow: TextOverflow.ellipsis,
                           ))
                         ]),
@@ -88,7 +88,9 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
                         Text(
                           experience.name,
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                           overflow: TextOverflow.ellipsis,
                         )
                       ],
