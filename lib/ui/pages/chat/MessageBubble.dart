@@ -58,7 +58,7 @@ class MessageBubble extends StatelessWidget {
                     textAlign: TextAlign.end,
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
-                  if (!message.isUser)
+                  /* if (!message.isUser)
                     Container(
                       margin: EdgeInsets.all(5),
                       width: 10,
@@ -66,7 +66,7 @@ class MessageBubble extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.all(Radius.circular(10))),
-                    )
+                    )*/
                 ],
               ),
             )
