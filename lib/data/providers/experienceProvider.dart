@@ -9,9 +9,9 @@ import 'package:tour_guide/data/entities/experienceDetailed.dart';
 class ExperienceProvider {
   Future<List<Experience>> getExperiences(
       String userId, double lat, double lng) async {
-    final url = Uri.parse('http://demo9889835.mockable.io/alpakitaPlaces');
-    //final url = Uri.parse(
-    //  'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/nearby/');
+    //final url = Uri.parse('http://demo9889835.mockable.io/alpakitaPlaces');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/nearby/');
     final body = {'user_id': userId, 'latitude': lat, 'longitude': lng};
     final http.Response resp = await http.post(url,
         headers: {
@@ -141,6 +141,26 @@ class ExperienceProvider {
           'Cookie': 'jwt=$userToken'
         },
         body: json.encode(body));
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> deleteFavoriteExperience(String experienceId) async {
+    final String userToken = UserPreferences().getToken();
+    final int userId = UserPreferences().getUserId();
+
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/favourite/${userId}/${experienceId}/');
+
+    final http.Response resp = await http.delete(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': userToken,
+      'Cookie': 'jwt=$userToken'
+    });
+
     if (resp.statusCode == 200) {
       return true;
     } else {

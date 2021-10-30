@@ -3,6 +3,7 @@ import 'package:tour_guide/data/entities/experience.dart';
 import 'package:tour_guide/data/providers/experienceProvider.dart';
 import 'package:tour_guide/ui/bloc/placesBloc.dart';
 import 'package:tour_guide/ui/bloc/provider.dart';
+import 'package:tour_guide/ui/helpers/notificationUtil.dart';
 import 'package:tour_guide/ui/helpers/utils.dart';
 import 'package:tour_guide/ui/routes/routes.dart';
 
@@ -115,11 +116,27 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
                   placesBloc
                       .postAddFavoriteExperience(experience.id.toString());
                   experience.isFavorite = true;
-                  setState(() {});
+                  NotificationUtil().showSnackbar(
+                      context,
+                      "Se ha agregado a favoritos correctamente",
+                      "success",
+                      null);
+                } else {
+                  placesBloc.deleteFavoriteExperience(experience.id.toString());
+                  experience.isFavorite = false;
+                  NotificationUtil().showSnackbar(
+                      context,
+                      "Se ha eliminado de favoritos correctamente",
+                      "warning",
+                      null);
                 }
+                setState(() {});
               },
               child: experience.isFavorite
-                  ? Icon(Icons.favorite)
+                  ? Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
                   : Icon(Icons.favorite_border),
             ),
           )
