@@ -192,7 +192,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
             SizedBox(
               height: 5,
             ),
-            Text("De 10:00 a 21:00 horas",
+            Text(experienceDetails.scheaduleInfo,
                 style: TextStyle(color: Colors.white)),
           ],
         ),
@@ -459,6 +459,27 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         );
       }
 
+      Widget reviewsList() {
+        if (experienceDetails.reviews.length == 1 ||
+            experienceDetails.reviews.length == 2) {
+          return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: experienceDetails.reviews.length,
+              itemBuilder: (ctx, indx) {
+                return singleReview(experienceDetails.reviews[indx]);
+              });
+        } else {
+          return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (ctx, indx) {
+                return singleReview(experienceDetails.reviews[indx]);
+              });
+        }
+      }
+
       final reviews = _section("Reseñas", () {
         return Container(
           width: double.infinity,
@@ -490,13 +511,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 child: Text("Escribir una reseña")),
             Divider(),
             experienceDetails.reviews.length > 0
-                ? ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: experienceDetails.reviews.length,
-                    itemBuilder: (ctx, indx) {
-                      return singleReview(experienceDetails.reviews[indx]);
-                    })
+                ? reviewsList()
                 : Column(
                     children: [
                       Text(
