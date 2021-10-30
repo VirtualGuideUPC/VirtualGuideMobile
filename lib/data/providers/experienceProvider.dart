@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:tour_guide/data/datasource/userPreferences.dart';
@@ -31,16 +32,23 @@ class ExperienceProvider {
   }
 
   Future<ExperienceDetailed> getExperienceDetail(String experienceId) async {
-    final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/tp/$experienceId/');
+    final int userId = UserPreferences().getUserId();
+
+    // final url = Uri.parse(
+    //   'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/tp/$experienceId/$userId');
+
+    final url = Uri.parse('http://demo7092181.mockable.io/detail');
 
     final String userToken = UserPreferences().getToken();
 
-    final http.Response resp = await http.get(url, headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': userToken,
-      'Cookie': 'jwt=$userToken'
-    });
+    final http.Response resp = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': userToken,
+        'Cookie': 'jwt=$userToken',
+      },
+    );
 
     print("resopnde c ode: " + resp.statusCode.toString());
     if (resp.statusCode == 200) {

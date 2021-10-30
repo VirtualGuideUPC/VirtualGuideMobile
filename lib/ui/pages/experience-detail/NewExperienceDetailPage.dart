@@ -152,21 +152,30 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                   flex: 1,
                   child: IconButton(
                       onPressed: () {
-                        ExperienceProvider()
-                            .postAddFavoriteExperience(
-                                experienceDetails.id.toString())
-                            .then((value) {
-                          if (value) {
-                            NotificationUtil().showSnackbar(
-                                context,
-                                "Se ha agregado a favoritos correctamente",
-                                "success",
-                                null);
-                          }
-                        });
+                        if (!experience.isFavorite) {
+                          ExperienceProvider().postAddFavoriteExperience(
+                              experience.id.toString());
+                          experience.isFavorite = true;
+                          NotificationUtil().showSnackbar(
+                              context,
+                              "Se ha agregado a favoritos correctamente",
+                              "success",
+                              null);
+                        } else {
+                          ExperienceProvider().deleteFavoriteExperience(
+                              experience.id.toString());
+                          experience.isFavorite = false;
+                          NotificationUtil().showSnackbar(
+                              context,
+                              "Se ha eliminado de favoritos correctamente",
+                              "warning",
+                              null);
+                        }
+                        setState(() {});
                       },
-                      icon: Icon(Icons.favorite_border,
-                          color: Theme.of(context).textTheme.bodyText1.color)),
+                      icon: experience.isFavorite
+                          ? Icon(Icons.favorite, color: Colors.white)
+                          : Icon(Icons.favorite_border)),
                 )
               ],
             ),
