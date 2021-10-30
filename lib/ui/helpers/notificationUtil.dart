@@ -11,6 +11,9 @@ class NotificationUtil {
       background = Colors.green.shade800;
     }
 
+    if (type == "warning") {
+      background = Colors.amber[700];
+    }
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

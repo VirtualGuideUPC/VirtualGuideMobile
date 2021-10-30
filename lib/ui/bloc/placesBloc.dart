@@ -60,6 +60,10 @@ class PlacesBloc {
     await experienceProvider.postAddFavoriteExperience(experienceId);
   }
 
+  void deleteFavoriteExperience(String experienceId) async {
+    await experienceProvider.deleteFavoriteExperience(experienceId);
+  }
+
   Future<List<Experience>> _getExperiences(
       String userId, double lat, double lng) async {
     final List<Experience> experiences =
