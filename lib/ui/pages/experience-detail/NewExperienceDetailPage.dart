@@ -397,6 +397,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 province: experienceDetails.similarExperience[i].province,
                 isFavorite: false);
             return FlipCard(
+              favoriteAvalible: false,
               experience: experience,
               onTap: () {},
             );

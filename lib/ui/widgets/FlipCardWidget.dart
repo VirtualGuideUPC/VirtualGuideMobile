@@ -12,11 +12,13 @@ class FlipCard extends StatefulWidget {
   final Function onLongPress;
   final Experience experience;
   final double horizontalPadding;
+  bool favoriteAvalible = false;
   FlipCard(
       {@required this.experience,
       this.horizontalPadding = 0,
       this.onTap,
       this.onLongPress,
+      this.favoriteAvalible = true,
       Key key})
       : super(key: key);
 
@@ -116,29 +118,30 @@ class _FlipCardState extends State<FlipCard> {
                           color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ),
-              Positioned(
-                top: 5,
-                right: 5,
-                child: GestureDetector(
-                    onTap: () {
-                      //TODO: send request to set this experience as favorite
-                      if (!experience.isFavorite) {
-                        placesBloc.postAddFavoriteExperience(
-                            experience.id.toString());
-                        experience.isFavorite = true;
-                        setState(() {});
-                      }
-                    },
-                    child: experience.isFavorite
-                        ? Icon(
-                            Icons.favorite,
-                            color: Colors.deepOrange.shade900,
-                          )
-                        : Icon(
-                            Icons.favorite_border,
-                            color: Colors.white,
-                          )),
-              ),
+              if (widget.favoriteAvalible)
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: GestureDetector(
+                      onTap: () {
+                        //TODO: send request to set this experience as favorite
+                        if (!experience.isFavorite) {
+                          placesBloc.postAddFavoriteExperience(
+                              experience.id.toString());
+                          experience.isFavorite = true;
+                          setState(() {});
+                        }
+                      },
+                      child: experience.isFavorite
+                          ? Icon(
+                              Icons.favorite,
+                              color: Colors.deepOrange.shade900,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Colors.white,
+                            )),
+                ),
             ],
           ),
         ));

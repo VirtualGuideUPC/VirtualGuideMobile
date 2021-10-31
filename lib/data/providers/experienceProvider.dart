@@ -34,10 +34,10 @@ class ExperienceProvider {
   Future<ExperienceDetailed> getExperienceDetail(String experienceId) async {
     final int userId = UserPreferences().getUserId();
 
-    // final url = Uri.parse(
-    //   'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/tp/$experienceId/$userId');
+    final url = Uri.parse(
+        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/tp/$experienceId/$userId');
 
-    final url = Uri.parse('http://demo7092181.mockable.io/detail');
+    //final url = Uri.parse('http://demo7092181.mockable.io/detail');
 
     final String userToken = UserPreferences().getToken();
 
