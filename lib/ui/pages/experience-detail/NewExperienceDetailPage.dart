@@ -152,21 +152,30 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                   flex: 1,
                   child: IconButton(
                       onPressed: () {
-                        ExperienceProvider()
-                            .postAddFavoriteExperience(
-                                experienceDetails.id.toString())
-                            .then((value) {
-                          if (value) {
-                            NotificationUtil().showSnackbar(
-                                context,
-                                "Se ha agregado a favoritos correctamente",
-                                "success",
-                                null);
-                          }
-                        });
+                        if (!experienceDetails.isFavourite) {
+                          ExperienceProvider().postAddFavoriteExperience(
+                              experience.id.toString());
+                          experience.isFavorite = true;
+                          NotificationUtil().showSnackbar(
+                              context,
+                              "Se ha agregado a favoritos correctamente",
+                              "success",
+                              null);
+                        } else {
+                          ExperienceProvider().deleteFavoriteExperience(
+                              experience.id.toString());
+                          experience.isFavorite = false;
+                          NotificationUtil().showSnackbar(
+                              context,
+                              "Se ha eliminado de favoritos correctamente",
+                              "warning",
+                              null);
+                        }
+                        setState(() {});
                       },
-                      icon: Icon(Icons.favorite_border,
-                          color: Theme.of(context).textTheme.bodyText1.color)),
+                      icon: experienceDetails.isFavourite
+                          ? Icon(Icons.favorite, color: Colors.white)
+                          : Icon(Icons.favorite_border)),
                 )
               ],
             ),
@@ -192,7 +201,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
             SizedBox(
               height: 5,
             ),
-            Text("De 10:00 a 21:00 horas",
+            Text(experienceDetails.scheaduleInfo,
                 style: TextStyle(color: Colors.white)),
           ],
         ),
@@ -388,6 +397,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 province: experienceDetails.similarExperience[i].province,
                 isFavorite: false);
             return FlipCard(
+              favoriteAvalible: false,
               experience: experience,
               onTap: () {},
             );
@@ -459,6 +469,27 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         );
       }
 
+      Widget reviewsList() {
+        if (experienceDetails.reviews.length == 1 ||
+            experienceDetails.reviews.length == 2) {
+          return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: experienceDetails.reviews.length,
+              itemBuilder: (ctx, indx) {
+                return singleReview(experienceDetails.reviews[indx]);
+              });
+        } else {
+          return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (ctx, indx) {
+                return singleReview(experienceDetails.reviews[indx]);
+              });
+        }
+      }
+
       final reviews = _section("Reseñas", () {
         return Container(
           width: double.infinity,
@@ -490,13 +521,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                 child: Text("Escribir una reseña")),
             Divider(),
             experienceDetails.reviews.length > 0
-                ? ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: experienceDetails.reviews.length,
-                    itemBuilder: (ctx, indx) {
-                      return singleReview(experienceDetails.reviews[indx]);
-                    })
+                ? reviewsList()
                 : Column(
                     children: [
                       Text(

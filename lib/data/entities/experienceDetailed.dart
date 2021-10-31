@@ -7,6 +7,8 @@ class ExperienceDetailed {
   List<Category> categories;
   String latitude;
   String longitude;
+  List<String> funFacts;
+  String scheaduleInfo;
   double avgRanking;
   bool isFavourite;
   int numberComments;
@@ -23,6 +25,8 @@ class ExperienceDetailed {
       this.longitude,
       this.avgRanking,
       this.numberComments,
+      this.funFacts,
+      this.scheaduleInfo,
       this.reviews,
       this.similarExperience,
       this.id,
@@ -47,6 +51,8 @@ class ExperienceDetailed {
     this.isFavourite = json["isFavourite"];
     this.avgRanking = json["avg_ranking"] != null ? json["avg_ranking"] / 1 : 0;
     this.numberComments = json["number_comments"];
+    this.funFacts = json["fun_facts"].cast<String>();
+    this.scheaduleInfo = json["schedule_info"];
     this.reviews = json["reviews"]
         ?.map((item) => Review.fromJson(item))
         ?.toList()
