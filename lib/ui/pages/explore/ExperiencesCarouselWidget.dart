@@ -78,9 +78,17 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
                             Icons.star_rate,
                             color: Colors.orangeAccent,
                           ),
+                          /*
                           Flexible(
                               child: Text(
                             "${experience.avgRanking}(${experience.nComments}). ${experience.province}",
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            overflow: TextOverflow.ellipsis,
+                          ))*/
+
+                          Flexible(
+                              child: Text(
+                            "${experience.province}",
                             style: TextStyle(fontSize: 16, color: Colors.black),
                             overflow: TextOverflow.ellipsis,
                           ))
