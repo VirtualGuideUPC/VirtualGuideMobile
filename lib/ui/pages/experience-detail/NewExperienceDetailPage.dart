@@ -152,7 +152,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                   flex: 1,
                   child: IconButton(
                       onPressed: () {
-                        if (!experience.isFavorite) {
+                        if (!experienceDetails.isFavourite) {
                           ExperienceProvider().postAddFavoriteExperience(
                               experience.id.toString());
                           experience.isFavorite = true;
@@ -173,7 +173,7 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
                         }
                         setState(() {});
                       },
-                      icon: experience.isFavorite
+                      icon: experienceDetails.isFavourite
                           ? Icon(Icons.favorite, color: Colors.white)
                           : Icon(Icons.favorite_border)),
                 )
