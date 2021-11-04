@@ -352,15 +352,38 @@ class _ExplorePageState extends State<ExplorePage>
             });
             placesBloc.changeListToRecommended(isRecommended);
           },
-          child: Icon(
+          child:
+          Row(
+                  children: <Widget>[
+                  Icon(
+                              Icons.thumb_up,
+                              color: isRecommended ? Colors.black : Colors.white,
+                            ),
+                  SizedBox(
+                      width:10,
+                  ),
+                  Text("Sugeridos", style:TextStyle(fontSize:14, color: isRecommended ? Colors.black : Colors.white)),
+                  ],
+              ),
+          /*Icon(
             Icons.thumb_up,
             color: isRecommended ? Colors.white : Colors.black,
-          ),
-          style: ElevatedButton.styleFrom(
+          ),*/
+          style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(176, 143, 251, 1)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(color: Colors.purple)
+                    )
+                  )
+                ),
+         /* style: ElevatedButton.styleFrom(
             shape: CircleBorder(),
             primary: Color.fromRGBO(176, 143, 251, 1),
             padding: EdgeInsets.all(10),
-          ),
+          ),*/
         ));
   }
 

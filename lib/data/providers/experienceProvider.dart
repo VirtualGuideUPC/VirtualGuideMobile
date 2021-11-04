@@ -12,7 +12,7 @@ class ExperienceProvider {
       String userId, double lat, double lng) async {
     //final url = Uri.parse('http://demo9889835.mockable.io/alpakitaPlaces');
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/nearby/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/places/nearby/');
     final body = {'user_id': userId, 'latitude': lat, 'longitude': lng};
     final http.Response resp = await http.post(url,
         headers: {
@@ -35,7 +35,7 @@ class ExperienceProvider {
     final int userId = UserPreferences().getUserId();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/places/tp/$experienceId/$userId');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/places/tp/$experienceId/$userId');
 
     //final url = Uri.parse('http://demo7092181.mockable.io/detail');
 
@@ -71,7 +71,7 @@ class ExperienceProvider {
     final int userId = UserPreferences().getUserId();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/$userId/favourites/departments/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/$userId/favourites/departments/');
 
     final http.Response resp = await http.get(
       url,
@@ -104,7 +104,7 @@ class ExperienceProvider {
     final String userToken = UserPreferences().getToken();
     final int userId = UserPreferences().getUserId();
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/$userId/favourites/departments/$departmentId/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/$userId/favourites/departments/$departmentId/');
 
     final http.Response resp = await http.get(
       url,
@@ -136,7 +136,7 @@ class ExperienceProvider {
 
   Future<bool> postAddFavoriteExperience(String experienceId) async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/favourite/create/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/favourite/create/');
     final String userToken = UserPreferences().getToken();
     final int userId = UserPreferences().getUserId();
 
@@ -161,7 +161,7 @@ class ExperienceProvider {
     final int userId = UserPreferences().getUserId();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/favourite/${userId}/${experienceId}/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/favourite/${userId}/${experienceId}/');
 
     final http.Response resp = await http.delete(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

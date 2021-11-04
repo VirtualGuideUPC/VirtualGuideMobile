@@ -29,7 +29,7 @@ class UserProvider {
       List<int> categories,
       List<int> subcategories) async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/register/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/register/');
     final authData = {
       'email': email,
       'password': password,
@@ -73,7 +73,7 @@ class UserProvider {
   Future<String> loginUser(String email) async {
     //final url = Uri.parse('https://vguidebe.herokuapp.com/api/users/login/');
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/login/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/login/');
     final authData = {'email': email};
 
     final http.Response resp = await http.post(url,
@@ -98,7 +98,7 @@ class UserProvider {
 
   Future<List<Category>> getCategories() async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllCategories');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/getAllCategories');
     final resp = await http.get(url);
 
     List<dynamic> decodedJson =
@@ -113,7 +113,7 @@ class UserProvider {
 
   Future<List<TypePlace>> getAllTypePlaces() async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllTypePlaces');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/getAllTypePlaces');
     final resp = await http.get(url);
     List<dynamic> decodedJson =
         json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
@@ -127,7 +127,7 @@ class UserProvider {
 
   Future<List<Subcategory>> getAllSubcategories() async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/getAllSubcategories');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/getAllSubcategories');
     final resp = await http.get(url);
     List<dynamic> decodedJson =
         json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
@@ -142,7 +142,7 @@ class UserProvider {
   Future<User> updateUserProfile(
       UserUpdateDto userUpdateDto, File image) async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/update/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/user/update/');
     final String userToken = UserPreferences().getToken();
 
     var formData = FormData.fromMap({
@@ -183,7 +183,7 @@ class UserProvider {
 
   Future<User> getUserProfile() async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/user/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/user/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -210,7 +210,7 @@ class UserProvider {
   Future<void> updateCategory(Category category) async {
     var pref = await PreferencesProvider().getPreferencesByUser();
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preference/category/update/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/preference/category/update/');
     var categories = pref.categories;
     var userId = UserPreferences().getUserId();
     final String userToken = UserPreferences().getToken();
@@ -231,7 +231,7 @@ class UserProvider {
 
   Future<void> updateTypePlace(TypePlace typePlace) async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preference/typeplace/update/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/preference/typeplace/update/');
     var userId = UserPreferences().getUserId();
     final String userToken = UserPreferences().getToken();
 
@@ -252,7 +252,7 @@ class UserProvider {
 
   Future<void> updateSubCategory(Subcategory subcategory) async {
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preference/subcategory/update/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/preference/subcategory/update/');
     var userId = UserPreferences().getUserId();
     final String userToken = UserPreferences().getToken();
 

@@ -11,7 +11,7 @@ class PreferencesProvider {
     var id = UserPreferences().getUserId();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/preferences/$id/');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/preferences/$id/');
 
     final http.Response resp = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

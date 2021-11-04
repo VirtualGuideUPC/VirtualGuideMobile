@@ -11,7 +11,7 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url = Uri.parse(
-        'http://ec2-34-226-195-132.compute-1.amazonaws.com/api/users/message/userid/${userId}');
+        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/message/userid/${userId}');
 
     final String userToken = UserPreferences().getToken();
 
@@ -42,7 +42,7 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url =
-        Uri.parse('http://ec2-54-235-10-1.compute-1.amazonaws.com/prediction');
+        Uri.parse('http://ec2-54-226-81-26.compute-1.amazonaws.com/prediction');
 
     final String userToken = UserPreferences().getToken();
 
