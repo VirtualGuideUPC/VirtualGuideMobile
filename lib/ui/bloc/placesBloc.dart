@@ -35,7 +35,7 @@ class PlacesBloc {
     changeSearchResult(results);
   }
 
-  void getExperiences(String userId, double lat, double long) async {
+  void getExperiences(int userId, double lat, double long) async {
     final List<Experience> experiences =
         await _getExperiences(userId, lat, long);
     changeExperiences(experiences);
@@ -65,7 +65,7 @@ class PlacesBloc {
   }
 
   Future<List<Experience>> _getExperiences(
-      String userId, double lat, double lng) async {
+      int userId, double lat, double lng) async {
     final List<Experience> experiences =
         await experienceProvider.getExperiences(userId, lat, lng);
     return experiences;

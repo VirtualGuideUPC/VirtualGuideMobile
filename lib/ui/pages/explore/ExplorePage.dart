@@ -26,6 +26,7 @@ class _ExplorePageState extends State<ExplorePage>
     with AutomaticKeepAliveClientMixin<ExplorePage> {
   String _searchString = '';
   bool _isBottomSheetOpen = false;
+  final _prefs = new UserPreferences();
 
   Future<Position> futureUserPosition;
   final Map defaultCameraPosition = {
@@ -60,7 +61,7 @@ class _ExplorePageState extends State<ExplorePage>
       currentLocation = value;
       final _prefs = new UserPreferences();
 
-      placesBloc.getExperiences(_prefs.getUserId().toString(),
+      placesBloc.getExperiences(_prefs.getUserId(),
           currentLocation.latitude, currentLocation.longitude);
     });
 
@@ -325,7 +326,7 @@ class _ExplorePageState extends State<ExplorePage>
                                   ["geometry"]["location"]["lng"];
                               newCameraPosition['lat'] = lat;
                               newCameraPosition['lng'] = long;
-                              placesBloc.getExperiences("1", lat, long);
+                              placesBloc.getExperiences(_prefs.getUserId(), lat, long);
                               FocusScope.of(context)
                                   .requestFocus(new FocusNode());
                               placesBloc.changeSearchResult([]);
