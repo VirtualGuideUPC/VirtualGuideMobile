@@ -9,7 +9,7 @@ class ReviewProvider {
   Future<List<Review>> getReviewsFromTouristicPlace(
       String touristicPlaceId) async {
     final url = Uri.parse(
-        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/reviews/tp/$touristicPlaceId/');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/reviews/tp/$touristicPlaceId/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -37,7 +37,7 @@ class ReviewProvider {
   Future<Review> createReview(
       CreateReviewDto createReviewDto, List<File> pictures) async {
     final url = Uri.parse(
-        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/reviews/create/');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/reviews/create/');
 
     final String userToken = UserPreferences().getToken();
 
@@ -89,7 +89,7 @@ class ReviewProvider {
 
   Future<List<Review>> getReviewsByUserId(String UserId) async {
     final url = Uri.parse(
-        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/reviews/user/$UserId');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/reviews/user/$UserId');
 
     final String userToken = UserPreferences().getToken();
 

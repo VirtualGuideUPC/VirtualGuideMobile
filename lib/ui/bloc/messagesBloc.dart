@@ -34,11 +34,9 @@ class MessagesBloc {
       changeMessages(dbMessages);
     } else if (dbMessages.length == 0) {
       var messages = await messageProvider.getMessages();
-
       messages.forEach((element) {
         MessagesDb().insertMessage(element);
       });
-
       changeMessages(messages);
     }
   }

@@ -11,7 +11,7 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url = Uri.parse(
-        'http://ec2-18-212-234-179.compute-1.amazonaws.com/api/users/message/userid/${userId}');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/message/userid/${userId}');
 
     final String userToken = UserPreferences().getToken();
 
@@ -42,10 +42,10 @@ class MessageProvider {
     final String userId = UserPreferences().getUserId().toString();
 
     final url =
-        Uri.parse('http://ec2-54-226-81-26.compute-1.amazonaws.com/prediction');
+        Uri.parse('https://mocki.io/v1/8627ada1-1ad7-4f4f-8def-5e6c92066169');
 
     final String userToken = UserPreferences().getToken();
-
+/*
     String dateFormat =
         "${DateTime.now().toLocal().year.toString()}-${DateTime.now().toLocal().month.toString().padLeft(2, '0')}-${DateTime.now().toLocal().day.toString().padLeft(2, '0')}";
 
@@ -59,6 +59,15 @@ class MessageProvider {
 
     var resp = await Dio().post(url.toString(),
         data: body,
+        options: Options(headers: <String, String>{
+          'Authorization': userToken,
+          'Cookie': 'session=$userToken',
+          'Connection': 'keep-alive',
+          'Keep-Alive': 'timeout=5,max=100',
+          'Content-Type': 'application/json; charset=UTF-8',
+        }));*/
+
+    var resp = await Dio().get(url.toString(),
         options: Options(headers: <String, String>{
           'Authorization': userToken,
           'Cookie': 'session=$userToken',
