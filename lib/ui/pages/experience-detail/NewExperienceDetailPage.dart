@@ -50,6 +50,10 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
     super.didChangeDependencies();
   }
 
+  List<Experience> getClosesestPlaces(toReturn) {
+    return toReturn;
+  }
+
   _onVerticalGesture(DragUpdateDetails details) {
     if (details.primaryDelta < 0) {
       bloc.changeToDetails();
@@ -78,9 +82,11 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
   Widget build(BuildContext context) {
     var _screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
     var _screenWidth = MediaQuery.of(context).size.width;
-    final Experience experience = ModalRoute.of(context)
-        .settings
-        .arguments; // error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
+    final dynamic arguments = ModalRoute.of(context).settings.arguments as List;
+
+    final experience = arguments[0];
+    final closesPlaces = arguments[1] as List<
+        Experience>; // error when trying to retrieve the argument passed to this widget from the initState method, thats why it is being done in this weird method
     futureExperienceDetail =
         ExperienceProvider().getExperienceDetail(experience.id.toString());
 
@@ -558,42 +564,66 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
         );
       });
 
-      Widget singleClosestPlace() {
-        return Container(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          width: _screenWidth * 0.8,
-          height: 150,
-          child: Row(
-            children: [
-              Flexible(
-                flex: 2,
-                child: Container(
-                  child: Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/a/a4/Pucallpa_Plaza_San_Mart%C3%ADn_Fountain_by_Night.jpg"),
-                  color: Colors.blue,
-                ),
-              ),
-              Flexible(
-                flex: 3,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Puente de los Suspiros",
-                          style: TextStyle(color: Colors.white)),
-                      LocationAndRatingStars(
-                          numberStars: 4,
-                          numberComments: 40,
-                          withNumbersOfComments: true,
-                          withLabel: false),
-                      Text("Barranco, Lima",
-                          style: TextStyle(color: Colors.white))
-                    ],
+      Widget singleClosestPlace(Experience experience) {
+        return GestureDetector(
+          onTap: () {
+            Utils.homeNavigator.currentState.pushNamed(
+                routeHomeExperienceDetailsPage,
+                arguments: [experience, getClosesestPlaces(closesPlaces)]);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white)),
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: EdgeInsets.all(10),
+            width: _screenWidth * 0.8,
+            height: 150,
+            child: Row(
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    width: 400,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              experience.picture,
+                            ))),
                   ),
                 ),
-              )
-            ],
+                Flexible(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(experience.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
+                        /* LocationAndRatingStars(
+                            numberStars: experience.avgRanking.toInt(),
+                            numberComments: experience.nComments,
+                            withNumbersOfComments: true,
+                            withLabel: false),*/
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(experience.province,
+                            style: TextStyle(color: Colors.white))
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       }
@@ -605,9 +635,9 @@ class _NewExperienceDetailPageState extends State<NewExperienceDetailPage> {
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: 2,
+              itemCount: closesPlaces.length,
               itemBuilder: (ctx, indx) {
-                return singleClosestPlace();
+                return singleClosestPlace(closesPlaces[indx]);
               }),
         );
       });

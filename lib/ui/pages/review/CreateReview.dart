@@ -270,6 +270,7 @@ class _AddReview extends State<AddReview> {
                               TextFormField(
                                 keyboardType: TextInputType.text,
                                 onFieldSubmitted: (_) {},
+                                maxLines: null,
                                 style: TextStyle(color: Colors.white),
                                 onSaved: (value) {
                                   _toSend = CreateReviewDto(

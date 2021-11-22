@@ -19,6 +19,14 @@ class ExperiencesCarousel extends StatefulWidget {
 }
 
 class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
+  List<Experience> getClosesestPlaces() {
+    List<Experience> toReturn = [];
+    for (int i = 1; i <= 5; i++) {
+      toReturn.add(widget.experiences[i]);
+    }
+    return toReturn;
+  }
+
   final _pageController =
       new PageController(initialPage: 0, viewportFraction: 0.9);
   final ExperienceProvider experienceProvider = ExperienceProvider();
@@ -155,8 +163,9 @@ class _ExperiencesCarouselState extends State<ExperiencesCarousel> {
     return GestureDetector(
       child: tarjeta,
       onTap: () {
-        Utils.homeNavigator.currentState
-            .pushNamed(routeHomeExperienceDetailsPage, arguments: experience);
+        Utils.homeNavigator.currentState.pushNamed(
+            routeHomeExperienceDetailsPage,
+            arguments: [experience, getClosesestPlaces()]);
       },
     );
   }

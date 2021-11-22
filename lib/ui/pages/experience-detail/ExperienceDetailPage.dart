@@ -374,7 +374,7 @@ class _ExperienceDetailState extends State<ExperienceDetails> {
       color: Color.fromRGBO(79, 77, 140, 1),
       child: Column(children: [
         info,
-       // more,
+        // more,
         location,
         reviews,
         similarExperiences,

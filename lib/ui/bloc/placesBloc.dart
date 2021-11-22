@@ -40,6 +40,7 @@ class PlacesBloc {
         await _getExperiences(userId, lat, long);
     changeExperiences(experiences);
     all = experiences;
+    recommended = [];
     all.forEach((element) {
       if (element.isRecommended == true) recommended.add(element);
     });
