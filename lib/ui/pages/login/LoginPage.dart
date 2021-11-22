@@ -143,12 +143,12 @@ class _LoginPageState extends State<LoginPage> {
               Divider(
                 color: Colors.white,
               ),
-             /* customElevatedButton(
+              customElevatedButton(
                   "Continuar con Facebook", 'assets/img/ic_fb.png', loginWithFb),
               Divider(
                 height: 22,
                 color: Colors.white,
-              ),*/
+              ),
               Text(
                 "Al continuar aceptas los Términos de servicios y la Política de privacidad de datos",
                 textAlign: TextAlign.center,

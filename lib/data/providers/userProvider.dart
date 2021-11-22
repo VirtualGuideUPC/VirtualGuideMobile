@@ -95,7 +95,7 @@ class UserProvider {
 
   Future<List<Category>> getCategories() async {
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/getAllCategories');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/getAllCategories');
     final resp = await http.get(url);
 
     List<dynamic> decodedJson =
@@ -110,7 +110,7 @@ class UserProvider {
 
   Future<List<TypePlace>> getAllTypePlaces() async {
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/getAllTypePlaces');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/getAllTypePlaces');
     final resp = await http.get(url);
     List<dynamic> decodedJson =
         json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
@@ -124,7 +124,7 @@ class UserProvider {
 
   Future<List<Subcategory>> getAllSubcategories() async {
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/getAllSubcategories');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/getAllSubcategories');
     final resp = await http.get(url);
     List<dynamic> decodedJson =
         json.decode(Utf8Decoder().convert(resp.bodyBytes).toString());
@@ -139,7 +139,7 @@ class UserProvider {
   Future<User> updateUserProfile(
       UserUpdateDto userUpdateDto, File image) async {
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/user/update/');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/user/update/');
     final String userToken = UserPreferences().getToken();
 
     var formData = FormData.fromMap({
@@ -207,7 +207,7 @@ class UserProvider {
   Future<void> updateCategory(Category category) async {
     var pref = await PreferencesProvider().getPreferencesByUser();
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/preference/category/update/');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/preference/category/update/');
     var categories = pref.categories;
     var userId = UserPreferences().getUserId();
     final String userToken = UserPreferences().getToken();
@@ -228,7 +228,7 @@ class UserProvider {
 
   Future<void> updateTypePlace(TypePlace typePlace) async {
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/preference/typeplace/update/');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/preference/typeplace/update/');
     var userId = UserPreferences().getUserId();
     final String userToken = UserPreferences().getToken();
 
@@ -249,7 +249,7 @@ class UserProvider {
 
   Future<void> updateSubCategory(Subcategory subcategory) async {
     final url = Uri.parse(
-        'http://http://ec2-52-90-137-95.compute-1.amazonaws.comm/api/users/preference/subcategory/update/');
+        'http://ec2-52-90-137-95.compute-1.amazonaws.com/api/users/preference/subcategory/update/');
     var userId = UserPreferences().getUserId();
     final String userToken = UserPreferences().getToken();
 

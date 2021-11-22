@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PlacesProvider{
-  String _apiKey='AIzaSyC1P3Uh-USWM03mLZnz-chGepsaIUCnAMI';
+  String _apiKey='AIzaSyD7piBwhoteIB7qYhAvMv3DNghmPbs3Cbw';
 
 
   Future<List<dynamic>> getLocations(String searchTerm) async{
