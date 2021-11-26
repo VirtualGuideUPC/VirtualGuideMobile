@@ -41,33 +41,21 @@ class MessageProvider {
   Future<Message> createMessage(String message) async {
     final String userId = UserPreferences().getUserId().toString();
 
-    final url =
-        Uri.parse('https://mocki.io/v1/8627ada1-1ad7-4f4f-8def-5e6c92066169');
+    final url = Uri.parse(
+        'http://ec2-54-172-42-125.compute-1.amazonaws.com/prediction');
 
     final String userToken = UserPreferences().getToken();
-/*
+
     String dateFormat =
         "${DateTime.now().toLocal().year.toString()}-${DateTime.now().toLocal().month.toString().padLeft(2, '0')}-${DateTime.now().toLocal().day.toString().padLeft(2, '0')}";
 
     var body = {
       "text": message,
       "user": int.parse(userId),
-      "date": dateFormat,
-      "url": "www.test14.com",
-      "is_user": true
     };
 
     var resp = await Dio().post(url.toString(),
         data: body,
-        options: Options(headers: <String, String>{
-          'Authorization': userToken,
-          'Cookie': 'session=$userToken',
-          'Connection': 'keep-alive',
-          'Keep-Alive': 'timeout=5,max=100',
-          'Content-Type': 'application/json; charset=UTF-8',
-        }));*/
-
-    var resp = await Dio().get(url.toString(),
         options: Options(headers: <String, String>{
           'Authorization': userToken,
           'Cookie': 'session=$userToken',
@@ -79,7 +67,9 @@ class MessageProvider {
     print("resopnde code: " + resp.statusCode.toString());
     if (resp.statusCode == 200) {
       var messageHuman = Message.fromJson(resp.data['human_message']);
+      messageHuman.isUser = true;
       var messageBot = Message.fromJson(resp.data['robot_response']);
+      messageBot.isUser = false;
 
       print(messageHuman);
       print(messageBot);

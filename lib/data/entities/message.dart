@@ -15,7 +15,7 @@ class Message {
         date: json["date"],
         time: json["time"],
         isUser: json["is_user"],
-        url: json["url"],
+        url: json["url"] ?? "",
         user: json["user"]);
   }
   Map<String, dynamic> ToJson(Message message) {

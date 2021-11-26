@@ -62,7 +62,7 @@ class MessageBubble extends StatelessWidget {
                     image: DecorationImage(
                         image: NetworkImage(message.url), fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.red),
+                    color: Color.fromRGBO(143, 142, 191, 1)),
               ),
             Container(
               constraints: BoxConstraints(maxWidth: _screenWidth * 0.2),

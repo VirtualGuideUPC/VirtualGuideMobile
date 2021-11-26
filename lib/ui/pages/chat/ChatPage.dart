@@ -298,11 +298,11 @@ class _ChatPageState extends State<ChatPage> {
                       Container(
                         child: _messagesArea(),
                       ),
-                      /* ElevatedButton(
-                        onPressed: () {
-                          MessagesDb().deleteDftabase();
-                        },
-                        child: Text("Bajarse DB")),*/
+                      ElevatedButton(
+                          onPressed: () {
+                            MessagesDb().deleteDftabase();
+                          },
+                          child: Text("Bajarse DB")),
                       downButton,
                     ],
                   ),
