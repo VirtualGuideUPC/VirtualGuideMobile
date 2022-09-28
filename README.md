@@ -1,16 +1,17 @@
-# tour_guide
+Alpakita: Your favorite tourism app ❤🦙
+=======
 
-A new Flutter application.
+## Description
 
-## Getting Started
+Have you ever looked for tourist information in a forum or blog but hasn't convinced you? Then this app is for you 🤩. 
 
-This project is a starting point for a Flutter application.
+We help you in your tourist experience through a friendly and intuitive mobile application that will provide you with information and tourist recommendations in real time according to your tastes.
 
-A few resources to get you started if this is your first Flutter project:
+<p float="left">
+  <img src="art/img_intereses.png" width="200" height="420">
+  <img src="art/img_suggested_places.png" width="410" height="420">
+  <img src="art/img_recommendation.png" width="200" height="420">
+</p>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Architecture
+--------
